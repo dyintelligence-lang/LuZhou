@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>【柳堤兒童遊戲場改造問卷】從孩子出發，定義蘆洲下一代共融遊戲場</title>
+    
+    <!-- Google Fonts & Bootstrap Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    
+    <!-- Tailwind CSS (Static Production Version) -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+
+    <style>
+        .text-brand-teal { color: #f97316 !important; }
+        .bg-brand-teal { background-color: #ea580c !important; }
+        .bg-brand-teal:hover { background-color: #c2410c !important; }
+        .text-brand-orange { color: #f97316 !important; }
+        .bg-brand-orange\/10 { background-color: rgba(249, 115, 22, 0.1) !important; }
+        .border-brand-teal { border-color: #f97316 !important; }
+        .focus\:border-brand-teal:focus { border-color: #f97316 !important; }
+        .focus\:ring-brand-teal:focus { --tw-ring-color: #f97316 !important; }
+        .text-brand-green { color: #fb923c !important; }
+        .from-brand-green { --tw-gradient-from: #fb923c !important; --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(251, 146, 60, 0)) !important; }
+        .to-brand-teal { --tw-gradient-to: #ea580c !important; }
+        .via-brand-teal { --tw-gradient-stops: var(--tw-gradient-from), #f97316, var(--tw-gradient-to, rgba(249, 115, 22, 0)) !important; }
+        .to-brand-purple { --tw-gradient-to: #f59e0b !important; }
+
+        body {
+            font-family: 'Outfit', 'Noto Sans TC', sans-serif;
+            background: linear-gradient(135deg, #fff7ed 0%, #fffbeb 50%, #fef3c7 100%);
+            min-height: 100vh;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.82);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 237, 213, 0.6);
+            box-shadow: 0 20px 40px rgba(249, 115, 22, 0.06);
+        }
+
+        .custom-option:hover {
+            border-color: rgba(249, 115, 22, 0.4);
+            background-color: rgba(249, 115, 22, 0.02);
+        }
+        
+        .custom-option-checked {
+            border-color: #f97316 !important;
+            background-color: rgba(249, 115, 22, 0.08) !important;
+            color: #ea580c !important;
+            box-shadow: 0 4px 12px rgba(249, 115, 22, 0.12);
+        }
+
+        .fade-in-step {
+            animation: fadeIn 0.4s ease-out forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .grid-check-cell:hover {
+            background-color: rgba(249, 115, 22, 0.04);
+        }
+    </style>
+</head>
+<body class="py-8 px-4 flex items-center justify-center">
+
+    <script>
+        const CONFIG = {
+            gasUrl: "https://script.google.com/macros/s/AKfycbzf11TrAEP6BYaEmgK9TwSBDFJM25-_K6lTbx8CoA2qYIPzqW_LE5ILmAFf1M2DTn6xvw/exec" 
+        };
+    </script>
+
+    <div class="w-full max-w-2xl glass-card rounded-3xl p-6 md:p-8 transition-all duration-300 relative overflow-hidden">
+        
+        <div class="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-brand-green via-brand-teal to-brand-purple"></div>
+
+        <div class="mb-8">
+            <h1 class="text-xl md:text-2xl font-bold text-orange-950 mb-3 tracking-wide leading-snug">
+                【柳堤兒童遊戲場改造問卷】<br class="hidden md:inline">從孩子出發，定義蘆洲下一代共融遊戲場
+            </h1>
+            <p class="text-sm text-orange-800 leading-relaxed bg-orange-50/50 p-4 rounded-2xl border border-orange-100">
+                您好！我們誠摯地邀請您參與柳堤兒童遊戲場的改造需求調查。您的寶貴意見將作為未來規劃與設計的重要依據，讓遊戲場不僅是遊樂空間，更成為孩子成長的探索天堂。本問卷填寫約需 3 分鐘，感謝您的支持與配合！
+            </p>
+        </div>
+
+        <!-- 進度條 -->
+        <div class="mb-8" id="progress-container">
+            <div class="flex justify-between text-xs font-semibold text-orange-700 mb-2">
+                <span id="step-label">步驟 1 / 4：基本背景資訊</span>
+                <span id="step-percent">25%</span>
+            </div>
+            <div class="w-full bg-orange-100/50 h-2 rounded-full overflow-hidden">
+                <div id="progress-bar" class="bg-gradient-to-r from-brand-green to-brand-teal h-full transition-all duration-300" style="width: 25%"></div>
+            </div>
+        </div>
+
+        <form id="survey-form" onsubmit="handleFormSubmit(event)">
+
+            <!-- STEP 1 -->
+            <div id="step-1" class="fade-in-step space-y-6">
+                <!-- Q1 -->
+                <div class="space-y-3">
+                    <label class="block font-bold text-orange-950">1. 您的性別 <span class="text-brand-orange">*</span></label>
+                    <div class="grid grid-cols-3 gap-3">
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q1', '生理女', this)">生理女</div>
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q1', '生理男', this)">生理男</div>
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q1', '其他', this)">其他</div>
+                    </div>
+                    <input type="hidden" name="q1" id="q1" required>
+                </div>
+
+                <!-- Q2 -->
+                <div class="space-y-3">
+                    <label class="block font-bold text-orange-950">2. 您的年齡層 <span class="text-brand-orange">*</span></label>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q2', '18歲以下', this)">18歲以下</div>
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q2', '19-30歲', this)">19-30歲</div>
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q2', '31-45歲', this)">31-45歲</div>
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q2', '46-60歲', this)">46-60歲</div>
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 col-span-1 sm:col-span-2 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q2', '61歲以上', this)">61歲以上</div>
+                    </div>
+                    <input type="hidden" name="q2" id="q2" required>
+                </div>
+
+                <!-- Q3 -->
+                <div class="space-y-3">
+                    <label class="block font-bold text-orange-950">3. 您來訪柳堤公園的頻率為何？ <span class="text-brand-orange">*</span></label>
+                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q3', '每天', this)">每天</div>
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q3', '每周1次', this)">每周1次</div>
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q3', '每周2-3次', this)">每周2-3次</div>
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q3', '每月1-2次', this)">每月1-2次</div>
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q3', '不定期', this)">不定期</div>
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q3', '不曾來過', this)">不曾來過</div>
+                    </div>
+                    <input type="hidden" name="q3" id="q3" required>
+                </div>
+
+                <!-- Q4 -->
+                <div class="space-y-3">
+                    <label class="block font-bold text-orange-950">4. 您前往此公園所使用的交通工具？ <span class="text-brand-orange">*</span></label>
+                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q4', '步行', this); hideOther('q4')">步行</div>
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q4', '腳踏車', this); hideOther('q4')">腳踏車</div>
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q4', '機車', this); hideOther('q4')">機車</div>
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q4', '汽車', this); hideOther('q4')">汽車</div>
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 col-span-1 sm:col-span-2 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q4', '其他', this); showOther('q4')">其他</div>
+                    </div>
+                    <input type="hidden" name="q4" id="q4" required>
+                    <input type="text" id="q4_other" name="q4_other" class="hidden w-full bg-white/60 border border-orange-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-brand-teal" placeholder="請輸入其他交通工具...">
+                </div>
+
+                <!-- Q5 -->
+                <div class="space-y-3">
+                    <label class="block font-bold text-orange-950">5. 您前往此公園需要花費多少時間？ <span class="text-brand-orange">*</span></label>
+                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q5', '10分鐘以下', this); hideOther('q5')">10分鐘以下</div>
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q5', '11-20分鐘', this); hideOther('q5')">11-20分鐘</div>
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q5', '21-30分鐘', this); hideOther('q5')">21-30分鐘</div>
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q5', '31-60分鐘', this); hideOther('q5')">31-60分鐘</div>
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q5', '1小時以上', this); hideOther('q5')">1小時以上</div>
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q5', '其他', this); showOther('q5')">其他</div>
+                    </div>
+                    <input type="hidden" name="q5" id="q5" required>
+                    <input type="text" id="q5_other" name="q5_other" class="hidden w-full bg-white/60 border border-orange-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-brand-teal" placeholder="請填寫其他花費時間...">
+                </div>
+            </div>
+
+            <!-- STEP 2 -->
+            <div id="step-2" class="hidden fade-in-step space-y-6">
+                <!-- Q6 -->
+                <div class="space-y-3">
+                    <label class="block font-bold text-orange-950">6. 您通常在什麼時間來此公園？ (可複選)</label>
+                    <div class="overflow-x-auto rounded-2xl border border-orange-100 bg-white/40 overflow-hidden">
+                        <table class="w-full text-sm text-left border-collapse">
+                            <thead>
+                                <tr class="bg-orange-50/80 border-b border-orange-100 text-orange-950 font-bold text-center">
+                                    <th class="p-3">來訪時段</th>
+                                    <th class="p-3 w-24">平日</th>
+                                    <th class="p-3 w-24">假日</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-orange-50">
+                                <script>
+                                    const timeslots = [
+                                        "上午 7:00 以前", "上午 7:00-9:00", "上午 9:00-12:00", 
+                                        "中午 12:00-13:00", "下午 13:00-16:00", "下午 16:00-19:00", 
+                                        "晚上 19:00 以後"
+                                    ];
+                                    timeslots.forEach((slot, sIdx) => {
+                                        document.write(`
+                                            <tr class="text-orange-950">
+                                                <td class="p-3 font-medium">${slot}</td>
+                                                <td class="p-3 text-center grid-check-cell cursor-pointer" onclick="toggleGridCheck(event, 'weekday', ${sIdx})">
+                                                    <input type="checkbox" id="q6-weekday-${sIdx}" name="q6_weekday_${sIdx}" onclick="event.stopPropagation()" class="form-checkbox h-4.5 w-4.5 text-brand-teal focus:ring-brand-teal rounded border-orange-300">
+                                                </td>
+                                                <td class="p-3 text-center grid-check-cell cursor-pointer" onclick="toggleGridCheck(event, 'weekend', ${sIdx})">
+                                                    <input type="checkbox" id="q6-weekend-${sIdx}" name="q6_weekend_${sIdx}" onclick="event.stopPropagation()" class="form-checkbox h-4.5 w-4.5 text-brand-teal focus:ring-brand-teal rounded border-orange-300">
+                                                </td>
+                                            </tr>
+                                        `);
+                                    });
+                                </script>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Q7 -->
+                <div class="space-y-3">
+                    <label class="block font-bold text-orange-950">7. 您來此公園平均每次停留時間？ <span class="text-brand-orange">*</span></label>
+                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q7', '10分鐘以下', this); hideOther('q7')">10分鐘以下</div>
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q7', '10-30分鐘', this); hideOther('q7')">10-30分鐘</div>
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q7', '30-60分鐘', this); hideOther('q7')">30-60分鐘</div>
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q7', '1-2小時', this); hideOther('q7')">1-2小時</div>
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q7', '2小時以上', this); hideOther('q7')">2小時以上</div>
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q7', '其他', this); showOther('q7')">其他</div>
+                    </div>
+                    <input type="hidden" name="q7" id="q7" required>
+                    <input type="text" id="q7_other" name="q7_other" class="hidden w-full bg-white/60 border border-orange-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-brand-teal" placeholder="請填寫其他停留時間...">
+                </div>
+
+                <!-- Q8 -->
+                <div class="space-y-3">
+                    <label class="block font-bold text-orange-950">8. 最常與您同行前往公園的同伴？ <span class="text-brand-orange">*</span></label>
+                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q8', '獨自前往', this); hideOther('q8')">獨自前往</div>
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q8', '與家人同行(3人以上)', this); hideOther('q8')">與家人(3人+)</div>
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q8', '配偶/伴侶', this); hideOther('q8')">配偶/伴侶</div>
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q8', '與小孩同行', this); hideOther('q8')">與小孩同行</div>
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q8', '與朋友同行', this); hideOther('q8')">與朋友同行</div>
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q8', '其他', this); showOther('q8')">其他</div>
+                    </div>
+                    <input type="hidden" name="q8" id="q8" required>
+                    <input type="text" id="q8_other" name="q8_other" class="hidden w-full bg-white/60 border border-orange-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-brand-teal" placeholder="請填寫其他同伴...">
+                </div>
+            </div>
+
+            <!-- STEP 3 -->
+            <div id="step-3" class="hidden fade-in-step space-y-6">
+                <!-- Q9 -->
+                <div class="space-y-3">
+                    <label class="block font-bold text-orange-950">9. 您是否聽過特色公園/共融遊戲場？ <span class="text-brand-orange">*</span></label>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q9', '是', this)">是</div>
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q9', '否', this)">否</div>
+                    </div>
+                    <input type="hidden" name="q9" id="q9" required>
+                </div>
+
+                <!-- Q10 -->
+                <div class="space-y-3">
+                    <label class="block font-bold text-orange-950">10. 您是否去過其他的特色公園/共融遊戲場？ <span class="text-brand-orange">*</span></label>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q10', '是', this)">是</div>
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q10', '否', this)">否</div>
+                    </div>
+                    <input type="hidden" name="q10" id="q10" required>
+                </div>
+
+                <!-- Q11 -->
+                <div class="space-y-3">
+                    <label class="block font-bold text-orange-950">11. 陪伴兒童的年齡層？ <span class="text-brand-orange">*</span></label>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q11', '無陪伴兒童(個人/無兒童)', this)">無陪伴兒童</div>
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q11', '0-3歲(幼兒)', this)">0-3歲(幼兒)</div>
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q11', '4-6歲(幼童)', this)">4-6歲(幼童)</div>
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q11', '7-12歲(學齡兒童)', this)">7-12歲(學齡兒童)</div>
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 col-span-1 sm:col-span-2 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q11', '13+ (青少年)', this)">13+ (青少年)</div>
+                    </div>
+                    <input type="hidden" name="q11" id="q11" required>
+                </div>
+
+                <!-- Q12 -->
+                <div class="space-y-3">
+                    <label class="block font-bold text-orange-950">12. 您認為特色公園最需要注意的是哪些項目？(可複選，最多3個) <span class="text-brand-orange">*</span></label>
+                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                        <script>
+                            const q12Options = ["創意性", "體能挑戰性", "安全性", "美觀性", "趣味性", "共融性", "公平使用的機會", "無障礙環境", "自然材質", "分齡使用", "混合使用", "共享空間"];
+                            q12Options.forEach(opt => {
+                                document.write(`
+                                    <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-xs font-medium" onclick="toggleMultiSelect('q12', '${opt}', this)">
+                                        ${opt}
+                                    </div>
+                                `);
+                            });
+                        </script>
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-xs font-medium" onclick="toggleMultiSelect('q12', '其他', this)">
+                            其他
+                        </div>
+                    </div>
+                    <input type="text" id="q12_other" name="q12_other" class="hidden w-full bg-white/60 border border-orange-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-brand-teal" placeholder="請填寫其他注意事項...">
+                </div>
+
+                <!-- Q13 -->
+                <div class="space-y-4 pt-4 border-t border-orange-100">
+                    <label class="block font-bold text-orange-950 leading-relaxed">
+                        13. 您希望柳堤遊戲場新增哪些遊具？請從以下四大類中點選喜歡的遊具（可複選，每類至少選一項） <span class="text-brand-orange">*</span>
+                    </label>
+                    <p class="text-xs text-orange-800 leading-normal mb-2">點擊圖片即可選取，再次點擊取消。可跨分類複選。</p>
+
+                    <style>
+                        .img-opt-group { margin-bottom: 1.25rem; }
+                        .img-opt-group-title {
+                            font-size: 0.85rem;
+                            font-weight: 700;
+                            color: #c2410c;
+                            background: rgba(249,115,22,0.08);
+                            border-left: 3px solid #f97316;
+                            padding: 4px 10px;
+                            border-radius: 4px;
+                            margin-bottom: 8px;
+                            display: inline-block;
+                        }
+                        .img-opt-grid {
+                            display: grid;
+                            grid-template-columns: repeat(3, 1fr);
+                            gap: 8px;
+                        }
+                        @media (max-width: 480px) {
+                            .img-opt-grid { grid-template-columns: repeat(2, 1fr); }
+                        }
+                        .img-opt-card {
+                            position: relative;
+                            border-radius: 12px;
+                            overflow: hidden;
+                            cursor: pointer;
+                            border: 2.5px solid transparent;
+                            transition: border-color 0.2s, box-shadow 0.2s;
+                            background: #fff;
+                            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+                        }
+                        .img-opt-card:hover {
+                            border-color: rgba(249,115,22,0.45);
+                            box-shadow: 0 4px 14px rgba(249,115,22,0.18);
+                        }
+                        .img-opt-card.selected {
+                            border-color: #f97316;
+                            box-shadow: 0 4px 16px rgba(249,115,22,0.30);
+                        }
+                        .img-opt-card img {
+                            width: 100%;
+                            aspect-ratio: 4/3;
+                            object-fit: cover;
+                            display: block;
+                            background: #fff7ed;
+                        }
+                        .img-opt-label {
+                            font-size: 0.72rem;
+                            font-weight: 600;
+                            color: #7c2d12;
+                            text-align: center;
+                            padding: 5px 4px;
+                            background: rgba(255,255,255,0.92);
+                            line-height: 1.3;
+                        }
+                        .img-opt-check {
+                            position: absolute;
+                            top: 5px;
+                            right: 5px;
+                            width: 22px;
+                            height: 22px;
+                            border-radius: 50%;
+                            background: #f97316;
+                            color: #fff;
+                            display: none;
+                            align-items: center;
+                            justify-content: center;
+                            font-size: 13px;
+                            box-shadow: 0 2px 6px rgba(249,115,22,0.45);
+                        }
+                        .img-opt-card.selected .img-opt-check { display: flex; }
+                    </style>
+
+                    <!-- 盪鞦韆類 -->
+                    <div class="img-opt-group">
+                        <div class="img-opt-group-title">盪鞦韆類</div>
+                        <div class="img-opt-grid">
+                            <div class="img-opt-card" onclick="toggleImgOpt('q13', '盪鞦韆-平板鞦韆', this)">
+                                <img src="https://6t.vcom.tw/archive/image/5bmz5p2-6Z6m6Z_GLjU5MjIzODc4Mg==.jpg" alt="平板鞦韆" loading="lazy">
+                                <div class="img-opt-label">平板鞦韆</div>
+                                <div class="img-opt-check">✓</div>
+                            </div>
+                            <div class="img-opt-card" onclick="toggleImgOpt('q13', '盪鞦韆-尿布鞦韆', this)">
+                                <img src="./照片/diaper_swing.jpg" alt="尿布鞦韆" loading="lazy">
+                                <div class="img-opt-label">尿布鞦韆</div>
+                                <div class="img-opt-check">✓</div>
+                            </div>
+                            <div class="img-opt-card" onclick="toggleImgOpt('q13', '盪鞦韆-座椅鞦韆', this)">
+                                <img src="https://6t.vcom.tw/archive/image/5bqn5qSF6Z6m6Z_GLjU5ODc5OTU1Ng==.jpg" alt="座椅鞦韆" loading="lazy">
+                                <div class="img-opt-label">座椅鞦韆</div>
+                                <div class="img-opt-check">✓</div>
+                            </div>
+                            <div class="img-opt-card" onclick="toggleImgOpt('q13', '盪鞦韆-鳥巢鞦韆', this)">
+                                <img src="https://6t.vcom.tw/archive/image/6bOl5bei6Z6m6Z_GLjU5ODgwMzAxNQ==.jpg" alt="鳥巢鞦韆" loading="lazy">
+                                <div class="img-opt-label">鳥巢鞦韆</div>
+                                <div class="img-opt-check">✓</div>
+                            </div>
+                            <div class="img-opt-card" onclick="toggleImgOpt('q13', '盪鞦韆-親子鞦韆', this)">
+                                <img src="https://6t.vcom.tw/archive/image/6Kaq5a2Q6Z6m6Z_GLjU5MjI1MjgyNg==.jpg" alt="親子鞦韆" loading="lazy">
+                                <div class="img-opt-label">親子鞦韆</div>
+                                <div class="img-opt-check">✓</div>
+                            </div>
+                            <div class="img-opt-card" onclick="toggleImgOpt('q13', '盪鞦韆-擺盪大索', this)">
+                                <img src="https://6t.vcom.tw/archive/image/5pO655uq5aSn57SiLjU5ODgwNjY4Mg==.jpg" alt="擺盪大索" loading="lazy">
+                                <div class="img-opt-label">擺盪大索</div>
+                                <div class="img-opt-check">✓</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 溜滑類 -->
+                    <div class="img-opt-group">
+                        <div class="img-opt-group-title">溜滑類</div>
+                        <div class="img-opt-grid">
+                            <div class="img-opt-card" onclick="toggleImgOpt('q13', '溜滑-直式滑梯', this)">
+                                <img src="https://6t.vcom.tw/archive/image/55u057ea5ruR5qKvLjU5OTUzODA5MQ==.jpg" alt="直式滑梯" loading="lazy">
+                                <div class="img-opt-label">直式滑梯</div>
+                                <div class="img-opt-check">✓</div>
+                            </div>
+                            <div class="img-opt-card" onclick="toggleImgOpt('q13', '溜滑-螺旋滑梯', this)">
+                                <img src="https://6t.vcom.tw/archive/image/5peL6L2J5ruR5qKvLjU5OTUwMzI5MQ==.jpg" alt="螺旋滑梯" loading="lazy">
+                                <div class="img-opt-label">螺旋滑梯</div>
+                                <div class="img-opt-check">✓</div>
+                            </div>
+                            <div class="img-opt-card" onclick="toggleImgOpt('q13', '溜滑-磨石滑梯', this)">
+                                <img src="https://6t.vcom.tw/archive/image/56Oo55_z5ruR5qKvLjU5ODgxODczNg==.jpg" alt="磨石滑梯" loading="lazy">
+                                <div class="img-opt-label">磨石滑梯</div>
+                                <div class="img-opt-check">✓</div>
+                            </div>
+                            <div class="img-opt-card" onclick="toggleImgOpt('q13', '溜滑-地景滑梯', this)">
+                                <img src="https://6t.vcom.tw/archive/image/5Zyw5pmv5ruR5qKvLjU5ODgyMTQ0Mg==.jpg" alt="地景滑梯" loading="lazy">
+                                <div class="img-opt-label">地景滑梯</div>
+                                <div class="img-opt-check">✓</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 攀爬類 -->
+                    <div class="img-opt-group">
+                        <div class="img-opt-group-title">攀爬類</div>
+                        <div class="img-opt-grid">
+                            <div class="img-opt-card" onclick="toggleImgOpt('q13', '攀爬-木製爬架', this)">
+                                <img src="https://6t.vcom.tw/archive/image/5pyo6KO95pSA54is5p62LjU5ODgyOTE5MQ==.jpg" alt="木製爬架" loading="lazy">
+                                <div class="img-opt-label">木製爬架</div>
+                                <div class="img-opt-check">✓</div>
+                            </div>
+                            <div class="img-opt-card" onclick="toggleImgOpt('q13', '攀爬-攀爬網繩', this)">
+                                <img src="https://6t.vcom.tw/archive/image/57mp57ay5pSA54is5p62LjU5ODgzNTQ1Nw==.jpg" alt="攀爬網繩" loading="lazy">
+                                <div class="img-opt-label">攀爬網繩</div>
+                                <div class="img-opt-check">✓</div>
+                            </div>
+                            <div class="img-opt-card" onclick="toggleImgOpt('q13', '攀爬-攀岩塊', this)">
+                                <img src="https://6t.vcom.tw/archive/image/5pSA5bKp54mGLjU5ODg0MTc1Ng==.jpg" alt="攀岩塊" loading="lazy">
+                                <div class="img-opt-label">攀岩塊</div>
+                                <div class="img-opt-check">✓</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 旋轉類 -->
+                    <div class="img-opt-group">
+                        <div class="img-opt-group-title">旋轉類</div>
+                        <div class="img-opt-grid">
+                            <div class="img-opt-card" onclick="toggleImgOpt('q13', '旋轉-旋轉杯', this)">
+                                <img src="https://6t.vcom.tw/archive/image/5peL6L2J5p2vLjU5ODc5MjU4OA==.jpg" alt="旋轉杯" loading="lazy">
+                                <div class="img-opt-label">旋轉杯</div>
+                                <div class="img-opt-check">✓</div>
+                            </div>
+                            <div class="img-opt-card" onclick="toggleImgOpt('q13', '旋轉-旋轉椅', this)">
+                                <img src="https://6t.vcom.tw/archive/image/5peL6L2J5qOSLjU5ODc1NzIxMw==.jpg" alt="旋轉椅" loading="lazy">
+                                <div class="img-opt-label">旋轉椅</div>
+                                <div class="img-opt-check">✓</div>
+                            </div>
+                            <div class="img-opt-card" onclick="toggleImgOpt('q13', '旋轉-多人轉盤', this)">
+                                <img src="https://6t.vcom.tw/archive/image/5aSa5Lq65peL6L2J55ukLjU5ODc0OTI2Nw==.jpg" alt="多人轉盤" loading="lazy">
+                                <div class="img-opt-label">多人轉盤</div>
+                                <div class="img-opt-check">✓</div>
+                            </div>
+                            <div class="img-opt-card" onclick="toggleImgOpt('q13', '旋轉-旋轉飛輪', this)">
+                                <img src="https://6t.vcom.tw/archive/image/5peL6L2J6aOb6LyqLjU5ODg0Njg3MQ==.jpg" alt="旋轉飛輪" loading="lazy">
+                                <div class="img-opt-label">旋轉飛輪</div>
+                                <div class="img-opt-check">✓</div>
+                            </div>
+                            <div class="img-opt-card" onclick="toggleImgOpt('q13', '旋轉-旋轉飛椅', this)">
+                                <img src="https://6t.vcom.tw/archive/image/5peL6L2J6aOb5qSFLjU5ODg0OTQyNg==.jpg" alt="旋轉飛椅" loading="lazy">
+                                <div class="img-opt-label">旋轉飛椅</div>
+                                <div class="img-opt-check">✓</div>
+                            </div>
+                            <div class="img-opt-card" onclick="toggleImgOpt('q13', '旋轉-旋轉塔', this)">
+                                <img src="https://6t.vcom.tw/archive/image/5peL6L2J5pSA54is5aGULjU5ODg1NTU5NA==.jpg" alt="旋轉塔" loading="lazy">
+                                <div class="img-opt-label">旋轉塔</div>
+                                <div class="img-opt-check">✓</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Q15 (軟石健康步道是否保留) -->
+                <div class="space-y-3 pt-4 border-t border-orange-100">
+                    <label class="block font-bold text-orange-950">15. 您希望軟石健康步道未來是否保留，或改建其他體健設施？ <span class="text-brand-orange">*</span></label>
+                    <div class="my-2 rounded-2xl overflow-hidden border border-orange-100 shadow-sm max-w-md bg-white">
+                        <img src="./照片/pebble_path.jpg" alt="軟石健康步道" class="w-full h-48 object-cover">
+                    </div>
+                    <div class="grid grid-cols-1 gap-2.5">
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q15', '保留軟石健康步道', this)">
+                            保留軟石健康步道
+                        </div>
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q15', '改建為其他體健設施', this)">
+                            改建為其他體健設施
+                        </div>
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q15', '無意見 / 沒想法', this)">
+                            無意見 / 沒想法
+                        </div>
+                    </div>
+                    <input type="hidden" name="q15" id="q15" required>
+                </div>
+
+                <!-- Q16 (廣場維持現狀或改建) -->
+                <div class="space-y-3 pt-4 border-t border-orange-100">
+                    <label class="block font-bold text-orange-950">16. 您是否希望柳堤公園內廣場維持現狀，或改作其他目的使用？ <span class="text-brand-orange">*</span></label>
+                    <div class="my-2 rounded-2xl overflow-hidden border border-orange-100 shadow-sm max-w-md bg-white">
+                        <img src="./照片/park_square.jpg" alt="內廣場" class="w-full h-48 object-cover">
+                    </div>
+                    <div class="grid grid-cols-1 gap-2.5">
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q16', '維持現狀', this)">
+                            維持現狀
+                        </div>
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q16', '改作其他目的使用（如增加綠化、休閒設施等）', this)">
+                            改作其他目的使用（如增加綠化、休閒設施等）
+                        </div>
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q16', '無意見 / 沒想法', this)">
+                            無意見 / 沒想法
+                        </div>
+                    </div>
+                    <input type="hidden" name="q16" id="q16" required>
+                </div>
+
+                <!-- Q17 -->
+                <div class="space-y-3 pt-4 border-t border-orange-100">
+                    <label class="block font-bold text-orange-950" for="q17">17. 對於柳堤公園之空間場域是否有需保留的記憶或設施？</label>
+                    <textarea id="q17" name="q17" rows="3" class="w-full bg-white/60 border border-orange-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-brand-teal" placeholder="請填寫您的看法..."></textarea>
+                </div>
+            </div>
+
+            <!-- STEP 4 -->
+            <div id="step-4" class="hidden fade-in-step space-y-6">
+                <!-- Q18 -->
+                <div class="space-y-3">
+                    <label class="block font-bold text-orange-950" for="q18">18. 您的其他建議或希望改善的項目？</label>
+                    <textarea id="q18" name="q18" rows="3" class="w-full bg-white/60 border border-orange-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-brand-teal" placeholder="請填寫您的看法..."></textarea>
+                </div>
+
+                <!-- 抽獎意願 -->
+                <div class="space-y-3 pt-4 border-t border-orange-100">
+                    <label class="block font-bold text-orange-950">19. 是否願意留下聯絡資訊以利發送後續回饋與抽獎？ <span class="text-brand-orange">*</span></label>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div id="opt-join-lottery" class="custom-option custom-option-checked border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="toggleLotteryFields(true)">
+                            是，我願意填寫資料
+                        </div>
+                        <div id="opt-skip-lottery" class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="toggleLotteryFields(false)">
+                            否，我只填問卷不參加
+                        </div>
+                    </div>
+                    <input type="hidden" name="join_lottery" id="join_lottery" value="yes">
+                </div>
+
+                <div id="lottery-fields-container" class="space-y-6">
+                    <div class="bg-brand-orange/10 px-4 py-3 rounded-2xl border border-brand-orange/20 my-2">
+                        <span class="font-bold text-orange-950 text-sm"><i class="bi bi-gift me-1"></i> 抽獎活動資格：</span>
+                        <span class="text-xs text-orange-900 leading-normal font-medium">感謝您的填寫！留下聯絡電話即可參與後續主辦單位舉辦的抽獎與精美禮品回饋活動！</span>
+                    </div>
+
+                    <!-- Name -->
+                    <div class="space-y-2">
+                        <label class="block font-bold text-orange-950" for="lottery-name">聯絡人真實姓名 <span class="text-brand-orange">*</span></label>
+                        <input type="text" id="lottery-name" name="name" class="w-full bg-white/60 border border-orange-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-brand-teal" placeholder="例如：王小明">
+                    </div>
+
+                    <!-- Phone -->
+                    <div class="space-y-2">
+                        <label class="block font-bold text-orange-950" for="lottery-phone">聯絡電話號碼 <span class="text-brand-orange">*</span></label>
+                        <input type="tel" id="lottery-phone" name="phone" class="w-full bg-white/60 border border-orange-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-brand-teal" placeholder="例如：0912345678" pattern="^09\d{8}$">
+                        <p class="text-[11px] text-orange-700/80">必須為 10 碼數字，例如 0912345678</p>
+                    </div>
+
+                    <!-- Email -->
+                    <div class="space-y-2">
+                        <label class="block font-bold text-orange-950" for="lottery-email">電子郵件 <span class="text-brand-orange">*</span></label>
+                        <input type="email" id="lottery-email" name="email" class="w-full bg-white/60 border border-orange-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-brand-teal" placeholder="例如：example@gmail.com">
+                    </div>
+
+                    <!-- Consent -->
+                    <div class="flex items-start space-x-3 pt-2">
+                        <input type="checkbox" id="lottery-consent" name="consent" class="form-checkbox mt-1 h-4.5 w-4.5 text-brand-teal focus:ring-brand-teal rounded border-orange-300">
+                        <label class="text-xs text-orange-900 leading-normal" for="lottery-consent">
+                            我同意提供上述個人聯絡資訊，僅用於本次柳堤公園改造問卷抽獎及後續規劃通知，主辦單位將嚴格遵守個人資料保護法。
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- BUTTONS -->
+            <div class="flex justify-between items-center mt-8 pt-6 border-t border-orange-100">
+                <button type="button" id="prev-btn" class="hidden px-5 py-2.5 rounded-xl border border-orange-200 text-sm font-semibold text-orange-850 hover:bg-orange-50 transition-all duration-200" onclick="prevStep()">
+                    上一步
+                </button>
+                <button type="button" id="next-btn" class="px-5 py-2.5 rounded-xl bg-brand-teal text-white text-sm font-semibold hover:shadow-lg hover:shadow-orange-500/20 transition-all duration-200 ml-auto" onclick="nextStep()">
+                    下一步
+                </button>
+                <button type="submit" id="submit-btn" class="hidden px-6 py-2.5 rounded-xl bg-brand-teal text-white text-sm font-semibold hover:shadow-lg hover:shadow-orange-500/20 transition-all duration-200 ml-auto">
+                    送出問卷
+                </button>
+            </div>
+        </form>
+
+        <!-- Loading -->
+        <div id="card-loading" class="hidden absolute inset-0 bg-white/90 backdrop-blur-sm flex flex-col items-center justify-center z-50">
+            <div class="animate-spin rounded-full h-10 w-10 border-4 border-orange-200 border-t-brand-teal mb-4"></div>
+            <p class="text-sm font-semibold text-orange-950">傳送問卷資料中，請稍候...</p>
+        </div>
+
+        <!-- Success Block -->
+        <div id="success-block" class="hidden text-center py-8 space-y-6 fade-in-step">
+            <div class="w-16 h-16 bg-green-500/10 text-green-600 rounded-full flex items-center justify-center mx-auto text-3xl">
+                <i class="bi bi-check-circle-fill"></i>
+            </div>
+            <div class="space-y-2">
+                <h2 class="text-xl font-bold text-orange-950">問卷提交成功！</h2>
+                <p class="text-sm text-orange-800">非常感謝您的寶貴意見，您的支持是我們持續進步的動力。</p>
+            </div>
+
+            <div id="success-lottery-box" class="hidden bg-brand-orange/10 border border-brand-orange/20 rounded-2xl p-4 max-w-sm mx-auto text-left space-y-2.5">
+                <div class="flex items-center space-x-2 text-brand-orange font-bold text-sm">
+                    <i class="bi bi-gift-fill"></i>
+                    <span>您的抽獎序號：</span>
+                </div>
+                <div class="text-2xl font-extrabold text-orange-950 font-mono tracking-wider text-center py-1 bg-white/60 rounded-xl border border-orange-100 shadow-inner" id="success-lottery-id">
+                    LZ-00000
+                </div>
+                <p class="text-[11px] text-orange-900 leading-normal text-center">
+                    請妥善保管此序號，抽獎結果公布時將以此序號為中獎憑證。
+                </p>
+            </div>
+
+            <div class="bg-orange-50/50 rounded-2xl p-4 text-left border border-orange-100 text-xs text-orange-950 space-y-2 max-w-md mx-auto">
+                <div class="font-bold text-sm text-orange-900 border-b border-orange-100 pb-1.5 mb-1.5">您的填答摘要：</div>
+                <div><strong>年齡 / 性別：</strong> <span id="sum-age-gender">-- / --</span></div>
+                <div><strong>來訪頻率 / 交通：</strong> <span id="sum-freq-transport">-- / --</span></div>
+                <div><strong>注意事項：</strong> <div class="flex flex-wrap gap-1 mt-1" id="sum-q12-tags"></div></div>
+                <div><strong>選取遊具：</strong> <div class="flex flex-wrap gap-1 mt-1" id="sum-q13-tags"></div></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentStep = 1;
+        const totalSteps = 4;
+        const selectedQ12 = new Set();
+        const selectedQ13 = new Set();
+
+        function selectRadio(name, val, element) {
+            document.getElementById(name).value = val;
+            const container = element.parentElement;
+            const options = container.querySelectorAll('.custom-option');
+            options.forEach(opt => opt.classList.remove('custom-option-checked'));
+            element.classList.add('custom-option-checked');
+        }
+
+        function showOther(name) {
+            document.getElementById(`${name}_other`).classList.remove('hidden');
+            document.getElementById(`${name}_other`).required = true;
+        }
+
+        function hideOther(name) {
+            document.getElementById(`${name}_other`).classList.add('hidden');
+            document.getElementById(`${name}_other`).required = false;
+            document.getElementById(`${name}_other`).value = "";
+        }
+
+        function toggleGridCheck(e, dayType, idx) {
+            const checkbox = document.getElementById(`q6-${dayType}-${idx}`);
+            checkbox.checked = !checkbox.checked;
+        }
+
+        function toggleMultiSelect(name, val, element) {
+            if (selectedQ12.has(val)) {
+                selectedQ12.delete(val);
+                element.classList.remove('custom-option-checked');
+                if (val === '其他') hideOther('q12');
+            } else {
+                if (selectedQ12.size >= 3) {
+                    alert("最常用注意事項最多只能選擇 3 個項目喔！");
+                    return;
+                }
+                selectedQ12.add(val);
+                element.classList.add('custom-option-checked');
+                if (val === '其他') showOther('q12');
+            }
+        }
+
+        function toggleImgOpt(name, val, element) {
+            if (selectedQ13.has(val)) {
+                selectedQ13.delete(val);
+                element.classList.remove('selected');
+            } else {
+                selectedQ13.add(val);
+                element.classList.add('selected');
+            }
+        }
+
+        function toggleLotteryFields(show) {
+            document.getElementById('join_lottery').value = show ? 'yes' : 'no';
+            const container = document.getElementById('lottery-fields-container');
+            const optJoin = document.getElementById('opt-join-lottery');
+            const optSkip = document.getElementById('opt-skip-lottery');
+            const inputs = container.querySelectorAll('input');
+
+            if (show) {
+                container.classList.remove('hidden');
+                optJoin.classList.add('custom-option-checked');
+                optSkip.classList.remove('custom-option-checked');
+                inputs.forEach(input => {
+                    if (input.type !== 'checkbox') input.required = true;
+                });
+            } else {
+                container.classList.add('hidden');
+                optJoin.classList.remove('custom-option-checked');
+                optSkip.classList.add('custom-option-checked');
+                inputs.forEach(input => input.required = false);
+            }
+        }
+
+        function updateProgress() {
+            const percent = Math.round((currentStep / totalSteps) * 100);
+            document.getElementById('step-percent').innerText = `${percent}%`;
+            document.getElementById('progress-bar').style.width = `${percent}%`;
+
+            let label = "";
+            switch(currentStep) {
+                case 1: label = "步驟 1 / 4：基本背景資訊"; break;
+                case 2: label = "步驟 2 / 4：使用習慣調查"; break;
+                case 3: label = "步驟 3 / 4：特色遊戲場需求"; break;
+                case 4: label = "步驟 4 / 4：聯絡資訊與送出"; break;
+            }
+            document.getElementById('step-label').innerText = label;
+        }
+
+        function validateStep() {
+            if (currentStep === 1) {
+                if (!document.getElementById('q1').value) { alert("請選擇性別！"); return false; }
+                if (!document.getElementById('q2').value) { alert("請選擇年齡層！"); return false; }
+                if (!document.getElementById('q3').value) { alert("請選擇來訪頻率！"); return false; }
+                if (!document.getElementById('q4').value) { alert("請選擇交通工具！"); return false; }
+                if (document.getElementById('q4').value === '其他' && !document.getElementById('q4_other').value.trim()) { alert("請填寫其他交通工具！"); return false; }
+                if (!document.getElementById('q5').value) { alert("請選擇花費時間！"); return false; }
+                if (document.getElementById('q5').value === '其他' && !document.getElementById('q5_other').value.trim()) { alert("請填寫其他花費時間！"); return false; }
+            } else if (currentStep === 2) {
+                if (!document.getElementById('q7').value) { alert("請選擇停留時間！"); return false; }
+                if (document.getElementById('q7').value === '其他' && !document.getElementById('q7_other').value.trim()) { alert("請填寫其他停留時間！"); return false; }
+                if (!document.getElementById('q8').value) { alert("請選擇同行同伴！"); return false; }
+                if (document.getElementById('q8').value === '其他' && !document.getElementById('q8_other').value.trim()) { alert("請填寫其他同伴！"); return false; }
+            } else if (currentStep === 3) {
+                if (!document.getElementById('q9').value) { alert("請回答是否聽過特色公園！"); return false; }
+                if (!document.getElementById('q10').value) { alert("請回答是否去過特色公園！"); return false; }
+                if (!document.getElementById('q11').value) { alert("請選擇陪同兒童年齡層！"); return false; }
+                if (selectedQ12.size === 0) { alert("最常用注意事項請至少選擇一項！"); return false; }
+                if (selectedQ12.has('其他') && !document.getElementById('q12_other').value.trim()) { alert("請填寫其他注意事項！"); return false; }
+                
+                // Q13 驗證：四大類別各需選一
+                const opts = Array.from(selectedQ13);
+                const swings = opts.some(v => v.indexOf("盪鞦韆-") === 0);
+                const slides = opts.some(v => v.indexOf("溜滑-") === 0);
+                const climbs = opts.some(v => v.indexOf("攀爬-") === 0);
+                const rotates = opts.some(v => v.indexOf("旋轉-") === 0);
+                
+                if (!swings || !slides || !climbs || !rotates) {
+                    alert("第 13 題請在四個類別中，各至少選取一項喜歡的遊具！");
+                    return false;
+                }
+
+                if (!document.getElementById('q15').value) { alert("請填寫第 15 題（軟石健康步道意見）！"); return false; }
+                if (!document.getElementById('q16').value) { alert("請填寫第 16 題（公園廣場意見）！"); return false; }
+            }
+            return true;
+        }
+
+        function nextStep() {
+            if (!validateStep()) return;
+            
+            document.getElementById(`step-${currentStep}`).classList.add('hidden');
+            currentStep++;
+            document.getElementById(`step-${currentStep}`).classList.remove('hidden');
+
+            document.getElementById('prev-btn').classList.remove('hidden');
+            if (currentStep === totalSteps) {
+                document.getElementById('next-btn').classList.add('hidden');
+                document.getElementById('submit-btn').classList.remove('hidden');
+            }
+            updateProgress();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function prevStep() {
+            document.getElementById(`step-${currentStep}`).classList.add('hidden');
+            currentStep--;
+            document.getElementById(`step-${currentStep}`).classList.remove('hidden');
+
+            document.getElementById('submit-btn').classList.add('hidden');
+            document.getElementById('next-btn').classList.remove('hidden');
+            
+            if (currentStep === 1) {
+                document.getElementById('prev-btn').classList.add('hidden');
+            }
+            updateProgress();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        async function handleFormSubmit(e) {
+            e.preventDefault();
+            
+            const isJoining = document.getElementById('join_lottery').value === 'yes';
+            let lotteryId = "未參加";
+            let nameVal = "";
+            let phoneVal = "";
+            let emailVal = "";
+
+            if (isJoining) {
+                if (!document.getElementById('lottery-name').value.trim()) { alert("請輸入真實姓名！"); return; }
+                if (!document.getElementById('lottery-phone').checkValidity()) { alert("請輸入正確的手機號碼 (例如 0912345678)！"); return; }
+                if (!document.getElementById('lottery-email').value.trim()) { alert("請輸入聯絡 Email！"); return; }
+                if (!document.getElementById('lottery-consent').checked) { alert("必須勾選同意條款以利抽獎！"); return; }
+
+                const randomCode = Math.floor(10000 + Math.random() * 90000);
+                lotteryId = "LZ-" + randomCode;
+                nameVal = document.getElementById('lottery-name').value.trim();
+                phoneVal = document.getElementById('lottery-phone').value.trim();
+                emailVal = document.getElementById('lottery-email').value.trim();
+            }
+
+            const q6Values = { weekday: [], weekend: [] };
+            for(let i=0; i<timeslots.length; i++) {
+                if (document.getElementById(`q6-weekday-${i}`).checked) q6Values.weekday.push(timeslots[i]);
+                if (document.getElementById(`q6-weekend-${i}`).checked) q6Values.weekend.push(timeslots[i]);
+            }
+
+            const payload = {
+                action: 'SUBMIT_PLAYGROUND_SURVEY',
+                lotteryId: lotteryId,
+                name: nameVal,
+                phone: phoneVal,
+                email: emailVal,
+                q1: document.getElementById('q1').value,
+                q2: document.getElementById('q2').value,
+                q3: document.getElementById('q3').value,
+                q4: document.getElementById('q4').value,
+                q4_other: document.getElementById('q4_other').value.trim(),
+                q5: document.getElementById('q5').value,
+                q5_other: document.getElementById('q5_other').value.trim(),
+                q6: q6Values,
+                q7: document.getElementById('q7').value,
+                q7_other: document.getElementById('q7_other').value.trim(),
+                q8: document.getElementById('q8').value,
+                q8_other: document.getElementById('q8_other').value.trim(),
+                q9: document.getElementById('q9').value,
+                q10: document.getElementById('q10').value,
+                q11: document.getElementById('q11').value,
+                q12: Array.from(selectedQ12),
+                q12_other: document.getElementById('q12_other').value.trim(),
+                q13: Array.from(selectedQ13),
+                q15: document.getElementById('q15').value.trim(),
+                q16: document.getElementById('q16').value.trim(),
+                q17: document.getElementById('q17').value.trim(),
+                q18: document.getElementById('q18').value.trim()
+            };
+
+            document.getElementById('card-loading').classList.remove('hidden');
+
+            try {
+                if (CONFIG.gasUrl) {
+                    await fetch(CONFIG.gasUrl, {
+                        method: 'POST',
+                        mode: 'no-cors',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+                }
+
+                document.getElementById('card-loading').classList.add('hidden');
+                document.getElementById('survey-form').classList.add('hidden');
+                document.getElementById('progress-container').classList.add('hidden');
+                
+                document.getElementById('sum-age-gender').innerText = `${payload.q2 || "無"} / ${payload.q1 || "無"}`;
+                document.getElementById('sum-freq-transport').innerText = `${payload.q3 || "無"} / ${payload.q4 || "無"}`;
+
+                const q12Container = document.getElementById('sum-q12-tags');
+                q12Container.innerHTML = '';
+                payload.q12.forEach(tag => {
+                    const span = document.createElement('span');
+                    span.className = 'bg-orange-100 text-orange-900 px-2 py-0.5 rounded-md font-medium text-[11px]';
+                    span.innerText = tag;
+                    q12Container.appendChild(span);
+                });
+
+                const q13Container = document.getElementById('sum-q13-tags');
+                q13Container.innerHTML = '';
+                payload.q13.forEach(item => {
+                    const span = document.createElement('span');
+                    span.className = 'bg-amber-100 text-amber-950 border border-amber-200/60 px-2 py-0.5 rounded-md font-medium text-[11px]';
+                    span.innerText = item.replace(/^[^-]+-/, "");
+                    q13Container.appendChild(span);
+                });
+
+                const successBox = document.getElementById('success-lottery-box');
+                if (isJoining) {
+                    document.getElementById('success-lottery-id').innerText = lotteryId;
+                    successBox.classList.remove('hidden');
+                } else {
+                    successBox.classList.add('hidden');
+                }
+                document.getElementById('success-block').classList.remove('hidden');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            } catch (err) {
+                document.getElementById('card-loading').classList.add('hidden');
+                alert("提交失敗，請檢查網路連線後重試！錯誤原因: " + err.message);
+            }
+        }
+    </script>
+</body>
+</html>
