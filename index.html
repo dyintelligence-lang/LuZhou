@@ -1,0 +1,1379 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>【柳堤兒童遊戲場改造問卷】從孩子出發，定義蘆洲下一代共融遊戲場</title>
+    
+    <!-- Google Fonts & Bootstrap Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    
+    <!-- Tailwind CSS (Static Production Version) -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+
+    <style>
+        /* Custom colors compatibility - Orange Theme */
+        .text-brand-teal { color: #f97316 !important; }
+        .bg-brand-teal { background-color: #ea580c !important; }
+        .bg-brand-teal:hover { background-color: #c2410c !important; }
+        .text-brand-orange { color: #f97316 !important; }
+        .bg-brand-orange\/10 { background-color: rgba(249, 115, 22, 0.1) !important; }
+        .border-brand-teal { border-color: #f97316 !important; }
+        .focus\:border-brand-teal:focus { border-color: #f97316 !important; }
+        .focus\:ring-brand-teal:focus { --tw-ring-color: #f97316 !important; }
+        .text-brand-green { color: #fb923c !important; }
+        .from-brand-green { --tw-gradient-from: #fb923c !important; --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(251, 146, 60, 0)) !important; }
+        .to-brand-teal { --tw-gradient-to: #ea580c !important; }
+        .via-brand-teal { --tw-gradient-stops: var(--tw-gradient-from), #f97316, var(--tw-gradient-to, rgba(249, 115, 22, 0)) !important; }
+        .to-brand-purple { --tw-gradient-to: #f59e0b !important; }
+
+        body {
+            font-family: 'Outfit', 'Noto Sans TC', sans-serif;
+            background: linear-gradient(135deg, #fff7ed 0%, #fffbeb 50%, #fef3c7 100%);
+            min-height: 100vh;
+        }
+
+        /* Glassmorphism styling */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.82);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 237, 213, 0.6);
+            box-shadow: 0 20px 40px rgba(249, 115, 22, 0.06);
+        }
+
+        /* Customize radio/checkbox states for custom touch buttons */
+        .custom-option:hover {
+            border-color: rgba(249, 115, 22, 0.4);
+            background-color: rgba(249, 115, 22, 0.02);
+        }
+        
+        .custom-option-checked {
+            border-color: #f97316 !important;
+            background-color: rgba(249, 115, 22, 0.08) !important;
+            color: #ea580c !important;
+            box-shadow: 0 4px 12px rgba(249, 115, 22, 0.12);
+        }
+
+        /* Animation */
+        .fade-in-step {
+            animation: fadeIn 0.4s ease-out forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Grid check styling */
+        .grid-check-cell:hover {
+            background-color: rgba(249, 115, 22, 0.04);
+        }
+    </style>
+</head>
+<body class="py-8 px-4 flex items-center justify-center">
+
+    <!-- 
+    =====================================================================
+    DEPLOYMENT INSTRUCTIONS FOR ADMINS (Google Apps Script)
+    =====================================================================
+    1. Create a new Google Sheet.
+    2. Click Extensions -> Apps Script.
+    3. Paste the following script:
+
+    function doPost(e) {
+      try {
+        var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+        var data = JSON.parse(e.postData.contents);
+        
+        // Write headers if sheet is empty
+        if (sheet.getLastRow() === 0) {
+          sheet.appendRow([
+            "時間戳記", "抽獎ID", "姓名", "電話", "Email", 
+            "1. 性別", "2. 年齡層", "3. 來訪頻率", "4. 交通工具", "4. 交通工具其他", 
+            "5. 花費時間", "5. 花費時間其他", "6. 通常來訪時間",
+            "7. 每次停留時間", "7. 每次停留時間其他", "8. 同行同伴", "8. 同行同伴其他",
+            "9. 聽過特色公園", "10. 去過特色公園", "11. 陪同孩童年齡層", "12. 注意事項",
+            "13. 高體能挑戰設施排序", "14. 保留記憶或設施", "15. 遊戲場改善建議"
+          ]);
+        }
+        
+        sheet.appendRow([
+          new Date(),
+          data.lotteryId || "",
+          data.name || "",
+          data.phone || "",
+          data.email || "",
+          data.q1 || "",
+          data.q2 || "",
+          data.q3 || "",
+          data.q4 || "",
+          data.q4_other || "",
+          data.q5 || "",
+          data.q5_other || "",
+          JSON.stringify(data.q6) || "",
+          data.q7 || "",
+          data.q7_other || "",
+          data.q8 || "",
+          data.q8_other || "",
+          data.q9 || "",
+          data.q10 || "",
+          data.q11 || "",
+          JSON.stringify(data.q12) || "",
+          JSON.stringify(data.q13) || "",
+          data.q15 || "",
+          data.q16 || ""
+        ]);
+        
+        return ContentService.createTextOutput(JSON.stringify({ status: "success", lotteryId: data.lotteryId }))
+          .setMimeType(ContentService.MimeType.JSON);
+      } catch(err) {
+        return ContentService.createTextOutput(JSON.stringify({ status: "error", message: err.toString() }))
+          .setMimeType(ContentService.MimeType.JSON);
+      }
+    }
+
+    4. Deploy -> New Deployment -> Web App.
+       - Execute as: Me
+       - Who has access: Anyone
+    5. Copy the Web App URL and paste it below in the CONFIG.gasUrl variable.
+    -->
+
+    <script>
+        // CONFIGURATION: Paste your Google Apps Script URL here to enable Sheet saving.
+        const CONFIG = {
+            gasUrl: "https://script.google.com/macros/s/AKfycbxEXR3fQ158Jn_P-u-BS6R1ubAKkUgmONoYIDaNmQodqp5yX3p3MVV5f2LWgA-SV-8iIA/exec" 
+        };
+    </script>
+
+    <div class="w-full max-w-2xl glass-card rounded-3xl p-6 md:p-8 transition-all duration-300 relative overflow-hidden">
+        
+        <!-- Header Decorator -->
+        <div class="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-brand-green via-brand-teal to-brand-purple"></div>
+
+        <!-- Title Block -->
+        <div class="mb-8 space-y-4">
+            <h1 class="text-xl md:text-2xl font-bold text-orange-950 tracking-wide leading-snug">
+                【柳堤兒童遊戲場改造問卷】<br class="hidden md:inline">從孩子出發，定義蘆洲下一代共融遊戲場
+            </h1>
+
+            <!-- 整合說明與抽獎活動辦法卡片 -->
+            <div class="bg-gradient-to-br from-amber-500/10 via-orange-500/10 to-amber-500/5 border border-orange-200/80 rounded-2xl p-4 md:p-5 shadow-sm space-y-3.5">
+                <!-- 問卷引言說明 -->
+                <p class="text-sm text-orange-900 leading-relaxed bg-white/70 p-3.5 rounded-xl border border-orange-100/80">
+                    您好！我們正在針對兒童遊戲場進行環境與設施的需求調查。您的意見將作為未來規劃遊戲場的重要參考，讓遊戲場不只是遊樂設施，更能成為孩子成長的體驗場。填寫約需 3 分鐘，感謝您的支持。
+                </p>
+
+                <!-- 抽獎活動標題 -->
+                <div class="flex items-center gap-2.5 pt-0.5">
+                    <div class="w-8 h-8 rounded-xl bg-orange-500 text-white flex items-center justify-center text-base shadow-sm">
+                        <i class="bi bi-gift-fill"></i>
+                    </div>
+                    <div>
+                        <span class="text-xs font-semibold text-orange-600 tracking-wider uppercase">填問卷抽好禮</span>
+                        <h2 class="text-base md:text-lg font-bold text-orange-950">柳堤公園遊戲場改造大調查・填問卷抽新北幣</h2>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 mb-3 text-xs">
+                    <div class="bg-white/80 rounded-xl p-2.5 border border-orange-100 flex items-start gap-2">
+                        <span class="text-orange-500 font-bold mt-0.5"><i class="bi bi-award-fill"></i></span>
+                        <div>
+                            <span class="text-orange-600 block text-[11px] font-semibold">抽獎獎項</span>
+                            <span class="text-orange-950 font-bold">新北幣 100 點（共 300 名）</span>
+                        </div>
+                    </div>
+                    <div class="bg-white/80 rounded-xl p-2.5 border border-orange-100 flex items-start gap-2">
+                        <span class="text-orange-500 font-bold mt-0.5"><i class="bi bi-calendar-check-fill"></i></span>
+                        <div>
+                            <span class="text-orange-600 block text-[11px] font-semibold">活動期間</span>
+                            <span class="text-orange-950 font-bold">115/09/21 08:00 - 10/20 17:00</span>
+                        </div>
+                    </div>
+                    <div class="bg-white/80 rounded-xl p-2.5 border border-orange-100 flex items-start gap-2">
+                        <span class="text-orange-500 font-bold mt-0.5"><i class="bi bi-megaphone-fill"></i></span>
+                        <div>
+                            <span class="text-orange-600 block text-[11px] font-semibold">中獎名單公告</span>
+                            <span class="text-orange-950 font-bold">115/10/30 16:00 公告</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 完整活動辦法收合區塊 -->
+                <details class="text-xs text-orange-900 group">
+                    <summary class="cursor-pointer font-semibold text-orange-800 hover:text-orange-950 select-none flex items-center justify-between bg-orange-100/50 hover:bg-orange-100/80 px-3.5 py-2 rounded-xl transition-colors">
+                        <span class="flex items-center gap-1.5"><i class="bi bi-file-earmark-text text-brand-teal"></i> 查閱完整抽獎活動辦法與個資告知事項</span>
+                        <i class="bi bi-chevron-down group-open:rotate-180 transition-transform text-orange-600"></i>
+                    </summary>
+                    <div class="mt-3 space-y-3 bg-white/90 p-4 rounded-xl border border-orange-100 leading-relaxed text-[12px]">
+                        <div>
+                            <h3 class="font-bold text-orange-950 mb-1">一、抽獎資格</h3>
+                            <p class="text-orange-800">
+                                於活動期間 115 年 9 月 21 日上午 8 時起至 115 年 10 月 20 日下午 5 時止，完成柳堤公園改造介紹網站瀏覽及「柳堤公園遊戲場改造先期調查問卷」，並留下真實、完整且可供聯繫之資料者，即具抽獎資格。<br>
+                                每人限參加 1 次，如有重複填寫、聯絡資料不完整或無法辨識等情形，主辦單位得以有效填答資料認定抽獎資格。
+                            </p>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-orange-950 mb-1">二、獎項及名額</h3>
+                            <p class="text-orange-800">
+                                🎁 <strong>新北幣 100 點，共 300 名</strong>。<br>
+                                符合抽獎資格者，將於活動結束後統一辦理抽獎，每位中獎者可獲得新北幣 100 點兌換序號。
+                            </p>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-orange-950 mb-1">三、每人參加次數</h3>
+                            <p class="text-orange-800">
+                                每人限參加及取得抽獎資格 1 次。同一人重複填寫問卷者，不會因此增加抽獎機會。同一電子郵件信箱（E-mail）或連絡電話視為同一參加者，每人僅限取得 1 次抽獎資格。
+                            </p>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-orange-950 mb-1">四、中獎公告</h3>
+                            <p class="text-orange-800">
+                                📅 <strong>115 年 10 月 30 日下午 4 點公告中獎名單</strong>。<br>
+                                中獎資訊將於新北市蘆洲區公所相關公告管道公布，請參與民眾留意相關訊息。
+                            </p>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-orange-950 mb-1">五、領獎方式</h3>
+                            <p class="text-orange-800">
+                                中獎者之「新北幣 100 點兌換序號」將寄送至填寫問卷時所留之電子郵件信箱（E-mail）。請務必填寫正確且可正常收信之電子郵件地址；如因資料填寫錯誤、信箱無法收件等非可歸責於主辦單位之因素致無法取得兌換序號，依主辦單位公告之相關規定辦理。
+                            </p>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-orange-950 mb-1">六、個人資料蒐集告知事項</h3>
+                            <p class="text-orange-800">
+                                依個人資料保護法相關規定，本活動因辦理抽獎、中獎通知、資格確認及獎項發放等需要，將蒐集參與者所填寫之姓名、電子郵件及其他必要聯絡資訊。所蒐集之個人資料僅於本次活動及相關行政作業必要範圍內使用，並依相關法令妥善保管。參與者得依個人資料保護法相關規定，就其個人資料行使查詢、閱覽、複製、補充、更正、停止蒐集處理利用或刪除等權利。參與者得自由選擇是否提供個人資料；惟如未提供抽獎所需之必要聯絡資訊，將無法進行抽獎資格確認、中獎通知及獎項發放。
+                            </p>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-orange-950 mb-1">七、注意事項</h3>
+                            <ol class="list-decimal list-inside space-y-0.5 text-orange-800">
+                                <li>問卷調查結果將作為柳堤公園遊戲場改造先期規劃之參考。</li>
+                                <li>抽獎資格以主辦單位實際收到之有效問卷及聯絡資料為準。</li>
+                                <li>新北幣兌換及使用方式，依新北幣相關規定辦理。</li>
+                                <li>本活動如有未盡事宜或因必要情形調整活動內容，將由主辦單位另行公告。</li>
+                            </ol>
+                            <p class="mt-2 text-right font-semibold text-orange-900">主辦單位｜新北市蘆洲區公所</p>
+                        </div>
+                    </div>
+                </details>
+            </div>
+        </div>
+
+        <!-- Progress Indicator -->
+        <div class="mb-8" id="progress-container">
+            <div class="flex justify-between text-xs font-semibold text-orange-700 mb-2">
+                <span id="step-label">步驟 1 / 4：基本背景</span>
+                <span id="step-percent">25%</span>
+            </div>
+            <div class="w-full bg-orange-100/50 h-2 rounded-full overflow-hidden">
+                <div id="progress-bar" class="bg-gradient-to-r from-brand-green to-brand-teal h-full transition-all duration-300" style="width: 25%"></div>
+            </div>
+        </div>
+
+        <!-- Form Element -->
+        <form id="survey-form" onsubmit="handleFormSubmit(event)">
+
+            <!-- STEP 1: Basic Background -->
+            <div id="step-1" class="fade-in-step space-y-6">
+                <!-- Q1 -->
+                <div class="space-y-3">
+                    <label class="block font-bold text-orange-950">1. 您的性別 <span class="text-brand-orange">*</span></label>
+                    <div class="grid grid-cols-3 gap-3">
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q1', '生理女', this)">
+                            生理女
+                        </div>
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q1', '生理男', this)">
+                            生理男
+                        </div>
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q1', '其他', this)">
+                            其他
+                        </div>
+                    </div>
+                    <input type="hidden" name="q1" id="q1" required>
+                </div>
+
+                <!-- Q2 -->
+                <div class="space-y-3">
+                    <label class="block font-bold text-orange-950">2. 您的年齡層 <span class="text-brand-orange">*</span></label>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q2', '18歲以下', this)">
+                            18歲以下
+                        </div>
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q2', '19-30歲', this)">
+                            19-30歲
+                        </div>
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q2', '31-45歲', this)">
+                            31-45歲
+                        </div>
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q2', '46-60歲', this)">
+                            46-60歲
+                        </div>
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 col-span-1 sm:col-span-2 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q2', '61歲以上', this)">
+                            61歲以上
+                        </div>
+                    </div>
+                    <input type="hidden" name="q2" id="q2" required>
+                </div>
+
+                <!-- Q3 -->
+                <div class="space-y-3">
+                    <label class="block font-bold text-orange-950">3. 您來訪柳堤公園的頻率為何？ <span class="text-brand-orange">*</span></label>
+                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q3', '每天', this)">每天</div>
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q3', '每周1次', this)">每周1次</div>
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q3', '每周2-3次', this)">每周2-3次</div>
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q3', '每月1-2次', this)">每月1-2次</div>
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q3', '不定時', this)">不定時</div>
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q3', '不曾來過', this)">不曾來過</div>
+                    </div>
+                    <input type="hidden" name="q3" id="q3" required>
+                </div>
+
+                <!-- Q4 -->
+                <div class="space-y-3">
+                    <label class="block font-bold text-orange-950">4. 您來此公園所使用的交通工具 <span class="text-brand-orange">*</span></label>
+                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q4', '走路', this); hideOther('q4')">走路</div>
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q4', '腳踏車', this); hideOther('q4')">腳踏車</div>
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q4', '機車', this); hideOther('q4')">機車</div>
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q4', '汽車', this); hideOther('q4')">汽車</div>
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 col-span-1 sm:col-span-2 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q4', '其他', this); showOther('q4')">其他</div>
+                    </div>
+                    <input type="hidden" name="q4" id="q4" required>
+                    <input type="text" id="q4_other" name="q4_other" class="hidden w-full bg-white/60 border border-orange-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-brand-teal" placeholder="請輸入其他交通工具...">
+                </div>
+
+                <!-- Q5 -->
+                <div class="space-y-3">
+                    <label class="block font-bold text-orange-950">5. 您來此公園需要花費多少時間？ <span class="text-brand-orange">*</span></label>
+                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q5', '10分鐘以下', this); hideOther('q5')">10分鐘以下</div>
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q5', '11-20分鐘', this); hideOther('q5')">11-20分鐘</div>
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q5', '21-30分鐘', this); hideOther('q5')">21-30分鐘</div>
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q5', '31-60分鐘', this); hideOther('q5')">31-60分鐘</div>
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q5', '1小時以上', this); hideOther('q5')">1小時以上</div>
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q5', '其他', this); showOther('q5')">其他</div>
+                    </div>
+                    <input type="hidden" name="q5" id="q5" required>
+                    <input type="text" id="q5_other" name="q5_other" class="hidden w-full bg-white/60 border border-orange-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-brand-teal" placeholder="請填寫其他花費時間...">
+                </div>
+            </div>
+
+            <!-- STEP 2: Visiting Habits -->
+            <div id="step-2" class="hidden fade-in-step space-y-6">
+                <!-- Q6 Grid table -->
+                <div class="space-y-3">
+                    <label class="block font-bold text-orange-950">6. 您通常什麼時候來此公園？ (可複選)</label>
+                    <div class="overflow-x-auto rounded-2xl border border-orange-100 bg-white/40 overflow-hidden">
+                        <table class="w-full text-sm text-left border-collapse">
+                            <thead>
+                                <tr class="bg-orange-50/80 border-b border-orange-100 text-orange-950 font-bold text-center">
+                                    <th class="p-3">來訪時段</th>
+                                    <th class="p-3 w-24">平日</th>
+                                    <th class="p-3 w-24">假日</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-orange-50">
+                                <script>
+                                    const timeslots = [
+                                        "上午7:00以前", "上午7:00-9:00", "上午9:00-12:00", 
+                                        "中午12:00-13:00", "下午13:00-16:00", "下午16:00-19:00", 
+                                        "晚上19:00以後"
+                                    ];
+                                    timeslots.forEach((slot, sIdx) => {
+                                        document.write(`
+                                            <tr class="text-orange-950">
+                                                <td class="p-3 font-medium">${slot}</td>
+                                                <td class="p-3 text-center grid-check-cell cursor-pointer" onclick="toggleGridCheck(event, 'weekday', ${sIdx})">
+                                                    <input type="checkbox" id="q6-weekday-${sIdx}" name="q6_weekday_${sIdx}" onclick="event.stopPropagation()" class="form-checkbox h-4.5 w-4.5 text-brand-teal focus:ring-brand-teal rounded border-orange-300">
+                                                </td>
+                                                <td class="p-3 text-center grid-check-cell cursor-pointer" onclick="toggleGridCheck(event, 'weekend', ${sIdx})">
+                                                    <input type="checkbox" id="q6-weekend-${sIdx}" name="q6_weekend_${sIdx}" onclick="event.stopPropagation()" class="form-checkbox h-4.5 w-4.5 text-brand-teal focus:ring-brand-teal rounded border-orange-300">
+                                                </td>
+                                            </tr>
+                                        `);
+                                    });
+                                </script>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Q7 -->
+                <div class="space-y-3">
+                    <label class="block font-bold text-orange-950">7. 您來此公園平均每次停留時間？ <span class="text-brand-orange">*</span></label>
+                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q7', '10分鐘以下', this); hideOther('q7')">10分鐘以下</div>
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q7', '10-30分鐘', this); hideOther('q7')">10-30分鐘</div>
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q7', '30-60分鐘', this); hideOther('q7')">30-60分鐘</div>
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q7', '1-2小時', this); hideOther('q7')">1-2小時</div>
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q7', '2小時以上', this); hideOther('q7')">2小時以上</div>
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q7', '其他', this); showOther('q7')">其他</div>
+                    </div>
+                    <input type="hidden" name="q7" id="q7" required>
+                    <input type="text" id="q7_other" name="q7_other" class="hidden w-full bg-white/60 border border-orange-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-brand-teal" placeholder="請填寫其他停留時間...">
+                </div>
+
+                <!-- Q8 -->
+                <div class="space-y-3">
+                    <label class="block font-bold text-orange-950">8. 最常與您同行前往公園的同伴？ <span class="text-brand-orange">*</span></label>
+                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q8', '獨自前往', this); hideOther('q8')">獨自前往</div>
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q8', '與家人同行(3人以上)', this); hideOther('q8')">與家人同行(3人+)</div>
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q8', '配偶/伴侶', this); hideOther('q8')">配偶/伴侶</div>
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q8', '與小孩來', this); hideOther('q8')">與小孩來</div>
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q8', '與朋友來', this); hideOther('q8')">與朋友來</div>
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q8', '其他', this); showOther('q8')">其他</div>
+                    </div>
+                    <input type="hidden" name="q8" id="q8" required>
+                    <input type="text" id="q8_other" name="q8_other" class="hidden w-full bg-white/60 border border-orange-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-brand-teal" placeholder="請填寫其他同伴...">
+                </div>
+            </div>
+
+            <!-- STEP 3: Special Parks & Attention -->
+            <div id="step-3" class="hidden fade-in-step space-y-6">
+                <!-- Q9 -->
+                <div class="space-y-3">
+                    <label class="block font-bold text-orange-950">9. 您是否聽過特色公園遊戲場？ <span class="text-brand-orange">*</span></label>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q9', '是', this)">是</div>
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q9', '否', this)">否</div>
+                    </div>
+                    <input type="hidden" name="q9" id="q9" required>
+                </div>
+
+                <!-- Q10 -->
+                <div class="space-y-3">
+                    <label class="block font-bold text-orange-950">10. 您是否有去過其他的特色公園遊戲場？ <span class="text-brand-orange">*</span></label>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q10', '是', this)">是</div>
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q10', '否', this)">否</div>
+                    </div>
+                    <input type="hidden" name="q10" id="q10" required>
+                </div>
+
+                <!-- Q11 -->
+                <div class="space-y-3">
+                    <label class="block font-bold text-orange-950">11. 陪同孩童年齡層？ <span class="text-brand-orange">*</span></label>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q11', '無陪同(個人/無孩童)', this)">無陪同(個人/無孩童)</div>
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q11', '0-3歲(幼童)', this)">0-3歲(幼童)</div>
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q11', '4-6歲(學齡前)', this)">4-6歲(學齡前)</div>
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q11', '7-12歲(學齡孩童)', this)">7-12歲(學齡孩童)</div>
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q11', '13+ (青少年)', this)">13+ (青少年)</div>
+                    </div>
+                    <input type="hidden" name="q11" id="q11" required>
+                </div>
+
+                <!-- Q12 -->
+                <div class="space-y-3">
+                    <label class="block font-bold text-orange-950">12. 您覺得柳堤遊戲場最需要注意？(擇三，目前已選 <span id="q12-count" class="font-bold text-brand-teal">0</span>/3 個) <span class="text-brand-orange">*</span></label>
+                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                        <script>
+                            const q12Options = ["創意性", "健康空間", "挑戰性", "安全性", "主題性", "遮蔭性", "公平使用的機會", "無障礙環境", "自然材質", "分齡使用", "混齡使用", "共融環境"];
+                            q12Options.forEach(opt => {
+                                document.write(`
+                                    <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-xs font-medium" onclick="toggleMultiSelect('q12', '${opt}', this)">
+                                        ${opt}
+                                    </div>
+                                `);
+                            });
+                        </script>
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-xs font-medium" onclick="toggleMultiSelect('q12', '其他', this)">
+                            其他
+                        </div>
+                    </div>
+                    <input type="text" id="q12_other" name="q12_other" class="hidden w-full bg-white/60 border border-orange-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-brand-teal" placeholder="請填寫其他注意事項...">
+                </div>
+
+                <!-- Q13 遊具圖片點選（按分類）-->
+                <div class="space-y-4 pt-4 border-t border-orange-100">
+                    <label class="block font-bold text-orange-950 leading-relaxed">
+                        13. 您希望柳堤遊戲場新增哪些遊具？請從以下四大類中點選喜歡的遊具（可複選，每類至少選一項） <span class="text-brand-orange">*</span>
+                    </label>
+                    <p class="text-xs text-orange-800 leading-normal mb-2">點擊圖片即可選取，再次點擊取消。可跨分類複選。</p>
+
+                    <style>
+                        .img-opt-group { margin-bottom: 1.25rem; }
+                        .img-opt-group-title {
+                            font-size: 0.85rem;
+                            font-weight: 700;
+                            color: #c2410c;
+                            background: rgba(249,115,22,0.08);
+                            border-left: 3px solid #f97316;
+                            padding: 4px 10px;
+                            border-radius: 4px;
+                            margin-bottom: 8px;
+                            display: inline-block;
+                        }
+                        .img-opt-grid {
+                            display: grid;
+                            grid-template-columns: repeat(3, 1fr);
+                            gap: 8px;
+                        }
+                        @media (max-width: 480px) {
+                            .img-opt-grid { grid-template-columns: repeat(2, 1fr); }
+                        }
+                        .img-opt-card {
+                            position: relative;
+                            border-radius: 12px;
+                            overflow: hidden;
+                            cursor: pointer;
+                            border: 2.5px solid transparent;
+                            transition: border-color 0.2s, box-shadow 0.2s;
+                            background: #fff;
+                            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+                        }
+                        .img-opt-card:hover {
+                            border-color: rgba(249,115,22,0.45);
+                            box-shadow: 0 4px 14px rgba(249,115,22,0.18);
+                        }
+                        .img-opt-card.selected {
+                            border-color: #f97316;
+                            box-shadow: 0 4px 16px rgba(249,115,22,0.30);
+                        }
+                        .img-opt-card img {
+                            width: 100%;
+                            aspect-ratio: 4/3;
+                            object-fit: cover;
+                            display: block;
+                            background: #fff7ed;
+                        }
+                        .img-opt-label {
+                            font-size: 0.72rem;
+                            font-weight: 600;
+                            color: #7c2d12;
+                            text-align: center;
+                            padding: 5px 4px;
+                            background: rgba(255,255,255,0.92);
+                            line-height: 1.3;
+                        }
+                        .img-opt-check {
+                            position: absolute;
+                            top: 5px;
+                            right: 5px;
+                            width: 22px;
+                            height: 22px;
+                            border-radius: 50%;
+                            background: #f97316;
+                            color: #fff;
+                            display: none;
+                            align-items: center;
+                            justify-content: center;
+                            font-size: 13px;
+                            box-shadow: 0 2px 6px rgba(249,115,22,0.45);
+                        }
+                        .img-opt-card.selected .img-opt-check { display: flex; }
+                    </style>
+
+                    <!-- 擺盪類 -->
+                    <div class="img-opt-group">
+                        <div class="img-opt-group-title">🕹 擺盪類</div>
+                        <div class="img-opt-grid">
+                            <div class="img-opt-card" onclick="toggleImgOpt('q13', '擺盪-平板鞦韆', this)">
+                                <img src="https://6t.vcom.tw/archive/image/5bmz5p2-6Z6m6Z_GLjU5MjIzODc4Mg==.jpg" alt="平板鞦韆" loading="lazy">
+                                <div class="img-opt-label">平板鞦韆</div>
+                                <div class="img-opt-check">✓</div>
+                            </div>
+                            <div class="img-opt-card" onclick="toggleImgOpt('q13', '擺盪-尿布鞦韆', this)">
+                                <img src="https://6t.vcom.tw/archive/image/5bC-5biD6Z6m6Z_GLjU5MTExODk2NQ==.jpg" alt="尿布鞦韆" loading="lazy">
+                                <div class="img-opt-label">尿布鞦韆</div>
+                                <div class="img-opt-check">✓</div>
+                            </div>
+                            <div class="img-opt-card" onclick="toggleImgOpt('q13', '擺盪-座椅鞦韆', this)">
+                                <img src="https://6t.vcom.tw/archive/image/5bqn5qSF6Z6m6Z_GLjU5ODc5OTU1Ng==.jpg" alt="座椅鞦韆" loading="lazy">
+                                <div class="img-opt-label">座椅鞦韆</div>
+                                <div class="img-opt-check">✓</div>
+                            </div>
+                            <div class="img-opt-card" onclick="toggleImgOpt('q13', '擺盪-鳥巢鞦韆', this)">
+                                <img src="https://6t.vcom.tw/archive/image/6bOl5bei6Z6m6Z_GLjU5ODgwMzAxNQ==.jpg" alt="鳥巢鞦韆" loading="lazy">
+                                <div class="img-opt-label">鳥巢鞦韆</div>
+                                <div class="img-opt-check">✓</div>
+                            </div>
+                            <div class="img-opt-card" onclick="toggleImgOpt('q13', '擺盪-親子鞦韆', this)">
+                                <img src="https://6t.vcom.tw/archive/image/6Kaq5a2Q6Z6m6Z_GLjU5MjI1MjgyNg==.jpg" alt="親子鞦韆" loading="lazy">
+                                <div class="img-opt-label">親子鞦韆</div>
+                                <div class="img-opt-check">✓</div>
+                            </div>
+                            <div class="img-opt-card" onclick="toggleImgOpt('q13', '擺盪-擺盪大索', this)">
+                                <img src="https://6t.vcom.tw/archive/image/5pO655uq5aSn57SiLjU5ODgwNjY4Mg==.jpg" alt="擺盪大索" loading="lazy">
+                                <div class="img-opt-label">擺盪大索</div>
+                                <div class="img-opt-check">✓</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 溜滑類 -->
+                    <div class="img-opt-group">
+                        <div class="img-opt-group-title">🎿 溜滑類</div>
+                        <div class="img-opt-grid">
+                            <div class="img-opt-card" onclick="toggleImgOpt('q13', '溜滑-直線滑梯', this)">
+                                <img src="https://6t.vcom.tw/archive/image/55u057ea5ruR5qKvLjU5OTUzODA5MQ==.jpg" alt="直線滑梯" loading="lazy">
+                                <div class="img-opt-label">直線滑梯</div>
+                                <div class="img-opt-check">✓</div>
+                            </div>
+                            <div class="img-opt-card" onclick="toggleImgOpt('q13', '溜滑-旋轉滑梯', this)">
+                                <img src="https://6t.vcom.tw/archive/image/5peL6L2J5ruR5qKvLjU5OTUwMzI5MQ==.jpg" alt="旋轉滑梯" loading="lazy">
+                                <div class="img-opt-label">旋轉滑梯</div>
+                                <div class="img-opt-check">✓</div>
+                            </div>
+                            <div class="img-opt-card" onclick="toggleImgOpt('q13', '溜滑-磨石滑梯', this)">
+                                <img src="https://6t.vcom.tw/archive/image/56Oo55_z5ruR5qKvLjU5ODgxODczNg==.jpg" alt="磨石滑梯" loading="lazy">
+                                <div class="img-opt-label">磨石滑梯</div>
+                                <div class="img-opt-check">✓</div>
+                            </div>
+                            <div class="img-opt-card" onclick="toggleImgOpt('q13', '溜滑-地景滑梯', this)">
+                                <img src="https://6t.vcom.tw/archive/image/5Zyw5pmv5ruR5qKvLjU5ODgyMTQ0Mg==.jpg" alt="地景滑梯" loading="lazy">
+                                <div class="img-opt-label">地景滑梯</div>
+                                <div class="img-opt-check">✓</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 攀爬類 -->
+                    <div class="img-opt-group">
+                        <div class="img-opt-group-title">🧗 攀爬類</div>
+                        <div class="img-opt-grid">
+                            <div class="img-opt-card" onclick="toggleImgOpt('q13', '攀爬-木製爬架', this)">
+                                <img src="https://6t.vcom.tw/archive/image/5pyo6KO95pSA54is5p62LjU5ODgyOTE5MQ==.jpg" alt="木製爬架" loading="lazy">
+                                <div class="img-opt-label">木製爬架</div>
+                                <div class="img-opt-check">✓</div>
+                            </div>
+                            <div class="img-opt-card" onclick="toggleImgOpt('q13', '攀爬-攀爬繩網', this)">
+                                <img src="https://6t.vcom.tw/archive/image/57mp57ay5pSA54is5p62LjU5ODgzNTQ1Nw==.jpg" alt="攀爬繩網" loading="lazy">
+                                <div class="img-opt-label">攀爬繩網</div>
+                                <div class="img-opt-check">✓</div>
+                            </div>
+                            <div class="img-opt-card" onclick="toggleImgOpt('q13', '攀爬-攀岩牆', this)">
+                                <img src="https://6t.vcom.tw/archive/image/5pSA5bKp54mGLjU5ODg0MTc1Ng==.jpg" alt="攀岩牆" loading="lazy">
+                                <div class="img-opt-label">攀岩牆</div>
+                                <div class="img-opt-check">✓</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 旋轉類 -->
+                    <div class="img-opt-group">
+                        <div class="img-opt-group-title">🌀 旋轉類</div>
+                        <div class="img-opt-grid">
+                            <div class="img-opt-card" onclick="toggleImgOpt('q13', '旋轉-旋轉杯', this)">
+                                <img src="https://6t.vcom.tw/archive/image/5peL6L2J5p2vLjU5ODc1MjY3Ng==.jpg" alt="旋轉杯" loading="lazy">
+                                <div class="img-opt-label">旋轉杯</div>
+                                <div class="img-opt-check">✓</div>
+                            </div>
+                            <div class="img-opt-card" onclick="toggleImgOpt('q13', '旋轉-旋轉棒', this)">
+                                <img src="https://6t.vcom.tw/archive/image/5peL6L2J5qOSLjU5ODc1NzIxMw==.jpg" alt="旋轉棒" loading="lazy">
+                                <div class="img-opt-label">旋轉棒</div>
+                                <div class="img-opt-check">✓</div>
+                            </div>
+                            <div class="img-opt-card" onclick="toggleImgOpt('q13', '旋轉-多人轉盤', this)">
+                                <img src="https://6t.vcom.tw/archive/image/5aSa5Lq65peL6L2J55ukLjU5ODc0OTI2Nw==.jpg" alt="多人轉盤" loading="lazy">
+                                <div class="img-opt-label">多人轉盤</div>
+                                <div class="img-opt-check">✓</div>
+                            </div>
+                            <div class="img-opt-card" onclick="toggleImgOpt('q13', '旋轉-旋轉飛輪', this)">
+                                <img src="https://6t.vcom.tw/archive/image/5peL6L2J6aOb6LyqLjU5ODg0Njg3MQ==.jpg" alt="旋轉飛輪" loading="lazy">
+                                <div class="img-opt-label">旋轉飛輪</div>
+                                <div class="img-opt-check">✓</div>
+                            </div>
+                            <div class="img-opt-card" onclick="toggleImgOpt('q13', '旋轉-旋轉飛椅', this)">
+                                <img src="https://6t.vcom.tw/archive/image/5peL6L2J6aOb5qSFLjU5ODg0OTQyNg==.jpg" alt="旋轉飛椅" loading="lazy">
+                                <div class="img-opt-label">旋轉飛椅</div>
+                                <div class="img-opt-check">✓</div>
+                            </div>
+                            <div class="img-opt-card" onclick="toggleImgOpt('q13', '旋轉-旋轉塔', this)">
+                                <img src="https://6t.vcom.tw/archive/image/5peL6L2J5pSA54is5aGULjU5ODg1NTU5NA==.jpg" alt="旋轉塔" loading="lazy">
+                                <div class="img-opt-label">旋轉塔</div>
+                                <div class="img-opt-check">✓</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- Q15 -->
+                <div class="space-y-3 pt-4 border-t border-orange-100">
+                    <label class="block font-bold text-orange-950" for="q15">15. 對於柳堤公園之空間場域是否有需保留的記憶或設施？</label>
+                    <textarea id="q15" name="q15" rows="3" class="w-full bg-white/60 border border-orange-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-brand-teal" placeholder="請填寫簡答內容..."></textarea>
+                </div>
+            </div>
+
+            <!-- STEP 4: Lottery Registration & Q16 -->
+            <div id="step-4" class="hidden fade-in-step space-y-6">
+                <!-- Q16 (綁定抽獎資料環節) -->
+                <div class="space-y-3">
+                    <label class="block font-bold text-orange-950" for="q16">16. 對於本次遊戲場改善有沒有其他建議？</label>
+                    <textarea id="q16" name="q16" rows="3" class="w-full bg-white/60 border border-orange-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-brand-teal" placeholder="請填寫簡答內容..."></textarea>
+                </div>
+
+                <!-- 抽獎意願選擇 -->
+                <div class="space-y-3 pt-4 border-t border-orange-100">
+                    <label class="block font-bold text-orange-950">17. 您是否願意留下聯絡資訊參加抽獎活動？ <span class="text-brand-orange">*</span></label>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div id="opt-join-lottery" class="custom-option custom-option-checked border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="toggleLotteryFields(true)">
+                            是，我要參加抽獎
+                        </div>
+                        <div id="opt-skip-lottery" class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="toggleLotteryFields(false)">
+                            否，放棄抽獎直接送出
+                        </div>
+                    </div>
+                    <input type="hidden" name="join_lottery" id="join_lottery" value="yes">
+                </div>
+
+                <div id="lottery-fields-container" class="space-y-6">
+                    <div class="bg-brand-orange/10 px-4 py-3 rounded-2xl border border-brand-orange/20 my-2">
+                        <span class="font-bold text-orange-950 text-sm"><i class="bi bi-gift me-1"></i> 抽獎活動登錄：</span>
+                        <span class="text-xs text-orange-900 leading-normal font-medium">填寫完整聯絡資訊即可參加抽獎！獎項為<strong>新北幣 100 點（共 300 名）</strong>，兌換序號將於中獎後以 Email 寄發。</span>
+                    </div>
+
+                    <!-- Name -->
+                    <div class="space-y-2">
+                        <label class="block font-bold text-orange-950" for="lottery-name">聯絡人真實姓名 <span class="text-brand-orange">*</span></label>
+                        <input type="text" id="lottery-name" name="name" required class="w-full bg-white/60 border border-orange-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-brand-teal" placeholder="例如：王小明">
+                    </div>
+
+                    <!-- Phone -->
+                    <div class="space-y-2">
+                        <label class="block font-bold text-orange-950" for="lottery-phone">聯絡手機號碼 <span class="text-brand-orange">*</span></label>
+                        <input type="tel" id="lottery-phone" name="phone" required class="w-full bg-white/60 border border-orange-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-brand-teal" placeholder="例如：0912345678" pattern="^09\d{8}$">
+                        <p class="text-[11px] text-orange-700/80">格式為 10 碼數字，例如 0912345678</p>
+                    </div>
+
+                    <!-- Email -->
+                    <div class="space-y-2">
+                        <label class="block font-bold text-orange-950" for="lottery-email">電子郵件信箱 <span class="text-brand-orange">*</span></label>
+                        <input type="email" id="lottery-email" name="email" required class="w-full bg-white/60 border border-orange-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-brand-teal" placeholder="例如：example@gmail.com">
+                    </div>
+
+                    <!-- Consent Checkbox -->
+                    <div class="flex items-start gap-3 mt-4">
+                        <input type="checkbox" id="lottery-consent" name="consent" required class="mt-1 form-checkbox h-4.5 w-4.5 text-brand-teal focus:ring-brand-teal rounded border-orange-300">
+                        <label for="lottery-consent" class="text-xs text-orange-900 leading-relaxed cursor-pointer select-none">
+                            本人同意所填寫之個人資料與上述答詢建議，僅供「蘆洲柳堤兒童遊戲場改造規劃」抽獎活動聯絡與專案分析統計使用，並同意機關在符合個資法規範下保存此數據。
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer Buttons -->
+            <div class="mt-8 pt-6 border-t border-orange-100 flex justify-between gap-4">
+                <button type="button" id="btn-prev" class="hidden px-5 py-2.5 bg-orange-50 hover:bg-orange-100 text-orange-800 font-semibold rounded-2xl text-sm transition-all duration-200" onclick="prevStep()">
+                    上一步
+                </button>
+                <div class="flex-grow"></div>
+                <button type="button" id="btn-next" class="px-6 py-2.5 bg-brand-teal hover:bg-orange-800 text-white font-semibold rounded-2xl text-sm transition-all duration-200 flex items-center gap-1 shadow-lg shadow-orange-700/10" onclick="nextStep()">
+                    <span>下一步</span> <i class="bi bi-chevron-right"></i>
+                </button>
+                <button type="submit" id="btn-submit" class="hidden px-6 py-2.5 bg-brand-teal hover:bg-orange-800 text-white font-bold rounded-2xl text-sm transition-all duration-200 flex items-center gap-1 shadow-lg shadow-orange-700/10">
+                    <span>送出問卷並參加抽獎</span> <i class="bi bi-send-fill"></i>
+                </button>
+            </div>
+
+        </form>
+
+        <!-- Loading Screen inside Card -->
+        <div id="card-loading" class="hidden absolute inset-0 bg-white/80 backdrop-filter blur-sm z-50 flex flex-col items-center justify-center space-y-3">
+            <div class="animate-spin rounded-full h-12 w-12 border-4 border-brand-teal border-t-transparent"></div>
+            <div class="text-orange-900 font-bold text-sm">正在安全送出您的問卷...</div>
+        </div>
+
+        <!-- Success Block -->
+        <div id="success-block" class="hidden fade-in-step text-left space-y-6 py-4">
+            <div class="text-center space-y-2">
+                <div class="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto text-brand-teal text-3xl shadow-inner">
+                    <i class="bi bi-check-circle-fill"></i>
+                </div>
+                <h2 class="text-2xl font-bold text-orange-950">問卷提交成功！</h2>
+                <p class="text-orange-800 text-xs">感謝您為蘆洲柳堤下一代共融遊戲場發聲，資料已即時彙整。</p>
+            </div>
+
+            <!-- 抽獎序號卡片 -->
+            <div id="success-lottery-box" class="bg-gradient-to-br from-orange-50 to-amber-50 p-4 rounded-2xl border border-orange-200 text-center shadow-sm">
+                <span class="text-xs text-orange-700 font-bold tracking-wider block mb-1">您的抽獎活動序號</span>
+                <span class="text-2xl md:text-3xl font-extrabold text-brand-teal tracking-widest block font-mono" id="success-lottery-id">LZ-XXXXX</span>
+                <p class="text-[11px] text-orange-600/80 mt-1">請截圖保存此序號，活動抽獎將以此序號進行核對。</p>
+            </div>
+
+            <!-- 區塊 1：您的填答摘要 -->
+            <div class="bg-white/75 rounded-2xl border border-orange-100 p-4 space-y-3 shadow-sm">
+                <div class="flex items-center justify-between border-b border-orange-100 pb-2">
+                    <span class="text-sm font-bold text-orange-950 flex items-center gap-1.5">
+                        <i class="bi bi-clipboard-check text-brand-teal"></i> 您的填答摘要
+                    </span>
+                    <span class="text-[11px] text-orange-600 bg-orange-100/60 px-2 py-0.5 rounded-full font-medium">個人紀錄</span>
+                </div>
+                
+                <div class="grid grid-cols-2 gap-2 text-xs text-orange-950">
+                    <div class="bg-orange-50/50 p-2.5 rounded-xl border border-orange-100/50">
+                        <span class="text-orange-600 block text-[10px] mb-0.5">年齡層 / 性別</span>
+                        <span id="sum-age-gender" class="font-semibold">-</span>
+                    </div>
+                    <div class="bg-orange-50/50 p-2.5 rounded-xl border border-orange-100/50">
+                        <span class="text-orange-600 block text-[10px] mb-0.5">來訪頻率 / 交通</span>
+                        <span id="sum-freq-transport" class="font-semibold">-</span>
+                    </div>
+                    <div class="col-span-2 bg-orange-50/50 p-2.5 rounded-xl border border-orange-100/50">
+                        <span class="text-orange-600 block text-[10px] mb-1">最重視的遊戲場特質 (Q12)</span>
+                        <div id="sum-q12-tags" class="flex flex-wrap gap-1"></div>
+                    </div>
+                    <div class="col-span-2 bg-orange-50/50 p-2.5 rounded-xl border border-orange-100/50">
+                        <span class="text-orange-600 block text-[10px] mb-1">您點選期待新增的遊具 (Q13)</span>
+                        <div id="sum-q13-tags" class="flex flex-wrap gap-1"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 區塊 2：當下即時統計圖表 -->
+            <div class="bg-white/75 rounded-2xl border border-orange-100 p-4 space-y-4 shadow-sm">
+                <div class="flex items-center justify-between border-b border-orange-100 pb-2">
+                    <span class="text-sm font-bold text-orange-950 flex items-center gap-1.5">
+                        <i class="bi bi-pie-chart-fill text-brand-teal"></i> 當前大眾期待統計分析
+                    </span>
+                    <span class="text-[11px] text-orange-600 bg-orange-100/60 px-2 py-0.5 rounded-full font-medium">
+                        全體填答趨勢
+                    </span>
+                </div>
+
+                <!-- 統計圖：四大遊具各自三色圓餅圖 + 前三名照片搭配四字名稱與獨立橘色百分比 -->
+                <div class="space-y-4 pt-1">
+                    <div class="flex justify-between items-center text-xs font-bold text-orange-950">
+                        <span>四大類別期待熱度與熱門遊具 Top 3</span>
+                        <span class="text-[10px] text-orange-600 font-normal">圖例邊框對照</span>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3.5">
+                        <!-- 1. 擺盪類 (總熱度 78%) -->
+                        <div class="bg-gradient-to-br from-orange-50/90 to-white/90 p-3.5 rounded-2xl border border-orange-200 shadow-sm space-y-3">
+                            <div class="flex items-center gap-3">
+                                <!-- 三色圓餅圖 (Donut Chart) -->
+                                <div class="relative w-14 h-14 rounded-full flex-shrink-0 flex items-center justify-center shadow-inner" style="background: conic-gradient(#ea580c 0% 41%, #f97316 41% 66%, #fdba74 66% 78%, #ffedd5 78% 100%);">
+                                    <div class="w-9 h-9 bg-white rounded-full flex items-center justify-center shadow-xs">
+                                        <span class="text-[13px] font-extrabold text-orange-800 leading-none font-mono">78%</span>
+                                    </div>
+                                </div>
+                                <div class="min-w-0 flex-1">
+                                    <h4 class="font-bold text-orange-950 text-sm">🕹 擺盪類</h4>
+                                    <p class="text-[11px] text-orange-700/90 mt-0.5">鞦韆與大索多樣擺盪設施</p>
+                                </div>
+                            </div>
+                            <!-- 3 張照片搭配對應顏色邊框，下方統一四字與橘色百分比 -->
+                            <div class="grid grid-cols-3 gap-2 pt-2 border-t border-orange-100/80">
+                                <div class="text-center">
+                                    <div class="rounded-xl overflow-hidden border-2 border-[#ea580c] shadow-xs">
+                                        <img src="https://6t.vcom.tw/archive/image/5pO655uq5aSn57SiLjU5ODgwNjY4Mg==.jpg" class="w-full h-14 object-cover" alt="擺盪大索">
+                                    </div>
+                                    <span class="text-[11px] font-semibold text-orange-950 block mt-1">擺盪大索</span>
+                                    <span class="text-[11px] font-extrabold text-orange-600 block font-mono">41%</span>
+                                </div>
+                                <div class="text-center">
+                                    <div class="rounded-xl overflow-hidden border-2 border-[#f97316] shadow-xs">
+                                        <img src="https://6t.vcom.tw/archive/image/6bOl5bei6Z6m6Z_GLjU5ODgwMzAxNQ==.jpg" class="w-full h-14 object-cover" alt="鳥巢鞦韆">
+                                    </div>
+                                    <span class="text-[11px] font-semibold text-orange-950 block mt-1">鳥巢鞦韆</span>
+                                    <span class="text-[11px] font-extrabold text-orange-600 block font-mono">25%</span>
+                                </div>
+                                <div class="text-center">
+                                    <div class="rounded-xl overflow-hidden border-2 border-[#fdba74] shadow-xs">
+                                        <img src="https://6t.vcom.tw/archive/image/6Kaq5a2Q6Z6m6Z_GLjU5MjI1MjgyNg==.jpg" class="w-full h-14 object-cover" alt="親子鞦韆">
+                                    </div>
+                                    <span class="text-[11px] font-semibold text-orange-950 block mt-1">親子鞦韆</span>
+                                    <span class="text-[11px] font-extrabold text-orange-600 block font-mono">12%</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 2. 攀爬類 (總熱度 69%) -->
+                        <div class="bg-gradient-to-br from-orange-50/90 to-white/90 p-3.5 rounded-2xl border border-orange-200 shadow-sm space-y-3">
+                            <div class="flex items-center gap-3">
+                                <!-- 三色圓餅圖 (Donut Chart) -->
+                                <div class="relative w-14 h-14 rounded-full flex-shrink-0 flex items-center justify-center shadow-inner" style="background: conic-gradient(#ea580c 0% 36%, #f97316 36% 57%, #fdba74 57% 69%, #ffedd5 69% 100%);">
+                                    <div class="w-9 h-9 bg-white rounded-full flex items-center justify-center shadow-xs">
+                                        <span class="text-[13px] font-extrabold text-orange-800 leading-none font-mono">69%</span>
+                                    </div>
+                                </div>
+                                <div class="min-w-0 flex-1">
+                                    <h4 class="font-bold text-orange-950 text-sm">🧗 攀爬類</h4>
+                                    <p class="text-[11px] text-orange-700/90 mt-0.5">繩網與立體攀爬挑戰設施</p>
+                                </div>
+                            </div>
+                            <!-- 3 張照片搭配對應顏色邊框，下方統一四字與橘色百分比 -->
+                            <div class="grid grid-cols-3 gap-2 pt-2 border-t border-orange-100/80">
+                                <div class="text-center">
+                                    <div class="rounded-xl overflow-hidden border-2 border-[#ea580c] shadow-xs">
+                                        <img src="https://6t.vcom.tw/archive/image/57mp57ay5pSA54is5p62LjU5ODgzNTQ1Nw==.jpg" class="w-full h-14 object-cover" alt="攀爬繩網">
+                                    </div>
+                                    <span class="text-[11px] font-semibold text-orange-950 block mt-1">攀爬繩網</span>
+                                    <span class="text-[11px] font-extrabold text-orange-600 block font-mono">36%</span>
+                                </div>
+                                <div class="text-center">
+                                    <div class="rounded-xl overflow-hidden border-2 border-[#f97316] shadow-xs">
+                                        <img src="https://6t.vcom.tw/archive/image/5pSA5bKp54mGLjU5ODg0MTc1Ng==.jpg" class="w-full h-14 object-cover" alt="攀岩牆">
+                                    </div>
+                                    <span class="text-[11px] font-semibold text-orange-950 block mt-1">攀岩牆</span>
+                                    <span class="text-[11px] font-extrabold text-orange-600 block font-mono">21%</span>
+                                </div>
+                                <div class="text-center">
+                                    <div class="rounded-xl overflow-hidden border-2 border-[#fdba74] shadow-xs">
+                                        <img src="https://6t.vcom.tw/archive/image/5pyo6KO95pSA54is5p62LjU5ODgyOTE5MQ==.jpg" class="w-full h-14 object-cover" alt="木製爬架">
+                                    </div>
+                                    <span class="text-[11px] font-semibold text-orange-950 block mt-1">木製爬架</span>
+                                    <span class="text-[11px] font-extrabold text-orange-600 block font-mono">12%</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 3. 溜滑類 (總熱度 62%) -->
+                        <div class="bg-gradient-to-br from-orange-50/90 to-white/90 p-3.5 rounded-2xl border border-orange-200 shadow-sm space-y-3">
+                            <div class="flex items-center gap-3">
+                                <!-- 三色圓餅圖 (Donut Chart) -->
+                                <div class="relative w-14 h-14 rounded-full flex-shrink-0 flex items-center justify-center shadow-inner" style="background: conic-gradient(#ea580c 0% 29%, #f97316 29% 47%, #fdba74 47% 62%, #ffedd5 62% 100%);">
+                                    <div class="w-9 h-9 bg-white rounded-full flex items-center justify-center shadow-xs">
+                                        <span class="text-[13px] font-extrabold text-orange-800 leading-none font-mono">62%</span>
+                                    </div>
+                                </div>
+                                <div class="min-w-0 flex-1">
+                                    <h4 class="font-bold text-orange-950 text-sm">🎿 溜滑類</h4>
+                                    <p class="text-[11px] text-orange-700/90 mt-0.5">多軌道與地形結合滑梯</p>
+                                </div>
+                            </div>
+                            <!-- 3 張照片搭配對應顏色邊框，下方統一四字與橘色百分比 -->
+                            <div class="grid grid-cols-3 gap-2 pt-2 border-t border-orange-100/80">
+                                <div class="text-center">
+                                    <div class="rounded-xl overflow-hidden border-2 border-[#ea580c] shadow-xs">
+                                        <img src="https://6t.vcom.tw/archive/image/5Zyw5pmv5ruR5qKvLjU5ODgyMTQ0Mg==.jpg" class="w-full h-14 object-cover" alt="地景滑梯">
+                                    </div>
+                                    <span class="text-[11px] font-semibold text-orange-950 block mt-1">地景滑梯</span>
+                                    <span class="text-[11px] font-extrabold text-orange-600 block font-mono">29%</span>
+                                </div>
+                                <div class="text-center">
+                                    <div class="rounded-xl overflow-hidden border-2 border-[#f97316] shadow-xs">
+                                        <img src="https://6t.vcom.tw/archive/image/5peL6L2J5ruR5qKvLjU5OTUwMzI5MQ==.jpg" class="w-full h-14 object-cover" alt="旋轉滑梯">
+                                    </div>
+                                    <span class="text-[11px] font-semibold text-orange-950 block mt-1">旋轉滑梯</span>
+                                    <span class="text-[11px] font-extrabold text-orange-600 block font-mono">18%</span>
+                                </div>
+                                <div class="text-center">
+                                    <div class="rounded-xl overflow-hidden border-2 border-[#fdba74] shadow-xs">
+                                        <img src="https://6t.vcom.tw/archive/image/56Oo55_z5ruR5qKvLjU5ODgxODczNg==.jpg" class="w-full h-14 object-cover" alt="磨石滑梯">
+                                    </div>
+                                    <span class="text-[11px] font-semibold text-orange-950 block mt-1">磨石滑梯</span>
+                                    <span class="text-[11px] font-extrabold text-orange-600 block font-mono">15%</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 4. 旋轉類 (總熱度 54%) -->
+                        <div class="bg-gradient-to-br from-orange-50/90 to-white/90 p-3.5 rounded-2xl border border-orange-200 shadow-sm space-y-3">
+                            <div class="flex items-center gap-3">
+                                <!-- 三色圓餅圖 (Donut Chart) -->
+                                <div class="relative w-14 h-14 rounded-full flex-shrink-0 flex items-center justify-center shadow-inner" style="background: conic-gradient(#ea580c 0% 24%, #f97316 24% 42%, #fdba74 42% 54%, #ffedd5 54% 100%);">
+                                    <div class="w-9 h-9 bg-white rounded-full flex items-center justify-center shadow-xs">
+                                        <span class="text-[13px] font-extrabold text-orange-800 leading-none font-mono">54%</span>
+                                    </div>
+                                </div>
+                                <div class="min-w-0 flex-1">
+                                    <h4 class="font-bold text-orange-950 text-sm">🌀 旋轉類</h4>
+                                    <p class="text-[11px] text-orange-700/90 mt-0.5">共融旋轉盤與體感遊具</p>
+                                </div>
+                            </div>
+                            <!-- 3 張照片搭配對應顏色邊框，下方統一四字與橘色百分比 -->
+                            <div class="grid grid-cols-3 gap-2 pt-2 border-t border-orange-100/80">
+                                <div class="text-center">
+                                    <div class="rounded-xl overflow-hidden border-2 border-[#ea580c] shadow-xs">
+                                        <img src="https://6t.vcom.tw/archive/image/5aSa5Lq65peL6L2J55ukLjU5ODc0OTI2Nw==.jpg" class="w-full h-14 object-cover" alt="多人轉盤">
+                                    </div>
+                                    <span class="text-[11px] font-semibold text-orange-950 block mt-1">多人轉盤</span>
+                                    <span class="text-[11px] font-extrabold text-orange-600 block font-mono">24%</span>
+                                </div>
+                                <div class="text-center">
+                                    <div class="rounded-xl overflow-hidden border-2 border-[#f97316] shadow-xs">
+                                        <img src="https://6t.vcom.tw/archive/image/5peL6L2J6aOb5qSFLjU5ODg0OTQyNg==.jpg" class="w-full h-14 object-cover" alt="旋轉飛椅">
+                                    </div>
+                                    <span class="text-[11px] font-semibold text-orange-950 block mt-1">旋轉飛椅</span>
+                                    <span class="text-[11px] font-extrabold text-orange-600 block font-mono">18%</span>
+                                </div>
+                                <div class="text-center">
+                                    <div class="rounded-xl overflow-hidden border-2 border-[#fdba74] shadow-xs">
+                                        <img src="https://6t.vcom.tw/archive/image/5peL6L2J6aOb6LyqLjU5ODg0Njg3MQ==.jpg" class="w-full h-14 object-cover" alt="旋轉飛輪">
+                                    </div>
+                                    <span class="text-[11px] font-semibold text-orange-950 block mt-1">旋轉飛輪</span>
+                                    <span class="text-[11px] font-extrabold text-orange-600 block font-mono">12%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 統計圖 2：前 3 大最重視特質 -->
+                <div class="pt-3 border-t border-orange-100/80 space-y-2">
+                    <span class="text-xs font-semibold text-orange-900 block">民眾最重視的公園特質 Top 3</span>
+                    <div class="grid grid-cols-3 gap-2 text-center">
+                        <div class="bg-orange-50 p-2 rounded-xl border border-orange-200/60">
+                            <span class="text-[10px] text-orange-600 block">No.1 首重</span>
+                            <span class="font-bold text-orange-950 text-xs block mt-0.5">安全性</span>
+                            <span class="text-[10px] text-brand-teal font-extrabold">84%</span>
+                        </div>
+                        <div class="bg-orange-50 p-2 rounded-xl border border-orange-200/60">
+                            <span class="text-[10px] text-orange-600 block">No.2 遮蔭</span>
+                            <span class="font-bold text-orange-950 text-xs block mt-0.5">遮蔭性</span>
+                            <span class="text-[10px] text-brand-teal font-extrabold">71%</span>
+                        </div>
+                        <div class="bg-orange-50 p-2 rounded-xl border border-orange-200/60">
+                            <span class="text-[10px] text-orange-600 block">No.3 挑戰</span>
+                            <span class="font-bold text-orange-950 text-xs block mt-0.5">挑戰性</span>
+                            <span class="text-[10px] text-brand-teal font-extrabold">59%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 返回首頁 / 重新填寫按鈕 -->
+            <div class="pt-2 text-center">
+                <button type="button" onclick="location.reload()" class="px-5 py-2 text-xs font-semibold text-orange-700 bg-orange-100/70 hover:bg-orange-200/70 rounded-xl transition-all">
+                    <i class="bi bi-arrow-clockwise me-1"></i> 再填一份問卷
+                </button>
+            </div>
+            
+            <p class="text-[11px] text-center text-orange-700/70">本問卷系統由蘆洲區公所規劃，數據即時安全加密彙整。</p>
+        </div>
+
+    </div>
+
+    <!-- Script Logic -->
+    <script>
+        let currentStep = 1;
+        const totalSteps = 4;
+        const selectedQ12 = new Set();
+        const selectedQ13 = new Set();
+
+        // Toggle image option for Q13
+        function toggleImgOpt(qName, value, el) {
+            if (selectedQ13.has(value)) {
+                selectedQ13.delete(value);
+                el.classList.remove('selected');
+            } else {
+                selectedQ13.add(value);
+                el.classList.add('selected');
+            }
+        }
+
+        function updateStepProgress() {
+            // Update labels
+            const stepLabels = {
+                1: "步驟 1 / 4：基本背景",
+                2: "步驟 2 / 4：訪園習慣",
+                3: "步驟 3 / 4：特色公園與注意事項",
+                4: "步驟 4 / 4：抽獎聯絡資料"
+            };
+            document.getElementById('step-label').innerText = stepLabels[currentStep];
+            
+            // Progress bar
+            const pct = (currentStep / totalSteps) * 100;
+            document.getElementById('step-percent').innerText = pct + '%';
+            document.getElementById('progress-bar').style.width = pct + '%';
+
+            // Show/Hide steps
+            for(let i = 1; i <= totalSteps; i++) {
+                const el = document.getElementById(`step-${i}`);
+                if (i === currentStep) {
+                    el.classList.remove('hidden');
+                } else {
+                    el.classList.add('hidden');
+                }
+            }
+
+            // Buttons controls
+            const btnPrev = document.getElementById('btn-prev');
+            const btnNext = document.getElementById('btn-next');
+            const btnSubmit = document.getElementById('btn-submit');
+
+            if (currentStep === 1) {
+                btnPrev.classList.add('hidden');
+            } else {
+                btnPrev.classList.remove('hidden');
+            }
+
+            if (currentStep === totalSteps) {
+                btnNext.classList.add('hidden');
+                btnSubmit.classList.remove('hidden');
+            } else {
+                btnNext.classList.remove('hidden');
+                btnSubmit.classList.add('hidden');
+            }
+        }
+
+        function nextStep() {
+            if (validateStep(currentStep)) {
+                currentStep++;
+                updateStepProgress();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+
+        function prevStep() {
+            if (currentStep > 1) {
+                currentStep--;
+                updateStepProgress();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+
+        // Custom Radio Selection handler
+        function selectRadio(inputName, value, element) {
+            // Sibling/Element selection handler (standard touch button)
+            if (element.tagName === 'INPUT') {
+                element.checked = true;
+                return;
+            }
+
+            document.getElementById(inputName).value = value;
+            const parent = element.parentNode;
+            parent.querySelectorAll('.custom-option').forEach(child => {
+                child.classList.remove('custom-option-checked');
+            });
+            element.classList.add('custom-option-checked');
+        }
+
+        // Show other text field if selected "其他"
+        function showOther(qId) {
+            document.getElementById(`${qId}_other`).classList.remove('hidden');
+            document.getElementById(`${qId}_other`).required = true;
+        }
+
+        function hideOther(qId) {
+            document.getElementById(`${qId}_other`).classList.add('hidden');
+            document.getElementById(`${qId}_other`).required = false;
+            document.getElementById(`${qId}_other`).value = "";
+        }
+
+        // Toggle Grid Table checkbox check by clicking cell (Fix: prevent checkbox double trigger)
+        function toggleGridCheck(event, type, idx) {
+            if (event.target.tagName === 'INPUT') return;
+            const cb = document.getElementById(`q6-${type}-${idx}`);
+            cb.checked = !cb.checked;
+        }
+
+        // Multi Select option toggle with Limit of 3 options
+        function toggleMultiSelect(inputName, opt, element) {
+            if (selectedQ12.has(opt)) {
+                selectedQ12.delete(opt);
+                element.classList.remove('custom-option-checked');
+                if (opt === '其他') hideOther('q12');
+            } else {
+                if (selectedQ12.size >= 3) {
+                    alert("最需要注意的項目最多只能選擇三個！");
+                    return;
+                }
+                selectedQ12.add(opt);
+                element.classList.add('custom-option-checked');
+                if (opt === '其他') showOther('q12');
+            }
+            document.getElementById('q12-count').innerText = selectedQ12.size;
+        }
+
+        // Toggle Lottery Fields and switch required attributes
+        function toggleLotteryFields(join) {
+            const container = document.getElementById('lottery-fields-container');
+            const nameInput = document.getElementById('lottery-name');
+            const phoneInput = document.getElementById('lottery-phone');
+            const emailInput = document.getElementById('lottery-email');
+            const consentInput = document.getElementById('lottery-consent');
+            const submitBtnText = document.getElementById('btn-submit').querySelector('span');
+
+            document.getElementById('join_lottery').value = join ? "yes" : "no";
+
+            const optJoin = document.getElementById('opt-join-lottery');
+            const optSkip = document.getElementById('opt-skip-lottery');
+            
+            if (join) {
+                optJoin.classList.add('custom-option-checked');
+                optSkip.classList.remove('custom-option-checked');
+                container.classList.remove('hidden');
+                nameInput.required = true;
+                phoneInput.required = true;
+                emailInput.required = true;
+                consentInput.required = true;
+                submitBtnText.innerText = "送出問卷並參加抽獎";
+            } else {
+                optSkip.classList.add('custom-option-checked');
+                optJoin.classList.remove('custom-option-checked');
+                container.classList.add('hidden');
+                nameInput.required = false;
+                phoneInput.required = false;
+                emailInput.required = false;
+                consentInput.required = false;
+                submitBtnText.innerText = "直接送出問卷";
+            }
+        }
+
+        // Validation for each progressive wizard step
+        function validateStep(step) {
+            if (step === 1) {
+                if (!document.getElementById('q1').value) { alert("請選擇您的性別！"); return false; }
+                if (!document.getElementById('q2').value) { alert("請選擇您的年齡層！"); return false; }
+                if (!document.getElementById('q3').value) { alert("請選擇來訪柳堤公園頻率！"); return false; }
+                if (!document.getElementById('q4').value) { alert("請選擇使用的交通工具！"); return false; }
+                if (document.getElementById('q4').value === '其他' && !document.getElementById('q4_other').value.trim()) { alert("請填寫其他交通工具！"); return false; }
+                if (!document.getElementById('q5').value) { alert("請選擇來此公園花費的時間！"); return false; }
+                if (document.getElementById('q5').value === '其他' && !document.getElementById('q5_other').value.trim()) { alert("請填寫其他時間！"); return false; }
+            } else if (step === 2) {
+                if (!document.getElementById('q7').value) { alert("請選擇平均停留時間！"); return false; }
+                if (document.getElementById('q7').value === '其他' && !document.getElementById('q7_other').value.trim()) { alert("請填寫其他停留時間！"); return false; }
+                if (!document.getElementById('q8').value) { alert("請選擇同行同伴！"); return false; }
+                if (document.getElementById('q8').value === '其他' && !document.getElementById('q8_other').value.trim()) { alert("請填寫其他同伴！"); return false; }
+            } else if (step === 3) {
+                if (!document.getElementById('q9').value) { alert("請回答是否聽過特色公園！"); return false; }
+                if (!document.getElementById('q10').value) { alert("請回答是否去過其他特色公園！"); return false; }
+                if (!document.getElementById('q11').value) { alert("請選擇陪同孩童的年齡層！"); return false; }
+                if (selectedQ12.size === 0) { alert("請至少選擇一個最需要注意的項目！(最多三個)"); return false; }
+                if (selectedQ12.has('其他') && !document.getElementById('q12_other').value.trim()) { alert("請填寫其他注意事項！"); return false; }
+
+                // Q13 圖片點選驗證（至少選一項）
+                if (selectedQ13.size === 0) { alert("第13題請至少選擇一項喜歡的遊具！"); return false; }
+
+            }
+            return true;
+        }
+
+        // Form Submit Handler
+        async function handleFormSubmit(e) {
+            e.preventDefault();
+            
+            // Final validation (Check if user wants to join lottery)
+            const isJoining = document.getElementById('join_lottery').value === 'yes';
+            let lotteryId = "未參加";
+            let nameVal = "";
+            let phoneVal = "";
+            let emailVal = "";
+
+            if (isJoining) {
+                if (!document.getElementById('lottery-name').value.trim()) { alert("請輸入聯絡姓名！"); return; }
+                if (!document.getElementById('lottery-phone').checkValidity()) { alert("請輸入正確的手機號碼格式 (例如 0912345678)！"); return; }
+                if (!document.getElementById('lottery-email').value.trim()) { alert("請輸入電子郵件！"); return; }
+                if (!document.getElementById('lottery-consent').checked) { alert("請同意個人資料處理條款！"); return; }
+
+                // Generate lottery ID
+                const randomCode = Math.floor(10000 + Math.random() * 90000);
+                lotteryId = "LZ-" + randomCode;
+                nameVal = document.getElementById('lottery-name').value.trim();
+                phoneVal = document.getElementById('lottery-phone').value.trim();
+                emailVal = document.getElementById('lottery-email').value.trim();
+            }
+
+            // Gather Q6 Grid values
+            const q6Values = { weekday: [], weekend: [] };
+            for(let i=0; i<timeslots.length; i++) {
+                if (document.getElementById(`q6-weekday-${i}`).checked) q6Values.weekday.push(timeslots[i]);
+                if (document.getElementById(`q6-weekend-${i}`).checked) q6Values.weekend.push(timeslots[i]);
+            }
+
+            // Gather Q13 image selection
+            const q13Values = Array.from(selectedQ13);
+
+            // Gather values
+            const payload = {
+                action: 'SUBMIT_PLAYGROUND_SURVEY',
+                lotteryId: lotteryId,
+                name: nameVal,
+                phone: phoneVal,
+                email: emailVal,
+                q1: document.getElementById('q1').value,
+                q2: document.getElementById('q2').value,
+                q3: document.getElementById('q3').value,
+                q4: document.getElementById('q4').value,
+                q4_other: document.getElementById('q4_other').value.trim(),
+                q5: document.getElementById('q5').value,
+                q5_other: document.getElementById('q5_other').value.trim(),
+                q6: q6Values,
+                q7: document.getElementById('q7').value,
+                q7_other: document.getElementById('q7_other').value.trim(),
+                q8: document.getElementById('q8').value,
+                q8_other: document.getElementById('q8_other').value.trim(),
+                q9: document.getElementById('q9').value,
+                q10: document.getElementById('q10').value,
+                q11: document.getElementById('q11').value,
+                q12: Array.from(selectedQ12),
+                q12_other: document.getElementById('q12_other').value.trim(),
+                q13: q13Values,
+                q15: document.getElementById('q15').value.trim(),
+                q16: document.getElementById('q16').value.trim()
+            };
+
+            // Show Loading Screen
+            document.getElementById('card-loading').classList.remove('hidden');
+
+            try {
+                if (CONFIG.gasUrl) {
+                    // Send to actual Google Sheet
+                    const response = await fetch(CONFIG.gasUrl, {
+                        method: 'POST',
+                        mode: 'no-cors',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(payload)
+                    });
+                } else {
+                    // Simulate sheet saving locally
+                    const localData = JSON.parse(localStorage.getItem('survey_demo_data') || '[]');
+                    localData.push({ timestamp: new Date(), ...payload });
+                    localStorage.setItem('survey_demo_data', JSON.stringify(localData));
+                    await new Promise(resolve => setTimeout(resolve, 800));
+                }
+
+                // Hide loading, hide form, hide progress, show success block
+                document.getElementById('card-loading').classList.add('hidden');
+                document.getElementById('survey-form').classList.add('hidden');
+                document.getElementById('progress-container').classList.add('hidden');
+                
+                // 動態渲染「您的填答摘要」
+                document.getElementById('sum-age-gender').innerText = `${payload.q2 || "未填"} / ${payload.q1 || "未填"}`;
+                document.getElementById('sum-freq-transport').innerText = `${payload.q3 || "未填"} / ${payload.q4 || "未填"}`;
+
+                const q12Container = document.getElementById('sum-q12-tags');
+                q12Container.innerHTML = '';
+                if (payload.q12 && payload.q12.length > 0) {
+                    payload.q12.forEach(tag => {
+                        const span = document.createElement('span');
+                        span.className = 'bg-orange-100 text-orange-900 px-2 py-0.5 rounded-md font-medium text-[11px]';
+                        span.innerText = tag;
+                        q12Container.appendChild(span);
+                    });
+                } else {
+                    q12Container.innerHTML = '<span class="text-gray-400 text-[11px]">無特別指定</span>';
+                }
+
+                const q13Container = document.getElementById('sum-q13-tags');
+                q13Container.innerHTML = '';
+                if (payload.q13 && payload.q13.length > 0) {
+                    payload.q13.forEach(item => {
+                        const span = document.createElement('span');
+                        span.className = 'bg-amber-100 text-amber-950 border border-amber-200/60 px-2 py-0.5 rounded-md font-medium text-[11px]';
+                        span.innerText = item;
+                        q13Container.appendChild(span);
+                    });
+                } else {
+                    q13Container.innerHTML = '<span class="text-gray-400 text-[11px]">無特別指定</span>';
+                }
+
+                // Show lottery ID only if joined
+                const successBox = document.getElementById('success-lottery-box');
+                if (isJoining) {
+                    document.getElementById('success-lottery-id').innerText = lotteryId;
+                    successBox.classList.remove('hidden');
+                } else {
+                    successBox.classList.add('hidden');
+                }
+                document.getElementById('success-block').classList.remove('hidden');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            } catch (err) {
+                document.getElementById('card-loading').classList.add('hidden');
+                alert("送出失敗，請確認網路連線是否正常：" + err.message);
+            }
+        }
+    </script>
+</body>
+</html>
