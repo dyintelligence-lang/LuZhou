@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>【柳堤兒童遊戲場改造問卷】從孩子出發，定義蘆洲下一代共融遊戲場</title>
+    <title>【柳堤兒童遊戲場改造】感謝民眾熱情參與・中獎名單公告</title>
     
     <!-- Google Fonts & Bootstrap Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
@@ -37,8 +37,8 @@
         /* Glassmorphism styling */
         .glass-card {
             background: rgba(255, 255, 255, 0.82);
-            backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
+            backdrop-filter: blur(20px);
             border: 1px solid rgba(255, 237, 213, 0.6);
             box-shadow: 0 20px 40px rgba(249, 115, 22, 0.06);
         }
@@ -152,117 +152,123 @@
         <!-- Header Decorator -->
         <div class="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-brand-green via-brand-teal to-brand-purple"></div>
 
-        <!-- Title Block -->
-        <div class="mb-8 space-y-4">
-            <h1 class="text-xl md:text-2xl font-bold text-orange-950 tracking-wide leading-snug">
-                【柳堤兒童遊戲場改造問卷】<br class="hidden md:inline">從孩子出發，定義蘆洲下一代共融遊戲場
-            </h1>
+        <!-- Notice Block: 問卷截止與中獎名單公告 -->
+        <div id="closed-announcement-block" class="mb-8 space-y-6">
+            <!-- 頂部感謝徽章與主標題 -->
+            <div class="text-center space-y-3">
+                <div class="w-16 h-16 md:w-20 md:h-20 rounded-3xl bg-gradient-to-br from-orange-500 to-amber-500 text-white flex items-center justify-center text-3xl md:text-4xl shadow-lg shadow-orange-500/20 mx-auto">
+                    <i class="bi bi-heart-fill"></i>
+                </div>
+                
+                <div class="space-y-1.5">
+                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-orange-100 text-orange-800 border border-orange-200">
+                        <i class="bi bi-check-circle-fill text-brand-teal"></i> 問卷調查已圓滿截止
+                    </span>
+                    <h1 class="text-2xl md:text-3xl font-extrabold text-orange-950 tracking-tight leading-snug">
+                        感謝民眾熱情參與！
+                    </h1>
+                    <p class="text-sm md:text-base text-orange-800 font-medium">
+                        柳堤公園兒童遊戲場改造大調查
+                    </p>
+                </div>
+            </div>
 
-            <!-- 整合說明與抽獎活動辦法卡片 -->
-            <div class="bg-gradient-to-br from-amber-500/10 via-orange-500/10 to-amber-500/5 border border-orange-200/80 rounded-2xl p-4 md:p-5 shadow-sm space-y-3.5">
-                <!-- 問卷引言說明 -->
-                <p class="text-sm text-orange-900 leading-relaxed bg-white/70 p-3.5 rounded-xl border border-orange-100/80">
-                    您好！我們正在針對兒童遊戲場進行環境與設施的需求調查。您的意見將作為未來規劃遊戲場的重要參考，讓遊戲場不只是遊樂設施，更能成為孩子成長的體驗場。填寫約需 3 分鐘，感謝您的支持。
+            <!-- 中獎名單公告核心卡片 -->
+            <div class="bg-gradient-to-br from-amber-500/10 via-orange-500/10 to-amber-500/5 border-2 border-orange-200/90 rounded-2xl p-5 md:p-6 shadow-sm space-y-4 text-center">
+                <div class="inline-flex items-center justify-center w-11 h-11 rounded-2xl bg-orange-500 text-white text-xl shadow-sm">
+                    <i class="bi bi-megaphone-fill"></i>
+                </div>
+
+                <div class="space-y-1">
+                    <h2 class="text-base md:text-lg font-bold text-orange-950">
+                        中獎名單公告排程
+                    </h2>
+                    <div class="inline-block bg-white/95 border border-orange-200 px-5 py-2.5 rounded-2xl shadow-xs my-1">
+                        <span class="text-xl md:text-2xl font-extrabold text-brand-teal tracking-wide font-mono">
+                            115 / 10 / 30 16:00
+                        </span>
+                        <span class="block text-[11px] text-orange-700 font-semibold mt-0.5">
+                            準時正式公告
+                        </span>
+                    </div>
+                </div>
+
+                <!-- 動態倒數計時器 -->
+                <div id="countdown-wrapper" class="bg-white/80 border border-orange-100 rounded-xl p-3 max-w-md mx-auto">
+                    <span class="text-[11px] font-bold text-orange-700 block mb-1.5 flex items-center justify-center gap-1">
+                        <i class="bi bi-clock-history text-brand-teal"></i> 距離中獎公告倒數
+                    </span>
+                    <div class="grid grid-cols-4 gap-2 text-center font-mono">
+                        <div class="bg-orange-50/80 rounded-lg p-1.5 border border-orange-100">
+                            <span id="cd-days" class="text-base md:text-lg font-bold text-orange-950">--</span>
+                            <span class="text-[10px] text-orange-600 block">天</span>
+                        </div>
+                        <div class="bg-orange-50/80 rounded-lg p-1.5 border border-orange-100">
+                            <span id="cd-hours" class="text-base md:text-lg font-bold text-orange-950">--</span>
+                            <span class="text-[10px] text-orange-600 block">時</span>
+                        </div>
+                        <div class="bg-orange-50/80 rounded-lg p-1.5 border border-orange-100">
+                            <span id="cd-minutes" class="text-base md:text-lg font-bold text-orange-950">--</span>
+                            <span class="text-[10px] text-orange-600 block">分</span>
+                        </div>
+                        <div class="bg-orange-50/80 rounded-lg p-1.5 border border-orange-100">
+                            <span id="cd-seconds" class="text-base md:text-lg font-bold text-orange-950">--</span>
+                            <span class="text-[10px] text-orange-600 block">秒</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 抽獎說明與獎項資訊 -->
+                <p class="text-xs text-orange-800 leading-relaxed max-w-lg mx-auto">
+                    中獎名單將於上述時間統一公布於新北市蘆洲區公所相關公告管道，中獎民眾之「新北幣 100 點兌換序號」亦將由系統陸續以電子郵件寄發，請參加者留意信箱通知。
                 </p>
 
-                <!-- 抽獎活動標題 -->
-                <div class="flex items-center gap-2.5 pt-0.5">
-                    <div class="w-8 h-8 rounded-xl bg-orange-500 text-white flex items-center justify-center text-base shadow-sm">
-                        <i class="bi bi-gift-fill"></i>
-                    </div>
-                    <div>
-                        <span class="text-xs font-semibold text-orange-600 tracking-wider uppercase">填問卷抽好禮</span>
-                        <h2 class="text-base md:text-lg font-bold text-orange-950">柳堤公園遊戲場改造大調查・填問卷抽新北幣</h2>
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 mb-3 text-xs">
-                    <div class="bg-white/80 rounded-xl p-2.5 border border-orange-100 flex items-start gap-2">
-                        <span class="text-orange-500 font-bold mt-0.5"><i class="bi bi-award-fill"></i></span>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs text-left pt-1">
+                    <div class="bg-white/85 p-3 rounded-xl border border-orange-100 flex items-start gap-2">
+                        <i class="bi bi-gift-fill text-orange-500 text-sm mt-0.5"></i>
                         <div>
-                            <span class="text-orange-600 block text-[11px] font-semibold">抽獎獎項</span>
-                            <span class="text-orange-950 font-bold">新北幣 100 點（共 300 名）</span>
+                            <span class="font-bold text-orange-950 block">抽獎獎項</span>
+                            <span class="text-orange-800 text-[11px]">新北幣 100 點（共 300 名）</span>
                         </div>
                     </div>
-                    <div class="bg-white/80 rounded-xl p-2.5 border border-orange-100 flex items-start gap-2">
-                        <span class="text-orange-500 font-bold mt-0.5"><i class="bi bi-calendar-check-fill"></i></span>
+                    <div class="bg-white/85 p-3 rounded-xl border border-orange-100 flex items-start gap-2">
+                        <i class="bi bi-envelope-check-fill text-orange-500 text-sm mt-0.5"></i>
                         <div>
-                            <span class="text-orange-600 block text-[11px] font-semibold">活動期間</span>
-                            <span class="text-orange-950 font-bold">115/09/21 08:00 - 10/20 17:00</span>
-                        </div>
-                    </div>
-                    <div class="bg-white/80 rounded-xl p-2.5 border border-orange-100 flex items-start gap-2">
-                        <span class="text-orange-500 font-bold mt-0.5"><i class="bi bi-megaphone-fill"></i></span>
-                        <div>
-                            <span class="text-orange-600 block text-[11px] font-semibold">中獎名單公告</span>
-                            <span class="text-orange-950 font-bold">115/10/30 16:00 公告</span>
+                            <span class="font-bold text-orange-950 block">序號領取方式</span>
+                            <span class="text-orange-800 text-[11px]">以留存之 Email 寄送兌換序號</span>
                         </div>
                     </div>
                 </div>
 
-                <!-- 完整活動辦法收合區塊 -->
-                <details class="text-xs text-orange-900 group">
-                    <summary class="cursor-pointer font-semibold text-orange-800 hover:text-orange-950 select-none flex items-center justify-between bg-orange-100/50 hover:bg-orange-100/80 px-3.5 py-2 rounded-xl transition-colors">
-                        <span class="flex items-center gap-1.5"><i class="bi bi-file-earmark-text text-brand-teal"></i> 查閱完整抽獎活動辦法與個資告知事項</span>
-                        <i class="bi bi-chevron-down group-open:rotate-180 transition-transform text-orange-600"></i>
-                    </summary>
-                    <div class="mt-3 space-y-3 bg-white/90 p-4 rounded-xl border border-orange-100 leading-relaxed text-[12px]">
-                        <div>
-                            <h3 class="font-bold text-orange-950 mb-1">一、抽獎資格</h3>
-                            <p class="text-orange-800">
-                                於活動期間 115 年 9 月 21 日上午 8 時起至 115 年 10 月 20 日下午 5 時止，完成柳堤公園改造介紹網站瀏覽及「柳堤公園遊戲場改造先期調查問卷」，並留下真實、完整且可供聯繫之資料者，即具抽獎資格。<br>
-                                每人限參加 1 次，如有重複填寫、聯絡資料不完整或無法辨識等情形，主辦單位得以有效填答資料認定抽獎資格。
-                            </p>
-                        </div>
-                        <div>
-                            <h3 class="font-bold text-orange-950 mb-1">二、獎項及名額</h3>
-                            <p class="text-orange-800">
-                                🎁 <strong>新北幣 100 點，共 300 名</strong>。<br>
-                                符合抽獎資格者，將於活動結束後統一辦理抽獎，每位中獎者可獲得新北幣 100 點兌換序號。
-                            </p>
-                        </div>
-                        <div>
-                            <h3 class="font-bold text-orange-950 mb-1">三、每人參加次數</h3>
-                            <p class="text-orange-800">
-                                每人限參加及取得抽獎資格 1 次。同一人重複填寫問卷者，不會因此增加抽獎機會。同一電子郵件信箱（E-mail）或連絡電話視為同一參加者，每人僅限取得 1 次抽獎資格。
-                            </p>
-                        </div>
-                        <div>
-                            <h3 class="font-bold text-orange-950 mb-1">四、中獎公告</h3>
-                            <p class="text-orange-800">
-                                📅 <strong>115 年 10 月 30 日下午 4 點公告中獎名單</strong>。<br>
-                                中獎資訊將於新北市蘆洲區公所相關公告管道公布，請參與民眾留意相關訊息。
-                            </p>
-                        </div>
-                        <div>
-                            <h3 class="font-bold text-orange-950 mb-1">五、領獎方式</h3>
-                            <p class="text-orange-800">
-                                中獎者之「新北幣 100 點兌換序號」將寄送至填寫問卷時所留之電子郵件信箱（E-mail）。請務必填寫正確且可正常收信之電子郵件地址；如因資料填寫錯誤、信箱無法收件等非可歸責於主辦單位之因素致無法取得兌換序號，依主辦單位公告之相關規定辦理。
-                            </p>
-                        </div>
-                        <div>
-                            <h3 class="font-bold text-orange-950 mb-1">六、個人資料蒐集告知事項</h3>
-                            <p class="text-orange-800">
-                                依個人資料保護法相關規定，本活動因辦理抽獎、中獎通知、資格確認及獎項發放等需要，將蒐集參與者所填寫之姓名、電子郵件及其他必要聯絡資訊。所蒐集之個人資料僅於本次活動及相關行政作業必要範圍內使用，並依相關法令妥善保管。參與者得依個人資料保護法相關規定，就其個人資料行使查詢、閱覽、複製、補充、更正、停止蒐集處理利用或刪除等權利。參與者得自由選擇是否提供個人資料；惟如未提供抽獎所需之必要聯絡資訊，將無法進行抽獎資格確認、中獎通知及獎項發放。
-                            </p>
-                        </div>
-                        <div>
-                            <h3 class="font-bold text-orange-950 mb-1">七、注意事項</h3>
-                            <ol class="list-decimal list-inside space-y-0.5 text-orange-800">
-                                <li>問卷調查結果將作為柳堤公園遊戲場改造先期規劃之參考。</li>
-                                <li>抽獎資格以主辦單位實際收到之有效問卷及聯絡資料為準。</li>
-                                <li>新北幣兌換及使用方式，依新北幣相關規定辦理。</li>
-                                <li>本活動如有未盡事宜或因必要情形調整活動內容，將由主辦單位另行公告。</li>
-                            </ol>
-                            <p class="mt-2 text-right font-semibold text-orange-900">主辦單位｜新北市蘆洲區公所</p>
-                        </div>
+                <!-- 抽獎序號查詢預留區塊 -->
+                <div class="bg-white/90 border border-orange-200/90 rounded-xl p-4 text-left space-y-2 mt-2">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-bold text-orange-950 flex items-center gap-1.5">
+                            <i class="bi bi-search text-brand-teal"></i> 中獎序號查詢（公告後開放核對）
+                        </span>
+                        <span class="text-[10px] bg-orange-100 text-orange-800 px-2 py-0.5 rounded-full font-medium">預留查詢</span>
                     </div>
-                </details>
+                    <div class="flex gap-2">
+                        <input type="text" id="query-lottery-id" placeholder="輸入抽獎序號 (例如 LZ-12345)" class="flex-1 px-3 py-2 text-xs border border-orange-200 rounded-xl focus:ring-2 focus:ring-brand-teal focus:border-brand-teal outline-none transition-all">
+                        <button type="button" onclick="checkLotteryResult()" class="px-4 py-2 bg-brand-teal hover:bg-orange-800 text-white font-semibold rounded-xl text-xs transition-all duration-200 flex items-center gap-1 shadow-xs">
+                            <i class="bi bi-search"></i> 查詢
+                        </button>
+                    </div>
+                    <div id="query-result-message" class="text-[11px] text-orange-700 font-medium"></div>
+                </div>
+
+                <!-- 溫馨致意 -->
+                <div class="border-t border-orange-200/60 pt-3 text-center">
+                    <p class="text-sm md:text-base font-bold text-orange-950">
+                        🌸 期待再次相會，共同迎向蘆洲更好的公園！
+                    </p>
+                    <p class="text-[11px] text-orange-700/80 mt-1">主辦單位｜新北市蘆洲區公所</p>
+                </div>
             </div>
         </div>
 
-        <!-- Progress Indicator -->
-        <div class="mb-8" id="progress-container">
+        <!-- Progress Indicator (問卷截止預設隱藏) -->
+        <div class="mb-8 hidden" id="progress-container">
             <div class="flex justify-between text-xs font-semibold text-orange-700 mb-2">
                 <span id="step-label">步驟 1 / 4：基本背景</span>
                 <span id="step-percent">25%</span>
@@ -272,8 +278,8 @@
             </div>
         </div>
 
-        <!-- Form Element -->
-        <form id="survey-form" onsubmit="handleFormSubmit(event)">
+        <!-- Form Element (問卷截止預設隱藏) -->
+        <form id="survey-form" class="hidden" onsubmit="handleFormSubmit(event)">
 
             <!-- STEP 1: Basic Background -->
             <div id="step-1" class="fade-in-step space-y-6">
@@ -779,9 +785,10 @@
             <div class="text-orange-900 font-bold text-sm">正在安全送出您的問卷...</div>
         </div>
 
-        <!-- Success Block -->
-        <div id="success-block" class="hidden fade-in-step text-left space-y-6 py-4">
-            <div class="text-center space-y-2">
+        <!-- Survey Results Block (全體填答趨勢成果展示) -->
+        <div id="success-block" class="fade-in-step text-left space-y-6 pt-2">
+            <!-- 填答提交成功時之個人提示 (日常隱藏) -->
+            <div id="submit-success-header" class="hidden text-center space-y-2">
                 <div class="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto text-brand-teal text-3xl shadow-inner">
                     <i class="bi bi-check-circle-fill"></i>
                 </div>
@@ -789,15 +796,15 @@
                 <p class="text-orange-800 text-xs">感謝您為蘆洲柳堤下一代共融遊戲場發聲，資料已即時彙整。</p>
             </div>
 
-            <!-- 抽獎序號卡片 -->
-            <div id="success-lottery-box" class="bg-gradient-to-br from-orange-50 to-amber-50 p-4 rounded-2xl border border-orange-200 text-center shadow-sm">
+            <!-- 抽獎序號卡片 (日常隱藏) -->
+            <div id="success-lottery-box" class="hidden bg-gradient-to-br from-orange-50 to-amber-50 p-4 rounded-2xl border border-orange-200 text-center shadow-sm">
                 <span class="text-xs text-orange-700 font-bold tracking-wider block mb-1">您的抽獎活動序號</span>
                 <span class="text-2xl md:text-3xl font-extrabold text-brand-teal tracking-widest block font-mono" id="success-lottery-id">LZ-XXXXX</span>
                 <p class="text-[11px] text-orange-600/80 mt-1">請截圖保存此序號，活動抽獎將以此序號進行核對。</p>
             </div>
 
-            <!-- 區塊 1：您的填答摘要 -->
-            <div class="bg-white/75 rounded-2xl border border-orange-100 p-4 space-y-3 shadow-sm">
+            <!-- 區塊 1：個人填答摘要 (日常隱藏) -->
+            <div id="personal-summary-box" class="hidden bg-white/75 rounded-2xl border border-orange-100 p-4 space-y-3 shadow-sm">
                 <div class="flex items-center justify-between border-b border-orange-100 pb-2">
                     <span class="text-sm font-bold text-orange-950 flex items-center gap-1.5">
                         <i class="bi bi-clipboard-check text-brand-teal"></i> 您的填答摘要
@@ -1029,14 +1036,17 @@
                 </div>
             </div>
 
-            <!-- 返回首頁 / 重新填寫按鈕 -->
-            <div class="pt-2 text-center">
-                <button type="button" onclick="location.reload()" class="px-5 py-2 text-xs font-semibold text-orange-700 bg-orange-100/70 hover:bg-orange-200/70 rounded-xl transition-all">
-                    <i class="bi bi-arrow-clockwise me-1"></i> 再填一份問卷
-                </button>
+            <!-- 操作引導按鈕 -->
+            <div class="pt-2 flex flex-wrap items-center justify-center gap-3">
+                <a href="https://www.luzhou.ntpc.gov.tw/" target="_blank" rel="noopener noreferrer" class="px-5 py-2.5 text-xs font-semibold text-white bg-brand-teal hover:bg-orange-800 rounded-xl transition-all shadow-xs flex items-center gap-1.5">
+                    <i class="bi bi-box-arrow-up-right"></i> 新北市蘆洲區公所公告專區
+                </a>
+                <a href="/" class="px-5 py-2.5 text-xs font-semibold text-orange-800 bg-orange-100 hover:bg-orange-200 rounded-xl transition-all flex items-center gap-1.5">
+                    <i class="bi bi-house-door-fill"></i> 返回首頁
+                </a>
             </div>
             
-            <p class="text-[11px] text-center text-orange-700/70">本問卷系統由蘆洲區公所規劃，數據即時安全加密彙整。</p>
+            <p class="text-[11px] text-center text-orange-700/70">本調查成果由蘆洲區公所規劃彙整，成果將納入柳堤公園兒童遊戲場後續規劃設計參考。</p>
         </div>
 
     </div>
@@ -1372,6 +1382,93 @@
             } catch (err) {
                 document.getElementById('card-loading').classList.add('hidden');
                 alert("送出失敗，請確認網路連線是否正常：" + err.message);
+            }
+        }
+
+        // =====================================================================
+        // 倒數計時器與中獎名單查詢邏輯 (115/10/30 16:00 即 2026/10/30 16:00)
+        // =====================================================================
+        const TARGET_DATE = new Date(2026, 9, 30, 16, 0, 0); // 月份為 0-indexed (9 代表 10 月)
+
+        function updateCountdown() {
+            const now = new Date();
+            const diff = TARGET_DATE - now;
+
+            const daysEl = document.getElementById('cd-days');
+            const hoursEl = document.getElementById('cd-hours');
+            const minutesEl = document.getElementById('cd-minutes');
+            const secondsEl = document.getElementById('cd-seconds');
+
+            if (!daysEl) return;
+
+            if (diff <= 0) {
+                daysEl.innerText = "00";
+                hoursEl.innerText = "00";
+                minutesEl.innerText = "00";
+                secondsEl.innerText = "00";
+                const wrapper = document.getElementById('countdown-wrapper');
+                if (wrapper) {
+                    wrapper.innerHTML = `
+                        <div class="text-xs font-bold text-green-700 bg-green-50 border border-green-200 rounded-lg p-2 text-center">
+                            🎉 中獎名單已於 115/10/30 16:00 正式公告，請參閱下方核對系統或公所公告！
+                        </div>
+                    `;
+                }
+                return;
+            }
+
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+            daysEl.innerText = String(days).padStart(2, '0');
+            hoursEl.innerText = String(hours).padStart(2, '0');
+            minutesEl.innerText = String(minutes).padStart(2, '0');
+            secondsEl.innerText = String(seconds).padStart(2, '0');
+        }
+
+        // 啟動倒數計時
+        updateCountdown();
+        setInterval(updateCountdown, 1000);
+
+        // 中獎序號查詢核對清單（預留資料庫或中獎清冊）
+        // 正式公告時可將 300 位抽獎序號字串寫入陣列
+        const WINNING_LOTTERY_IDS = [
+            // 範例："LZ-10234", "LZ-58921", ...
+        ];
+
+        function checkLotteryResult() {
+            const input = document.getElementById('query-lottery-id');
+            const msgEl = document.getElementById('query-result-message');
+            if (!input || !msgEl) return;
+
+            const val = input.value.trim().toUpperCase();
+            if (!val) {
+                msgEl.className = "text-[11px] text-red-600 font-semibold";
+                msgEl.innerText = "⚠️ 請輸入您填答問卷時所獲取的抽獎序號（例如 LZ-12345）！";
+                return;
+            }
+
+            const now = new Date();
+            if (now < TARGET_DATE) {
+                msgEl.className = "text-[11px] text-amber-700 font-semibold";
+                msgEl.innerText = `⏳ 尚未到達公告時間（115/10/30 16:00）。您的抽獎序號為「${val}」，請於公告時間後再行查詢。`;
+                return;
+            }
+
+            if (WINNING_LOTTERY_IDS.length === 0) {
+                msgEl.className = "text-[11px] text-orange-800 font-semibold";
+                msgEl.innerText = "📋 中獎名冊正由蘆洲區公所行政複核中，兌換序號將以 Email 寄發，亦可直接查閱公所官方網站公告。";
+                return;
+            }
+
+            if (WINNING_LOTTERY_IDS.includes(val)) {
+                msgEl.className = "text-[11px] text-green-700 font-bold";
+                msgEl.innerText = `🎉 恭喜！抽獎序號【${val}】榮獲新北幣 100 點！兌換序號已陸續寄送至您留存之 Email。`;
+            } else {
+                msgEl.className = "text-[11px] text-gray-600 font-medium";
+                msgEl.innerText = `很遺憾，抽獎序號【${val}】本次未中獎。衷心感謝您對蘆洲柳堤公園改造的熱情支持！`;
             }
         }
     </script>
