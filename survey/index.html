@@ -243,7 +243,7 @@
         // #region [INDEX_JS_COUNTDOWN_WINNER] 3. 倒數計時與得獎名單自動切換核對系統 (JS)
         // =====================================================================
         // 倒數計時器與中獎名單自動切換邏輯 (115/10/30 16:00 即 2026/10/30 16:00)
-        // 包含最後送出之問卷抽獎序號 (lotteryId) 與個資遮蔽後欄位，絕不含任何原始明文個資
+        // 包含首次送出之問卷抽獎序號 (lotteryId) 與個資遮蔽後欄位，絕不含任何原始明文個資
         // =====================================================================
         const TARGET_DATE = new Date(2026, 9, 30, 16, 0, 0); // 月份為 0-indexed (9 代表 10 月)
         const WINNER_LIST = [
@@ -372,7 +372,7 @@
             { "seq": 123, "lotteryId": "LZ-41448", "name": "鄭○如", "phone": "******3872", "email": "ayu***@yahoo.com.tw" },
             { "seq": 124, "lotteryId": "LZ-36778", "name": "施○斌", "phone": "******9719", "email": "esc***@mail2000.com.tw" },
             { "seq": 125, "lotteryId": "LZ-70630", "name": "許○庭", "phone": "******7169", "email": "kai***@gmail.com" },
-            { "seq": 126, "lotteryId": "LZ-97438", "name": "張○豪", "phone": "******3429", "email": "a09***@gmail.com" },
+            { "seq": 126, "lotteryId": "LZ-15568", "name": "張○豪", "phone": "******3429", "email": "a09***@gmail.com" },
             { "seq": 127, "lotteryId": "LZ-33691", "name": "陳○廷", "phone": "******6939", "email": "ton***@yahoo.com.tw" },
             { "seq": 128, "lotteryId": "LZ-70776", "name": "林○珊", "phone": "******2372", "email": "lin***@gmail.com" },
             { "seq": 129, "lotteryId": "LZ-44805", "name": "王○珠", "phone": "******6007", "email": "chu***@gmail.com" },
@@ -390,13 +390,13 @@
             { "seq": 141, "lotteryId": "LZ-84246", "name": "張○姍", "phone": "******9170", "email": "hap***@gmail.com" },
             { "seq": 142, "lotteryId": "LZ-36299", "name": "高○君", "phone": "******3391", "email": "y09***@gmail.com" },
             { "seq": 143, "lotteryId": "LZ-88660", "name": "何○郿", "phone": "******5044", "email": "a74***@gmail.com" },
-            { "seq": 144, "lotteryId": "LZ-58320", "name": "蔡○霖", "phone": "******1229", "email": "pob***@yahoo.com.tw" },
+            { "seq": 144, "lotteryId": "LZ-40623", "name": "蔡○霖", "phone": "******1229", "email": "pob***@yahoo.com.tw" },
             { "seq": 145, "lotteryId": "LZ-78454", "name": "林○嫻", "phone": "******2911", "email": "jil***@gmail.com" },
             { "seq": 146, "lotteryId": "LZ-58435", "name": "黃○萍", "phone": "******0022", "email": "kim***@gmail.com" },
             { "seq": 147, "lotteryId": "LZ-40573", "name": "黃○蕎", "phone": "******7939", "email": "tin***@gmail.com" },
             { "seq": 148, "lotteryId": "LZ-64109", "name": "陳○真", "phone": "******7199", "email": "ido***@gmail.com" },
             { "seq": 149, "lotteryId": "LZ-89109", "name": "林○薇", "phone": "******2024", "email": "mer***@yahoo.com.tw" },
-            { "seq": 150, "lotteryId": "LZ-87892", "name": "陳○如", "phone": "******5357", "email": "bal***@gmail.com" },
+            { "seq": 150, "lotteryId": "LZ-30892", "name": "陳○如", "phone": "******5357", "email": "bal***@gmail.com" },
             { "seq": 151, "lotteryId": "LZ-78176", "name": "徐○珠", "phone": "******6908", "email": "pc1***@gmail.com" },
             { "seq": 152, "lotteryId": "LZ-94063", "name": "廖○蓁", "phone": "******3207", "email": "2bn***@gmail.com" },
             { "seq": 153, "lotteryId": "LZ-30460", "name": "鄭○芳", "phone": "******5686", "email": "lij***@gmail.com" },
@@ -429,10 +429,10 @@
             { "seq": 180, "lotteryId": "LZ-89873", "name": "許○萱", "phone": "******0185", "email": "whi***@hotmail.com" },
             { "seq": 181, "lotteryId": "LZ-26481", "name": "蕭○尚", "phone": "******6858", "email": "tai***@icloud.com" },
             { "seq": 182, "lotteryId": "LZ-59724", "name": "曾○青", "phone": "******0277", "email": "jud***@hotmail.com" },
-            { "seq": 183, "lotteryId": "LZ-41196", "name": "陳○孝", "phone": "******5935", "email": "ezi***@gmail.com" },
+            { "seq": 183, "lotteryId": "LZ-33995", "name": "陳○孝", "phone": "******5935", "email": "ezi***@gmail.com" },
             { "seq": 184, "lotteryId": "LZ-49616", "name": "盧○瑜", "phone": "******3165", "email": "wre***@hotmail.com" },
             { "seq": 185, "lotteryId": "LZ-55279", "name": "吳○宇", "phone": "******8567", "email": "cwt***@gmail.com" },
-            { "seq": 186, "lotteryId": "LZ-43839", "name": "王○勳", "phone": "******0710", "email": "sta***@gmail.com" },
+            { "seq": 186, "lotteryId": "LZ-55239", "name": "王○勳", "phone": "******0710", "email": "sta***@gmail.com" },
             { "seq": 187, "lotteryId": "LZ-29767", "name": "黃○珺", "phone": "******7709", "email": "may***@yahoo.com.tw" },
             { "seq": 188, "lotteryId": "LZ-22742", "name": "吳○樺", "phone": "******5745", "email": "gpx***@gmail.com" },
             { "seq": 189, "lotteryId": "LZ-90418", "name": "游○盛", "phone": "******0401", "email": "yuv***@gmail.com" },
@@ -464,7 +464,7 @@
             { "seq": 215, "lotteryId": "LZ-26966", "name": "林○世", "phone": "******8985", "email": "har***@yahoo.com.tw" },
             { "seq": 216, "lotteryId": "LZ-21445", "name": "蔡○軒", "phone": "******5798", "email": "a09***@gmail.com" },
             { "seq": 217, "lotteryId": "LZ-82091", "name": "吳○怜", "phone": "******2600", "email": "za7***@gmail.com" },
-            { "seq": 218, "lotteryId": "LZ-84677", "name": "詹○玫", "phone": "******9680", "email": "may***@gmail.com" },
+            { "seq": 218, "lotteryId": "LZ-64018", "name": "詹○玫", "phone": "******9680", "email": "may***@gmail.com" },
             { "seq": 219, "lotteryId": "LZ-95904", "name": "陳○進", "phone": "******6542", "email": "lee***@gmail.com" },
             { "seq": 220, "lotteryId": "LZ-65075", "name": "吳○芸", "phone": "******6906", "email": "yun***@gmail.com" },
             { "seq": 221, "lotteryId": "LZ-87462", "name": "黃○萍", "phone": "******5507", "email": "deb***@gmail.com" },
