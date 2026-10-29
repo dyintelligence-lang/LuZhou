@@ -1,0 +1,1563 @@
+<!-- MARK: [INDEX_TOC] 🧭 全檔架構導航地圖 -->
+<!-- #region [INDEX_TOC] 🧭 全檔架構導航地圖 -->
+<!--
+ ════════════════════════════════════════════════════════════════════════════
+ [INDEX_HTML_HEAD       ] - 1. 頁首、字型與樣式系統 (HTML/CSS)
+ [INDEX_NOTICE_ANNOUNCEMENT] - 2. 問卷截止、倒數計時與得獎名單公告區 (HTML)
+ [INDEX_SURVEY_WIZARD   ] - 3. 問卷填答表單步驟區 (HTML)
+ [INDEX_SURVEY_RESULTS  ] - 4. 填答趨勢統計成果展示區 (HTML)
+ [INDEX_JS_WIZARD       ] - 5. 問卷步驟與表單送出邏輯 (JS)
+ [INDEX_JS_COUNTDOWN_WINNER] - 6. 倒數計時與得獎名單自動切換核對系統 (JS)
+ ════════════════════════════════════════════════════════════════════════════
+-->
+<!-- #endregion -->
+
+<!DOCTYPE html>
+<html lang="zh-TW">
+<!-- MARK: [INDEX_HTML_HEAD] 1. 頁首、字型與樣式系統 (HTML/CSS) -->
+<!-- #region [INDEX_HTML_HEAD] 1. 頁首、字型與樣式系統 (HTML/CSS) -->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>【柳堤兒童遊戲場改造】感謝民眾熱情參與・中獎名單公告</title>
+    
+    <!-- Google Fonts & Bootstrap Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    
+    <!-- Tailwind CSS (Static Production Version) -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+
+    <style>
+        /* Custom colors compatibility - Orange Theme */
+        .text-brand-teal { color: #f97316 !important; }
+        .bg-brand-teal { background-color: #ea580c !important; }
+        .bg-brand-teal:hover { background-color: #c2410c !important; }
+        .text-brand-orange { color: #f97316 !important; }
+        .bg-brand-orange\/10 { background-color: rgba(249, 115, 22, 0.1) !important; }
+        .border-brand-teal { border-color: #f97316 !important; }
+        .focus\:border-brand-teal:focus { border-color: #f97316 !important; }
+        .focus\:ring-brand-teal:focus { --tw-ring-color: #f97316 !important; }
+        .text-brand-green { color: #fb923c !important; }
+        .from-brand-green { --tw-gradient-from: #fb923c !important; --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(251, 146, 60, 0)) !important; }
+        .to-brand-teal { --tw-gradient-to: #ea580c !important; }
+        .via-brand-teal { --tw-gradient-stops: var(--tw-gradient-from), #f97316, var(--tw-gradient-to, rgba(249, 115, 22, 0)) !important; }
+        .to-brand-purple { --tw-gradient-to: #f59e0b !important; }
+
+        body {
+            font-family: 'Outfit', 'Noto Sans TC', sans-serif;
+            background: linear-gradient(135deg, #fff7ed 0%, #fffbeb 50%, #fef3c7 100%);
+            min-height: 100vh;
+        }
+
+        /* Glassmorphism styling */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.82);
+            -webkit-backdrop-filter: blur(20px);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 237, 213, 0.6);
+            box-shadow: 0 20px 40px rgba(249, 115, 22, 0.06);
+        }
+
+        /* Customize radio/checkbox states for custom touch buttons */
+        .custom-option:hover {
+            border-color: rgba(249, 115, 22, 0.4);
+            background-color: rgba(249, 115, 22, 0.02);
+        }
+        
+        .custom-option-checked {
+            border-color: #f97316 !important;
+            background-color: rgba(249, 115, 22, 0.08) !important;
+            color: #ea580c !important;
+            box-shadow: 0 4px 12px rgba(249, 115, 22, 0.12);
+        }
+
+        /* Animation */
+        .fade-in-step {
+            animation: fadeIn 0.4s ease-out forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Grid check styling */
+        .grid-check-cell:hover {
+            background-color: rgba(249, 115, 22, 0.04);
+        }
+
+        /* 成果統計圓餅圖 (Donut Chart) 樣式 */
+        .chart-donut-swing {
+            background: conic-gradient(#ea580c 0% 41%, #f97316 41% 66%, #fdba74 66% 78%, #ffedd5 78% 100%);
+        }
+        .chart-donut-climb {
+            background: conic-gradient(#ea580c 0% 36%, #f97316 36% 57%, #fdba74 57% 69%, #ffedd5 69% 100%);
+        }
+        .chart-donut-slide {
+            background: conic-gradient(#ea580c 0% 29%, #f97316 29% 47%, #fdba74 47% 62%, #ffedd5 62% 100%);
+        }
+        .chart-donut-spin {
+            background: conic-gradient(#ea580c 0% 24%, #f97316 24% 42%, #fdba74 42% 54%, #ffedd5 54% 100%);
+        }
+        .survey-progress-init {
+            width: 25%;
+        }
+    </style>
+</head>
+<!-- #endregion -->
+<body class="py-8 px-4 flex items-center justify-center">
+
+    <!-- 
+    =====================================================================
+    DEPLOYMENT INSTRUCTIONS FOR ADMINS (Google Apps Script)
+    =====================================================================
+    1. Create a new Google Sheet.
+    2. Click Extensions -> Apps Script.
+    3. Paste the following script:
+
+    function doPost(e) {
+      try {
+        var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+        var data = JSON.parse(e.postData.contents);
+        
+        // Write headers if sheet is empty
+        if (sheet.getLastRow() === 0) {
+          sheet.appendRow([
+            "時間戳記", "抽獎ID", "姓名", "電話", "Email", 
+            "1. 性別", "2. 年齡層", "3. 來訪頻率", "4. 交通工具", "4. 交通工具其他", 
+            "5. 花費時間", "5. 花費時間其他", "6. 通常來訪時間",
+            "7. 每次停留時間", "7. 每次停留時間其他", "8. 同行同伴", "8. 同行同伴其他",
+            "9. 聽過特色公園", "10. 去過特色公園", "11. 陪同孩童年齡層", "12. 注意事項",
+            "13. 高體能挑戰設施排序", "14. 保留記憶或設施", "15. 遊戲場改善建議"
+          ]);
+        }
+        
+        sheet.appendRow([
+          new Date(),
+          data.lotteryId || "",
+          data.name || "",
+          data.phone || "",
+          data.email || "",
+          data.q1 || "",
+          data.q2 || "",
+          data.q3 || "",
+          data.q4 || "",
+          data.q4_other || "",
+          data.q5 || "",
+          data.q5_other || "",
+          JSON.stringify(data.q6) || "",
+          data.q7 || "",
+          data.q7_other || "",
+          data.q8 || "",
+          data.q8_other || "",
+          data.q9 || "",
+          data.q10 || "",
+          data.q11 || "",
+          JSON.stringify(data.q12) || "",
+          JSON.stringify(data.q13) || "",
+          data.q15 || "",
+          data.q16 || ""
+        ]);
+        
+        return ContentService.createTextOutput(JSON.stringify({ status: "success", lotteryId: data.lotteryId }))
+          .setMimeType(ContentService.MimeType.JSON);
+      } catch(err) {
+        return ContentService.createTextOutput(JSON.stringify({ status: "error", message: err.toString() }))
+          .setMimeType(ContentService.MimeType.JSON);
+      }
+    }
+
+    4. Deploy -> New Deployment -> Web App.
+       - Execute as: Me
+       - Who has access: Anyone
+    5. Copy the Web App URL and paste it below in the CONFIG.gasUrl variable.
+    -->
+
+    <script>
+        // CONFIGURATION: Paste your Google Apps Script URL here to enable Sheet saving.
+        const CONFIG = {
+            gasUrl: "https://script.google.com/macros/s/AKfycbxEXR3fQ158Jn_P-u-BS6R1ubAKkUgmONoYIDaNmQodqp5yX3p3MVV5f2LWgA-SV-8iIA/exec" 
+        };
+    </script>
+
+    <div class="w-full max-w-2xl glass-card rounded-3xl p-6 md:p-8 transition-all duration-300 relative overflow-hidden">
+        
+        <!-- Header Decorator -->
+        <div class="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-brand-green via-brand-teal to-brand-purple"></div>
+
+        <!-- MARK: [INDEX_NOTICE_ANNOUNCEMENT] 2. 問卷截止、倒數計時與得獎名單公告區 (HTML) -->
+        <!-- #region [INDEX_NOTICE_ANNOUNCEMENT] 2. 問卷截止、倒數計時與得獎名單公告區 (HTML) -->
+        <!-- Notice Block: 問卷截止與中獎名單公告 -->
+        <div id="closed-announcement-block" class="mb-8 space-y-6">
+            <!-- 頂部感謝徽章與主標題 -->
+            <div class="text-center space-y-3 pt-2">
+                <div class="space-y-1.5">
+                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-orange-100 text-orange-800 border border-orange-200">
+                        <i class="bi bi-check-circle-fill text-brand-teal"></i> 問卷調查已圓滿截止
+                    </span>
+                    <h1 class="text-2xl md:text-3xl font-extrabold text-orange-950 tracking-tight leading-snug">
+                        感謝民眾熱情參與！
+                    </h1>
+                    <p class="text-sm md:text-base text-orange-800 font-medium">
+                        柳堤公園兒童遊戲場改造調查
+                    </p>
+                </div>
+            </div>
+
+            <!-- 中獎名單公告核心卡片 -->
+            <div class="bg-gradient-to-br from-amber-500/10 via-orange-500/10 to-amber-500/5 border-2 border-orange-200/90 rounded-2xl p-5 md:p-6 shadow-sm space-y-4 text-center">
+                <div class="inline-flex items-center justify-center w-11 h-11 rounded-2xl bg-orange-500 text-white text-xl shadow-sm">
+                    <i class="bi bi-megaphone-fill"></i>
+                </div>
+
+                <div class="space-y-1">
+                    <h2 class="text-base md:text-lg font-bold text-orange-950">
+                        中獎名單公告
+                    </h2>
+                    <div class="inline-block bg-white/95 border border-orange-200 px-6 py-2.5 rounded-2xl shadow-xs my-1">
+                        <span class="text-xl md:text-2xl font-extrabold text-brand-teal tracking-wide font-mono">
+                            115 / 10 / 30 16:00 公告
+                        </span>
+                    </div>
+                </div>
+
+                <!-- 動態倒數計時器（倒數結束時自動隱藏並切換為下方得獎名單） -->
+                <div id="countdown-wrapper" class="bg-white/80 border border-orange-100 rounded-xl p-3 max-w-md mx-auto">
+                    <span class="text-[11px] font-bold text-orange-700 block mb-1.5 flex items-center justify-center gap-1">
+                        <i class="bi bi-clock-history text-brand-teal"></i> 距離公告倒數
+                    </span>
+                    <div class="grid grid-cols-4 gap-2 text-center font-mono">
+                        <div class="bg-orange-50/80 rounded-lg p-1.5 border border-orange-100">
+                            <span id="cd-days" class="text-base md:text-lg font-bold text-orange-950">--</span>
+                            <span class="text-[10px] text-orange-600 block">天</span>
+                        </div>
+                        <div class="bg-orange-50/80 rounded-lg p-1.5 border border-orange-100">
+                            <span id="cd-hours" class="text-base md:text-lg font-bold text-orange-950">--</span>
+                            <span class="text-[10px] text-orange-600 block">時</span>
+                        </div>
+                        <div class="bg-orange-50/80 rounded-lg p-1.5 border border-orange-100">
+                            <span id="cd-minutes" class="text-base md:text-lg font-bold text-orange-950">--</span>
+                            <span class="text-[10px] text-orange-600 block">分</span>
+                        </div>
+                        <div class="bg-orange-50/80 rounded-lg p-1.5 border border-orange-100">
+                            <span id="cd-seconds" class="text-base md:text-lg font-bold text-orange-950">--</span>
+                            <span class="text-[10px] text-orange-600 block">秒</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 得獎名單正式公告區塊（115/10/30 16:00 倒數結束時自動顯示） -->
+                <div id="winner-list-section" class="hidden space-y-3 text-left pt-1">
+                    <div class="bg-green-50 border border-green-200 rounded-xl p-2.5 text-center">
+                        <span class="text-xs font-bold text-green-800 flex items-center justify-center gap-1.5">
+                            <i class="bi bi-patch-check-fill text-green-600"></i> 新北幣 100 點得獎名單已正式公布（共 300 名）
+                        </span>
+                    </div>
+
+                    <!-- 快速搜尋過濾框 -->
+                    <div class="bg-white/95 p-3 rounded-xl border border-orange-200 shadow-xs space-y-2">
+                        <label for="winner-search-input" class="text-xs font-bold text-orange-950 flex items-center justify-between">
+                            <span><i class="bi bi-search text-brand-teal mr-1"></i> 快速查詢得獎名單</span>
+                            <span id="winner-count-badge" class="text-[11px] text-orange-700 bg-orange-100 px-2 py-0.5 rounded-full font-mono">共 300 筆</span>
+                        </label>
+                        <div class="flex gap-2">
+                            <input type="text" id="winner-search-input" oninput="filterWinnerList()" placeholder="輸入電話末 3 碼、Email 前 3 碼、姓名首尾字或代號 (如 K594)..." class="w-full bg-orange-50/40 border border-orange-200 rounded-xl px-3.5 py-2 text-xs text-orange-950 outline-none focus:border-brand-teal">
+                            <button type="button" onclick="clearWinnerSearch()" class="px-3 py-2 bg-orange-100 hover:bg-orange-200 text-orange-800 rounded-xl text-xs font-semibold flex-shrink-0 transition-all">
+                                清除
+                            </button>
+                        </div>
+                        <p class="text-[11px] text-orange-700/80">
+                            為保護個人資料，名單採去識別化遮蔽顯示（姓名隱中間字、電話顯末 3 碼、信箱顯前 3 碼）。
+                        </p>
+                    </div>
+
+                    <!-- 可捲動得獎名單表格 -->
+                    <div class="bg-white/95 rounded-xl border border-orange-200 shadow-xs overflow-hidden">
+                        <div class="max-h-80 overflow-y-auto">
+                            <table class="w-full text-xs text-left border-collapse">
+                                <thead class="bg-orange-100/90 text-orange-950 font-bold sticky top-0 z-10 border-b border-orange-200">
+                                    <tr>
+                                        <th class="py-2.5 px-2.5 text-center w-12">順序</th>
+                                        <th class="py-2.5 px-2 text-center w-16">代號</th>
+                                        <th class="py-2.5 px-2 text-center w-20">姓名</th>
+                                        <th class="py-2.5 px-2 text-center w-28">電話</th>
+                                        <th class="py-2.5 px-2.5">電子郵件信箱</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="winner-table-body" class="divide-y divide-orange-100/70 text-orange-950 font-mono">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 抽獎說明與獎項資訊 -->
+                <p class="text-xs text-orange-800 leading-relaxed max-w-lg mx-auto">
+                    中獎名單將於上述時間統一公布於本頁面及新北市蘆洲區公所相關公告管道，中獎民眾之「新北幣 100 點兌換序號」亦將由系統陸續以電子郵件寄發，請參加者留意信箱通知。
+                </p>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs text-left pt-1">
+                    <div class="bg-white/85 p-3 rounded-xl border border-orange-100 flex items-start gap-2">
+                        <i class="bi bi-gift-fill text-orange-500 text-sm mt-0.5"></i>
+                        <div>
+                            <span class="font-bold text-orange-950 block">抽獎獎項</span>
+                            <span class="text-orange-800 text-[11px]">新北幣 100 點（共 300 名）</span>
+                        </div>
+                    </div>
+                    <div class="bg-white/85 p-3 rounded-xl border border-orange-100 flex items-start gap-2">
+                        <i class="bi bi-envelope-check-fill text-orange-500 text-sm mt-0.5"></i>
+                        <div>
+                            <span class="font-bold text-orange-950 block">序號領取方式</span>
+                            <span class="text-orange-800 text-[11px]">以留存之 Email 寄送兌換序號</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 溫馨致意 -->
+                <div class="border-t border-orange-200/60 pt-3 text-center">
+                    <p class="text-sm md:text-base font-bold text-orange-950">
+                        🌸 期待再次相會，共同迎向更好的柳堤公園！
+                    </p>
+                    <p class="text-[11px] text-orange-700/80 mt-1">主辦單位｜新北市蘆洲區公所</p>
+                </div>
+            </div>
+        </div>
+        <!-- #endregion -->
+
+        <!-- MARK: [INDEX_SURVEY_WIZARD] 3. 問卷填答表單步驟區 (HTML) -->
+        <!-- #region [INDEX_SURVEY_WIZARD] 3. 問卷填答表單步驟區 (HTML) -->
+        <!-- Progress Indicator (問卷截止預設隱藏) -->
+        <div class="mb-8 hidden" id="progress-container">
+            <div class="flex justify-between text-xs font-semibold text-orange-700 mb-2">
+                <span id="step-label">步驟 1 / 4：基本背景</span>
+                <span id="step-percent">25%</span>
+            </div>
+            <div class="w-full bg-orange-100/50 h-2 rounded-full overflow-hidden">
+                <div id="progress-bar" class="bg-gradient-to-r from-brand-green to-brand-teal h-full transition-all duration-300 survey-progress-init"></div>
+            </div>
+        </div>
+
+        <!-- Form Element (問卷截止預設隱藏) -->
+        <form id="survey-form" class="hidden" onsubmit="handleFormSubmit(event)">
+
+            <!-- STEP 1: Basic Background -->
+            <div id="step-1" class="fade-in-step space-y-6">
+                <!-- Q1 -->
+                <div class="space-y-3">
+                    <label class="block font-bold text-orange-950">1. 您的性別 <span class="text-brand-orange">*</span></label>
+                    <div class="grid grid-cols-3 gap-3">
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q1', '生理女', this)">
+                            生理女
+                        </div>
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q1', '生理男', this)">
+                            生理男
+                        </div>
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q1', '其他', this)">
+                            其他
+                        </div>
+                    </div>
+                    <input type="hidden" name="q1" id="q1" required>
+                </div>
+
+                <!-- Q2 -->
+                <div class="space-y-3">
+                    <label class="block font-bold text-orange-950">2. 您的年齡層 <span class="text-brand-orange">*</span></label>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q2', '18歲以下', this)">
+                            18歲以下
+                        </div>
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q2', '19-30歲', this)">
+                            19-30歲
+                        </div>
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q2', '31-45歲', this)">
+                            31-45歲
+                        </div>
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q2', '46-60歲', this)">
+                            46-60歲
+                        </div>
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 col-span-1 sm:col-span-2 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q2', '61歲以上', this)">
+                            61歲以上
+                        </div>
+                    </div>
+                    <input type="hidden" name="q2" id="q2" required>
+                </div>
+
+                <!-- Q3 -->
+                <div class="space-y-3">
+                    <label class="block font-bold text-orange-950">3. 您來訪柳堤公園的頻率為何？ <span class="text-brand-orange">*</span></label>
+                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q3', '每天', this)">每天</div>
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q3', '每周1次', this)">每周1次</div>
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q3', '每周2-3次', this)">每周2-3次</div>
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q3', '每月1-2次', this)">每月1-2次</div>
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q3', '不定時', this)">不定時</div>
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q3', '不曾來過', this)">不曾來過</div>
+                    </div>
+                    <input type="hidden" name="q3" id="q3" required>
+                </div>
+
+                <!-- Q4 -->
+                <div class="space-y-3">
+                    <label class="block font-bold text-orange-950">4. 您來此公園所使用的交通工具 <span class="text-brand-orange">*</span></label>
+                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q4', '走路', this); hideOther('q4')">走路</div>
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q4', '腳踏車', this); hideOther('q4')">腳踏車</div>
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q4', '機車', this); hideOther('q4')">機車</div>
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q4', '汽車', this); hideOther('q4')">汽車</div>
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 col-span-1 sm:col-span-2 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q4', '其他', this); showOther('q4')">其他</div>
+                    </div>
+                    <input type="hidden" name="q4" id="q4" required>
+                    <input type="text" id="q4_other" name="q4_other" class="hidden w-full bg-white/60 border border-orange-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-brand-teal" placeholder="請輸入其他交通工具...">
+                </div>
+
+                <!-- Q5 -->
+                <div class="space-y-3">
+                    <label class="block font-bold text-orange-950">5. 您來此公園需要花費多少時間？ <span class="text-brand-orange">*</span></label>
+                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q5', '10分鐘以下', this); hideOther('q5')">10分鐘以下</div>
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q5', '11-20分鐘', this); hideOther('q5')">11-20分鐘</div>
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q5', '21-30分鐘', this); hideOther('q5')">21-30分鐘</div>
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q5', '31-60分鐘', this); hideOther('q5')">31-60分鐘</div>
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q5', '1小時以上', this); hideOther('q5')">1小時以上</div>
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q5', '其他', this); showOther('q5')">其他</div>
+                    </div>
+                    <input type="hidden" name="q5" id="q5" required>
+                    <input type="text" id="q5_other" name="q5_other" class="hidden w-full bg-white/60 border border-orange-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-brand-teal" placeholder="請填寫其他花費時間...">
+                </div>
+            </div>
+
+            <!-- STEP 2: Visiting Habits -->
+            <div id="step-2" class="hidden fade-in-step space-y-6">
+                <!-- Q6 Grid table -->
+                <div class="space-y-3">
+                    <label class="block font-bold text-orange-950">6. 您通常什麼時候來此公園？ (可複選)</label>
+                    <div class="overflow-x-auto rounded-2xl border border-orange-100 bg-white/40 overflow-hidden">
+                        <table class="w-full text-sm text-left border-collapse">
+                            <thead>
+                                <tr class="bg-orange-50/80 border-b border-orange-100 text-orange-950 font-bold text-center">
+                                    <th class="p-3">來訪時段</th>
+                                    <th class="p-3 w-24">平日</th>
+                                    <th class="p-3 w-24">假日</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-orange-50">
+                                <script>
+                                    const timeslots = [
+                                        "上午7:00以前", "上午7:00-9:00", "上午9:00-12:00", 
+                                        "中午12:00-13:00", "下午13:00-16:00", "下午16:00-19:00", 
+                                        "晚上19:00以後"
+                                    ];
+                                    timeslots.forEach((slot, sIdx) => {
+                                        document.write(`
+                                            <tr class="text-orange-950">
+                                                <td class="p-3 font-medium">${slot}</td>
+                                                <td class="p-3 text-center grid-check-cell cursor-pointer" onclick="toggleGridCheck(event, 'weekday', ${sIdx})">
+                                                    <input type="checkbox" id="q6-weekday-${sIdx}" name="q6_weekday_${sIdx}" onclick="event.stopPropagation()" class="form-checkbox h-4.5 w-4.5 text-brand-teal focus:ring-brand-teal rounded border-orange-300">
+                                                </td>
+                                                <td class="p-3 text-center grid-check-cell cursor-pointer" onclick="toggleGridCheck(event, 'weekend', ${sIdx})">
+                                                    <input type="checkbox" id="q6-weekend-${sIdx}" name="q6_weekend_${sIdx}" onclick="event.stopPropagation()" class="form-checkbox h-4.5 w-4.5 text-brand-teal focus:ring-brand-teal rounded border-orange-300">
+                                                </td>
+                                            </tr>
+                                        `);
+                                    });
+                                </script>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Q7 -->
+                <div class="space-y-3">
+                    <label class="block font-bold text-orange-950">7. 您來此公園平均每次停留時間？ <span class="text-brand-orange">*</span></label>
+                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q7', '10分鐘以下', this); hideOther('q7')">10分鐘以下</div>
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q7', '10-30分鐘', this); hideOther('q7')">10-30分鐘</div>
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q7', '30-60分鐘', this); hideOther('q7')">30-60分鐘</div>
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q7', '1-2小時', this); hideOther('q7')">1-2小時</div>
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q7', '2小時以上', this); hideOther('q7')">2小時以上</div>
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q7', '其他', this); showOther('q7')">其他</div>
+                    </div>
+                    <input type="hidden" name="q7" id="q7" required>
+                    <input type="text" id="q7_other" name="q7_other" class="hidden w-full bg-white/60 border border-orange-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-brand-teal" placeholder="請填寫其他停留時間...">
+                </div>
+
+                <!-- Q8 -->
+                <div class="space-y-3">
+                    <label class="block font-bold text-orange-950">8. 最常與您同行前往公園的同伴？ <span class="text-brand-orange">*</span></label>
+                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q8', '獨自前往', this); hideOther('q8')">獨自前往</div>
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q8', '與家人同行(3人以上)', this); hideOther('q8')">與家人同行(3人+)</div>
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q8', '配偶/伴侶', this); hideOther('q8')">配偶/伴侶</div>
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q8', '與小孩來', this); hideOther('q8')">與小孩來</div>
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q8', '與朋友來', this); hideOther('q8')">與朋友來</div>
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q8', '其他', this); showOther('q8')">其他</div>
+                    </div>
+                    <input type="hidden" name="q8" id="q8" required>
+                    <input type="text" id="q8_other" name="q8_other" class="hidden w-full bg-white/60 border border-orange-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-brand-teal" placeholder="請填寫其他同伴...">
+                </div>
+            </div>
+
+            <!-- STEP 3: Special Parks & Attention -->
+            <div id="step-3" class="hidden fade-in-step space-y-6">
+                <!-- Q9 -->
+                <div class="space-y-3">
+                    <label class="block font-bold text-orange-950">9. 您是否聽過特色公園遊戲場？ <span class="text-brand-orange">*</span></label>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q9', '是', this)">是</div>
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q9', '否', this)">否</div>
+                    </div>
+                    <input type="hidden" name="q9" id="q9" required>
+                </div>
+
+                <!-- Q10 -->
+                <div class="space-y-3">
+                    <label class="block font-bold text-orange-950">10. 您是否有去過其他的特色公園遊戲場？ <span class="text-brand-orange">*</span></label>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q10', '是', this)">是</div>
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q10', '否', this)">否</div>
+                    </div>
+                    <input type="hidden" name="q10" id="q10" required>
+                </div>
+
+                <!-- Q11 -->
+                <div class="space-y-3">
+                    <label class="block font-bold text-orange-950">11. 陪同孩童年齡層？ <span class="text-brand-orange">*</span></label>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q11', '無陪同(個人/無孩童)', this)">無陪同(個人/無孩童)</div>
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q11', '0-3歲(幼童)', this)">0-3歲(幼童)</div>
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q11', '4-6歲(學齡前)', this)">4-6歲(學齡前)</div>
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q11', '7-12歲(學齡孩童)', this)">7-12歲(學齡孩童)</div>
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="selectRadio('q11', '13+ (青少年)', this)">13+ (青少年)</div>
+                    </div>
+                    <input type="hidden" name="q11" id="q11" required>
+                </div>
+
+                <!-- Q12 -->
+                <div class="space-y-3">
+                    <label class="block font-bold text-orange-950">12. 您覺得柳堤遊戲場最需要注意？(擇三，目前已選 <span id="q12-count" class="font-bold text-brand-teal">0</span>/3 個) <span class="text-brand-orange">*</span></label>
+                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                        <script>
+                            const q12Options = ["創意性", "健康空間", "挑戰性", "安全性", "主題性", "遮蔭性", "公平使用的機會", "無障礙環境", "自然材質", "分齡使用", "混齡使用", "共融環境"];
+                            q12Options.forEach(opt => {
+                                document.write(`
+                                    <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-xs font-medium" onclick="toggleMultiSelect('q12', '${opt}', this)">
+                                        ${opt}
+                                    </div>
+                                `);
+                            });
+                        </script>
+                        <div class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-xs font-medium" onclick="toggleMultiSelect('q12', '其他', this)">
+                            其他
+                        </div>
+                    </div>
+                    <input type="text" id="q12_other" name="q12_other" class="hidden w-full bg-white/60 border border-orange-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-brand-teal" placeholder="請填寫其他注意事項...">
+                </div>
+
+                <!-- Q13 遊具圖片點選（按分類）-->
+                <div class="space-y-4 pt-4 border-t border-orange-100">
+                    <label class="block font-bold text-orange-950 leading-relaxed">
+                        13. 您希望柳堤遊戲場新增哪些遊具？請從以下四大類中點選喜歡的遊具（可複選，每類至少選一項） <span class="text-brand-orange">*</span>
+                    </label>
+                    <p class="text-xs text-orange-800 leading-normal mb-2">點擊圖片即可選取，再次點擊取消。可跨分類複選。</p>
+
+                    <style>
+                        .img-opt-group { margin-bottom: 1.25rem; }
+                        .img-opt-group-title {
+                            font-size: 0.85rem;
+                            font-weight: 700;
+                            color: #c2410c;
+                            background: rgba(249,115,22,0.08);
+                            border-left: 3px solid #f97316;
+                            padding: 4px 10px;
+                            border-radius: 4px;
+                            margin-bottom: 8px;
+                            display: inline-block;
+                        }
+                        .img-opt-grid {
+                            display: grid;
+                            grid-template-columns: repeat(3, 1fr);
+                            gap: 8px;
+                        }
+                        @media (max-width: 480px) {
+                            .img-opt-grid { grid-template-columns: repeat(2, 1fr); }
+                        }
+                        .img-opt-card {
+                            position: relative;
+                            border-radius: 12px;
+                            overflow: hidden;
+                            cursor: pointer;
+                            border: 2.5px solid transparent;
+                            transition: border-color 0.2s, box-shadow 0.2s;
+                            background: #fff;
+                            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+                        }
+                        .img-opt-card:hover {
+                            border-color: rgba(249,115,22,0.45);
+                            box-shadow: 0 4px 14px rgba(249,115,22,0.18);
+                        }
+                        .img-opt-card.selected {
+                            border-color: #f97316;
+                            box-shadow: 0 4px 16px rgba(249,115,22,0.30);
+                        }
+                        .img-opt-card img {
+                            width: 100%;
+                            aspect-ratio: 4/3;
+                            object-fit: cover;
+                            display: block;
+                            background: #fff7ed;
+                        }
+                        .img-opt-label {
+                            font-size: 0.72rem;
+                            font-weight: 600;
+                            color: #7c2d12;
+                            text-align: center;
+                            padding: 5px 4px;
+                            background: rgba(255,255,255,0.92);
+                            line-height: 1.3;
+                        }
+                        .img-opt-check {
+                            position: absolute;
+                            top: 5px;
+                            right: 5px;
+                            width: 22px;
+                            height: 22px;
+                            border-radius: 50%;
+                            background: #f97316;
+                            color: #fff;
+                            display: none;
+                            align-items: center;
+                            justify-content: center;
+                            font-size: 13px;
+                            box-shadow: 0 2px 6px rgba(249,115,22,0.45);
+                        }
+                        .img-opt-card.selected .img-opt-check { display: flex; }
+                    </style>
+
+                    <!-- 擺盪類 -->
+                    <div class="img-opt-group">
+                        <div class="img-opt-group-title">🕹 擺盪類</div>
+                        <div class="img-opt-grid">
+                            <div class="img-opt-card" onclick="toggleImgOpt('q13', '擺盪-平板鞦韆', this)">
+                                <img src="https://6t.vcom.tw/archive/image/5bmz5p2-6Z6m6Z_GLjU5MjIzODc4Mg==.jpg" alt="平板鞦韆" loading="lazy">
+                                <div class="img-opt-label">平板鞦韆</div>
+                                <div class="img-opt-check">✓</div>
+                            </div>
+                            <div class="img-opt-card" onclick="toggleImgOpt('q13', '擺盪-尿布鞦韆', this)">
+                                <img src="https://6t.vcom.tw/archive/image/5bC-5biD6Z6m6Z_GLjU5MTExODk2NQ==.jpg" alt="尿布鞦韆" loading="lazy">
+                                <div class="img-opt-label">尿布鞦韆</div>
+                                <div class="img-opt-check">✓</div>
+                            </div>
+                            <div class="img-opt-card" onclick="toggleImgOpt('q13', '擺盪-座椅鞦韆', this)">
+                                <img src="https://6t.vcom.tw/archive/image/5bqn5qSF6Z6m6Z_GLjU5ODc5OTU1Ng==.jpg" alt="座椅鞦韆" loading="lazy">
+                                <div class="img-opt-label">座椅鞦韆</div>
+                                <div class="img-opt-check">✓</div>
+                            </div>
+                            <div class="img-opt-card" onclick="toggleImgOpt('q13', '擺盪-鳥巢鞦韆', this)">
+                                <img src="https://6t.vcom.tw/archive/image/6bOl5bei6Z6m6Z_GLjU5ODgwMzAxNQ==.jpg" alt="鳥巢鞦韆" loading="lazy">
+                                <div class="img-opt-label">鳥巢鞦韆</div>
+                                <div class="img-opt-check">✓</div>
+                            </div>
+                            <div class="img-opt-card" onclick="toggleImgOpt('q13', '擺盪-親子鞦韆', this)">
+                                <img src="https://6t.vcom.tw/archive/image/6Kaq5a2Q6Z6m6Z_GLjU5MjI1MjgyNg==.jpg" alt="親子鞦韆" loading="lazy">
+                                <div class="img-opt-label">親子鞦韆</div>
+                                <div class="img-opt-check">✓</div>
+                            </div>
+                            <div class="img-opt-card" onclick="toggleImgOpt('q13', '擺盪-擺盪大索', this)">
+                                <img src="https://6t.vcom.tw/archive/image/5pO655uq5aSn57SiLjU5ODgwNjY4Mg==.jpg" alt="擺盪大索" loading="lazy">
+                                <div class="img-opt-label">擺盪大索</div>
+                                <div class="img-opt-check">✓</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 溜滑類 -->
+                    <div class="img-opt-group">
+                        <div class="img-opt-group-title">🎿 溜滑類</div>
+                        <div class="img-opt-grid">
+                            <div class="img-opt-card" onclick="toggleImgOpt('q13', '溜滑-直線滑梯', this)">
+                                <img src="https://6t.vcom.tw/archive/image/55u057ea5ruR5qKvLjU5OTUzODA5MQ==.jpg" alt="直線滑梯" loading="lazy">
+                                <div class="img-opt-label">直線滑梯</div>
+                                <div class="img-opt-check">✓</div>
+                            </div>
+                            <div class="img-opt-card" onclick="toggleImgOpt('q13', '溜滑-旋轉滑梯', this)">
+                                <img src="https://6t.vcom.tw/archive/image/5peL6L2J5ruR5qKvLjU5OTUwMzI5MQ==.jpg" alt="旋轉滑梯" loading="lazy">
+                                <div class="img-opt-label">旋轉滑梯</div>
+                                <div class="img-opt-check">✓</div>
+                            </div>
+                            <div class="img-opt-card" onclick="toggleImgOpt('q13', '溜滑-磨石滑梯', this)">
+                                <img src="https://6t.vcom.tw/archive/image/56Oo55_z5ruR5qKvLjU5ODgxODczNg==.jpg" alt="磨石滑梯" loading="lazy">
+                                <div class="img-opt-label">磨石滑梯</div>
+                                <div class="img-opt-check">✓</div>
+                            </div>
+                            <div class="img-opt-card" onclick="toggleImgOpt('q13', '溜滑-地景滑梯', this)">
+                                <img src="https://6t.vcom.tw/archive/image/5Zyw5pmv5ruR5qKvLjU5ODgyMTQ0Mg==.jpg" alt="地景滑梯" loading="lazy">
+                                <div class="img-opt-label">地景滑梯</div>
+                                <div class="img-opt-check">✓</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 攀爬類 -->
+                    <div class="img-opt-group">
+                        <div class="img-opt-group-title">🧗 攀爬類</div>
+                        <div class="img-opt-grid">
+                            <div class="img-opt-card" onclick="toggleImgOpt('q13', '攀爬-木製爬架', this)">
+                                <img src="https://6t.vcom.tw/archive/image/5pyo6KO95pSA54is5p62LjU5ODgyOTE5MQ==.jpg" alt="木製爬架" loading="lazy">
+                                <div class="img-opt-label">木製爬架</div>
+                                <div class="img-opt-check">✓</div>
+                            </div>
+                            <div class="img-opt-card" onclick="toggleImgOpt('q13', '攀爬-攀爬繩網', this)">
+                                <img src="https://6t.vcom.tw/archive/image/57mp57ay5pSA54is5p62LjU5ODgzNTQ1Nw==.jpg" alt="攀爬繩網" loading="lazy">
+                                <div class="img-opt-label">攀爬繩網</div>
+                                <div class="img-opt-check">✓</div>
+                            </div>
+                            <div class="img-opt-card" onclick="toggleImgOpt('q13', '攀爬-攀岩牆', this)">
+                                <img src="https://6t.vcom.tw/archive/image/5pSA5bKp54mGLjU5ODg0MTc1Ng==.jpg" alt="攀岩牆" loading="lazy">
+                                <div class="img-opt-label">攀岩牆</div>
+                                <div class="img-opt-check">✓</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 旋轉類 -->
+                    <div class="img-opt-group">
+                        <div class="img-opt-group-title">🌀 旋轉類</div>
+                        <div class="img-opt-grid">
+                            <div class="img-opt-card" onclick="toggleImgOpt('q13', '旋轉-旋轉杯', this)">
+                                <img src="https://6t.vcom.tw/archive/image/5peL6L2J5p2vLjU5ODc1MjY3Ng==.jpg" alt="旋轉杯" loading="lazy">
+                                <div class="img-opt-label">旋轉杯</div>
+                                <div class="img-opt-check">✓</div>
+                            </div>
+                            <div class="img-opt-card" onclick="toggleImgOpt('q13', '旋轉-旋轉棒', this)">
+                                <img src="https://6t.vcom.tw/archive/image/5peL6L2J5qOSLjU5ODc1NzIxMw==.jpg" alt="旋轉棒" loading="lazy">
+                                <div class="img-opt-label">旋轉棒</div>
+                                <div class="img-opt-check">✓</div>
+                            </div>
+                            <div class="img-opt-card" onclick="toggleImgOpt('q13', '旋轉-多人轉盤', this)">
+                                <img src="https://6t.vcom.tw/archive/image/5aSa5Lq65peL6L2J55ukLjU5ODc0OTI2Nw==.jpg" alt="多人轉盤" loading="lazy">
+                                <div class="img-opt-label">多人轉盤</div>
+                                <div class="img-opt-check">✓</div>
+                            </div>
+                            <div class="img-opt-card" onclick="toggleImgOpt('q13', '旋轉-旋轉飛輪', this)">
+                                <img src="https://6t.vcom.tw/archive/image/5peL6L2J6aOb6LyqLjU5ODg0Njg3MQ==.jpg" alt="旋轉飛輪" loading="lazy">
+                                <div class="img-opt-label">旋轉飛輪</div>
+                                <div class="img-opt-check">✓</div>
+                            </div>
+                            <div class="img-opt-card" onclick="toggleImgOpt('q13', '旋轉-旋轉飛椅', this)">
+                                <img src="https://6t.vcom.tw/archive/image/5peL6L2J6aOb5qSFLjU5ODg0OTQyNg==.jpg" alt="旋轉飛椅" loading="lazy">
+                                <div class="img-opt-label">旋轉飛椅</div>
+                                <div class="img-opt-check">✓</div>
+                            </div>
+                            <div class="img-opt-card" onclick="toggleImgOpt('q13', '旋轉-旋轉塔', this)">
+                                <img src="https://6t.vcom.tw/archive/image/5peL6L2J5pSA54is5aGULjU5ODg1NTU5NA==.jpg" alt="旋轉塔" loading="lazy">
+                                <div class="img-opt-label">旋轉塔</div>
+                                <div class="img-opt-check">✓</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- Q15 -->
+                <div class="space-y-3 pt-4 border-t border-orange-100">
+                    <label class="block font-bold text-orange-950" for="q15">15. 對於柳堤公園之空間場域是否有需保留的記憶或設施？</label>
+                    <textarea id="q15" name="q15" rows="3" class="w-full bg-white/60 border border-orange-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-brand-teal" placeholder="請填寫簡答內容..."></textarea>
+                </div>
+            </div>
+
+            <!-- STEP 4: Lottery Registration & Q16 -->
+            <div id="step-4" class="hidden fade-in-step space-y-6">
+                <!-- Q16 (綁定抽獎資料環節) -->
+                <div class="space-y-3">
+                    <label class="block font-bold text-orange-950" for="q16">16. 對於本次遊戲場改善有沒有其他建議？</label>
+                    <textarea id="q16" name="q16" rows="3" class="w-full bg-white/60 border border-orange-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-brand-teal" placeholder="請填寫簡答內容..."></textarea>
+                </div>
+
+                <!-- 抽獎意願選擇 -->
+                <div class="space-y-3 pt-4 border-t border-orange-100">
+                    <label class="block font-bold text-orange-950">17. 您是否願意留下聯絡資訊參加抽獎活動？ <span class="text-brand-orange">*</span></label>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div id="opt-join-lottery" class="custom-option custom-option-checked border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="toggleLotteryFields(true)">
+                            是，我要參加抽獎
+                        </div>
+                        <div id="opt-skip-lottery" class="custom-option border border-gray-300/80 rounded-xl p-3 text-center cursor-pointer transition-all duration-200 text-sm font-medium" onclick="toggleLotteryFields(false)">
+                            否，放棄抽獎直接送出
+                        </div>
+                    </div>
+                    <input type="hidden" name="join_lottery" id="join_lottery" value="yes">
+                </div>
+
+                <div id="lottery-fields-container" class="space-y-6">
+                    <div class="bg-brand-orange/10 px-4 py-3 rounded-2xl border border-brand-orange/20 my-2">
+                        <span class="font-bold text-orange-950 text-sm"><i class="bi bi-gift me-1"></i> 抽獎活動登錄：</span>
+                        <span class="text-xs text-orange-900 leading-normal font-medium">填寫完整聯絡資訊即可參加抽獎！獎項為<strong>新北幣 100 點（共 300 名）</strong>，兌換序號將於中獎後以 Email 寄發。</span>
+                    </div>
+
+                    <!-- Name -->
+                    <div class="space-y-2">
+                        <label class="block font-bold text-orange-950" for="lottery-name">聯絡人真實姓名 <span class="text-brand-orange">*</span></label>
+                        <input type="text" id="lottery-name" name="name" required class="w-full bg-white/60 border border-orange-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-brand-teal" placeholder="例如：王小明">
+                    </div>
+
+                    <!-- Phone -->
+                    <div class="space-y-2">
+                        <label class="block font-bold text-orange-950" for="lottery-phone">聯絡手機號碼 <span class="text-brand-orange">*</span></label>
+                        <input type="tel" id="lottery-phone" name="phone" required class="w-full bg-white/60 border border-orange-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-brand-teal" placeholder="例如：0912345678" pattern="^09\d{8}$">
+                        <p class="text-[11px] text-orange-700/80">格式為 10 碼數字，例如 0912345678</p>
+                    </div>
+
+                    <!-- Email -->
+                    <div class="space-y-2">
+                        <label class="block font-bold text-orange-950" for="lottery-email">電子郵件信箱 <span class="text-brand-orange">*</span></label>
+                        <input type="email" id="lottery-email" name="email" required class="w-full bg-white/60 border border-orange-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-brand-teal" placeholder="例如：example@gmail.com">
+                    </div>
+
+                    <!-- Consent Checkbox -->
+                    <div class="flex items-start gap-3 mt-4">
+                        <input type="checkbox" id="lottery-consent" name="consent" required class="mt-1 form-checkbox h-4.5 w-4.5 text-brand-teal focus:ring-brand-teal rounded border-orange-300">
+                        <label for="lottery-consent" class="text-xs text-orange-900 leading-relaxed cursor-pointer select-none">
+                            本人同意所填寫之個人資料與上述答詢建議，僅供「蘆洲柳堤兒童遊戲場改造規劃」抽獎活動聯絡與專案分析統計使用，並同意機關在符合個資法規範下保存此數據。
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer Buttons -->
+            <div class="mt-8 pt-6 border-t border-orange-100 flex justify-between gap-4">
+                <button type="button" id="btn-prev" class="hidden px-5 py-2.5 bg-orange-50 hover:bg-orange-100 text-orange-800 font-semibold rounded-2xl text-sm transition-all duration-200" onclick="prevStep()">
+                    上一步
+                </button>
+                <div class="flex-grow"></div>
+                <button type="button" id="btn-next" class="px-6 py-2.5 bg-brand-teal hover:bg-orange-800 text-white font-semibold rounded-2xl text-sm transition-all duration-200 flex items-center gap-1 shadow-lg shadow-orange-700/10" onclick="nextStep()">
+                    <span>下一步</span> <i class="bi bi-chevron-right"></i>
+                </button>
+                <button type="submit" id="btn-submit" class="hidden px-6 py-2.5 bg-brand-teal hover:bg-orange-800 text-white font-bold rounded-2xl text-sm transition-all duration-200 flex items-center gap-1 shadow-lg shadow-orange-700/10">
+                    <span>送出問卷並參加抽獎</span> <i class="bi bi-send-fill"></i>
+                </button>
+            </div>
+
+        </form>
+
+        <!-- Loading Screen inside Card -->
+        <div id="card-loading" class="hidden absolute inset-0 bg-white/80 backdrop-filter blur-sm z-50 flex flex-col items-center justify-center space-y-3">
+            <div class="animate-spin rounded-full h-12 w-12 border-4 border-brand-teal border-t-transparent"></div>
+            <div class="text-orange-900 font-bold text-sm">正在安全送出您的問卷...</div>
+        </div>
+
+        <!-- #endregion -->
+
+        <!-- MARK: [INDEX_SURVEY_RESULTS] 4. 填答趨勢統計成果展示區 (HTML) -->
+        <!-- #region [INDEX_SURVEY_RESULTS] 4. 填答趨勢統計成果展示區 (HTML) -->
+        <!-- Survey Results Block (全體填答趨勢成果展示) -->
+        <div id="success-block" class="fade-in-step text-left space-y-6 pt-2">
+            <!-- 填答提交成功時之個人提示 (日常隱藏) -->
+            <div id="submit-success-header" class="hidden text-center space-y-2">
+                <div class="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto text-brand-teal text-3xl shadow-inner">
+                    <i class="bi bi-check-circle-fill"></i>
+                </div>
+                <h2 class="text-2xl font-bold text-orange-950">問卷提交成功！</h2>
+                <p class="text-orange-800 text-xs">感謝您為蘆洲柳堤下一代共融遊戲場發聲，資料已即時彙整。</p>
+            </div>
+
+            <!-- 抽獎序號卡片 (日常隱藏) -->
+            <div id="success-lottery-box" class="hidden bg-gradient-to-br from-orange-50 to-amber-50 p-4 rounded-2xl border border-orange-200 text-center shadow-sm">
+                <span class="text-xs text-orange-700 font-bold tracking-wider block mb-1">您的抽獎活動序號</span>
+                <span class="text-2xl md:text-3xl font-extrabold text-brand-teal tracking-widest block font-mono" id="success-lottery-id">LZ-XXXXX</span>
+                <p class="text-[11px] text-orange-600/80 mt-1">請截圖保存此序號，活動抽獎將以此序號進行核對。</p>
+            </div>
+
+            <!-- 區塊 1：個人填答摘要 (日常隱藏) -->
+            <div id="personal-summary-box" class="hidden bg-white/75 rounded-2xl border border-orange-100 p-4 space-y-3 shadow-sm">
+                <div class="flex items-center justify-between border-b border-orange-100 pb-2">
+                    <span class="text-sm font-bold text-orange-950 flex items-center gap-1.5">
+                        <i class="bi bi-clipboard-check text-brand-teal"></i> 您的填答摘要
+                    </span>
+                    <span class="text-[11px] text-orange-600 bg-orange-100/60 px-2 py-0.5 rounded-full font-medium">個人紀錄</span>
+                </div>
+                
+                <div class="grid grid-cols-2 gap-2 text-xs text-orange-950">
+                    <div class="bg-orange-50/50 p-2.5 rounded-xl border border-orange-100/50">
+                        <span class="text-orange-600 block text-[10px] mb-0.5">年齡層 / 性別</span>
+                        <span id="sum-age-gender" class="font-semibold">-</span>
+                    </div>
+                    <div class="bg-orange-50/50 p-2.5 rounded-xl border border-orange-100/50">
+                        <span class="text-orange-600 block text-[10px] mb-0.5">來訪頻率 / 交通</span>
+                        <span id="sum-freq-transport" class="font-semibold">-</span>
+                    </div>
+                    <div class="col-span-2 bg-orange-50/50 p-2.5 rounded-xl border border-orange-100/50">
+                        <span class="text-orange-600 block text-[10px] mb-1">最重視的遊戲場特質 (Q12)</span>
+                        <div id="sum-q12-tags" class="flex flex-wrap gap-1"></div>
+                    </div>
+                    <div class="col-span-2 bg-orange-50/50 p-2.5 rounded-xl border border-orange-100/50">
+                        <span class="text-orange-600 block text-[10px] mb-1">您點選期待新增的遊具 (Q13)</span>
+                        <div id="sum-q13-tags" class="flex flex-wrap gap-1"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 區塊 2：當下即時統計圖表 -->
+            <div class="bg-white/75 rounded-2xl border border-orange-100 p-4 space-y-4 shadow-sm">
+                <!-- 統計圖：四大遊具各自三色圓餅圖 + 前三名照片搭配四字名稱與獨立橘色百分比 -->
+                <div class="space-y-4 pt-1">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3.5">
+                        <!-- 1. 擺盪類 (總熱度 78%) -->
+                        <div class="bg-gradient-to-br from-orange-50/90 to-white/90 p-3.5 rounded-2xl border border-orange-200 shadow-sm space-y-3">
+                            <div class="flex items-center gap-3">
+                                <!-- 三色圓餅圖 (Donut Chart) -->
+                                <div class="relative w-14 h-14 rounded-full flex-shrink-0 flex items-center justify-center shadow-inner chart-donut-swing">
+                                    <div class="w-9 h-9 bg-white rounded-full flex items-center justify-center shadow-xs">
+                                        <span class="text-[13px] font-extrabold text-orange-800 leading-none font-mono">78%</span>
+                                    </div>
+                                </div>
+                                <div class="min-w-0 flex-1">
+                                    <h4 class="font-bold text-orange-950 text-sm">🕹 擺盪類</h4>
+                                    <p class="text-[11px] text-orange-700/90 mt-0.5">鞦韆與擺盪設施</p>
+                                </div>
+                            </div>
+                            <!-- 3 張照片搭配對應顏色邊框，下方統一四字與橘色百分比 -->
+                            <div class="grid grid-cols-3 gap-2 pt-2 border-t border-orange-100/80">
+                                <div class="text-center">
+                                    <div class="rounded-xl overflow-hidden border-2 border-[#ea580c] shadow-xs">
+                                        <img src="https://6t.vcom.tw/archive/image/5pO655uq5aSn57SiLjU5ODgwNjY4Mg==.jpg" class="w-full h-14 object-cover" alt="擺盪大索">
+                                    </div>
+                                    <span class="text-[11px] font-semibold text-orange-950 block mt-1">擺盪大索</span>
+                                    <span class="text-[11px] font-extrabold text-orange-600 block font-mono">41%</span>
+                                </div>
+                                <div class="text-center">
+                                    <div class="rounded-xl overflow-hidden border-2 border-[#f97316] shadow-xs">
+                                        <img src="https://6t.vcom.tw/archive/image/6bOl5bei6Z6m6Z_GLjU5ODgwMzAxNQ==.jpg" class="w-full h-14 object-cover" alt="鳥巢鞦韆">
+                                    </div>
+                                    <span class="text-[11px] font-semibold text-orange-950 block mt-1">鳥巢鞦韆</span>
+                                    <span class="text-[11px] font-extrabold text-orange-600 block font-mono">25%</span>
+                                </div>
+                                <div class="text-center">
+                                    <div class="rounded-xl overflow-hidden border-2 border-[#fdba74] shadow-xs">
+                                        <img src="https://6t.vcom.tw/archive/image/6Kaq5a2Q6Z6m6Z_GLjU5MjI1MjgyNg==.jpg" class="w-full h-14 object-cover" alt="親子鞦韆">
+                                    </div>
+                                    <span class="text-[11px] font-semibold text-orange-950 block mt-1">親子鞦韆</span>
+                                    <span class="text-[11px] font-extrabold text-orange-600 block font-mono">12%</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 2. 攀爬類 (總熱度 69%) -->
+                        <div class="bg-gradient-to-br from-orange-50/90 to-white/90 p-3.5 rounded-2xl border border-orange-200 shadow-sm space-y-3">
+                            <div class="flex items-center gap-3">
+                                <!-- 三色圓餅圖 (Donut Chart) -->
+                                <div class="relative w-14 h-14 rounded-full flex-shrink-0 flex items-center justify-center shadow-inner chart-donut-climb">
+                                    <div class="w-9 h-9 bg-white rounded-full flex items-center justify-center shadow-xs">
+                                        <span class="text-[13px] font-extrabold text-orange-800 leading-none font-mono">69%</span>
+                                    </div>
+                                </div>
+                                <div class="min-w-0 flex-1">
+                                    <h4 class="font-bold text-orange-950 text-sm">🧗 攀爬類</h4>
+                                    <p class="text-[11px] text-orange-700/90 mt-0.5">繩網與攀爬設施</p>
+                                </div>
+                            </div>
+                            <!-- 3 張照片搭配對應顏色邊框，下方統一四字與橘色百分比 -->
+                            <div class="grid grid-cols-3 gap-2 pt-2 border-t border-orange-100/80">
+                                <div class="text-center">
+                                    <div class="rounded-xl overflow-hidden border-2 border-[#ea580c] shadow-xs">
+                                        <img src="https://6t.vcom.tw/archive/image/57mp57ay5pSA54is5p62LjU5ODgzNTQ1Nw==.jpg" class="w-full h-14 object-cover" alt="攀爬繩網">
+                                    </div>
+                                    <span class="text-[11px] font-semibold text-orange-950 block mt-1">攀爬繩網</span>
+                                    <span class="text-[11px] font-extrabold text-orange-600 block font-mono">36%</span>
+                                </div>
+                                <div class="text-center">
+                                    <div class="rounded-xl overflow-hidden border-2 border-[#f97316] shadow-xs">
+                                        <img src="https://6t.vcom.tw/archive/image/5pSA5bKp54mGLjU5ODg0MTc1Ng==.jpg" class="w-full h-14 object-cover" alt="攀岩牆">
+                                    </div>
+                                    <span class="text-[11px] font-semibold text-orange-950 block mt-1">攀岩牆</span>
+                                    <span class="text-[11px] font-extrabold text-orange-600 block font-mono">21%</span>
+                                </div>
+                                <div class="text-center">
+                                    <div class="rounded-xl overflow-hidden border-2 border-[#fdba74] shadow-xs">
+                                        <img src="https://6t.vcom.tw/archive/image/5pyo6KO95pSA54is5p62LjU5ODgyOTE5MQ==.jpg" class="w-full h-14 object-cover" alt="木製爬架">
+                                    </div>
+                                    <span class="text-[11px] font-semibold text-orange-950 block mt-1">木製爬架</span>
+                                    <span class="text-[11px] font-extrabold text-orange-600 block font-mono">12%</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 3. 溜滑類 (總熱度 62%) -->
+                        <div class="bg-gradient-to-br from-orange-50/90 to-white/90 p-3.5 rounded-2xl border border-orange-200 shadow-sm space-y-3">
+                            <div class="flex items-center gap-3">
+                                <!-- 三色圓餅圖 (Donut Chart) -->
+                                <div class="relative w-14 h-14 rounded-full flex-shrink-0 flex items-center justify-center shadow-inner chart-donut-slide">
+                                    <div class="w-9 h-9 bg-white rounded-full flex items-center justify-center shadow-xs">
+                                        <span class="text-[13px] font-extrabold text-orange-800 leading-none font-mono">62%</span>
+                                    </div>
+                                </div>
+                                <div class="min-w-0 flex-1">
+                                    <h4 class="font-bold text-orange-950 text-sm">🎿 溜滑類</h4>
+                                    <p class="text-[11px] text-orange-700/90 mt-0.5">軌道與地形滑梯</p>
+                                </div>
+                            </div>
+                            <!-- 3 張照片搭配對應顏色邊框，下方統一四字與橘色百分比 -->
+                            <div class="grid grid-cols-3 gap-2 pt-2 border-t border-orange-100/80">
+                                <div class="text-center">
+                                    <div class="rounded-xl overflow-hidden border-2 border-[#ea580c] shadow-xs">
+                                        <img src="https://6t.vcom.tw/archive/image/5Zyw5pmv5ruR5qKvLjU5ODgyMTQ0Mg==.jpg" class="w-full h-14 object-cover" alt="地景滑梯">
+                                    </div>
+                                    <span class="text-[11px] font-semibold text-orange-950 block mt-1">地景滑梯</span>
+                                    <span class="text-[11px] font-extrabold text-orange-600 block font-mono">29%</span>
+                                </div>
+                                <div class="text-center">
+                                    <div class="rounded-xl overflow-hidden border-2 border-[#f97316] shadow-xs">
+                                        <img src="https://6t.vcom.tw/archive/image/5peL6L2J5ruR5qKvLjU5OTUwMzI5MQ==.jpg" class="w-full h-14 object-cover" alt="旋轉滑梯">
+                                    </div>
+                                    <span class="text-[11px] font-semibold text-orange-950 block mt-1">旋轉滑梯</span>
+                                    <span class="text-[11px] font-extrabold text-orange-600 block font-mono">18%</span>
+                                </div>
+                                <div class="text-center">
+                                    <div class="rounded-xl overflow-hidden border-2 border-[#fdba74] shadow-xs">
+                                        <img src="https://6t.vcom.tw/archive/image/56Oo55_z5ruR5qKvLjU5ODgxODczNg==.jpg" class="w-full h-14 object-cover" alt="磨石滑梯">
+                                    </div>
+                                    <span class="text-[11px] font-semibold text-orange-950 block mt-1">磨石滑梯</span>
+                                    <span class="text-[11px] font-extrabold text-orange-600 block font-mono">15%</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 4. 旋轉類 (總熱度 54%) -->
+                        <div class="bg-gradient-to-br from-orange-50/90 to-white/90 p-3.5 rounded-2xl border border-orange-200 shadow-sm space-y-3">
+                            <div class="flex items-center gap-3">
+                                <!-- 三色圓餅圖 (Donut Chart) -->
+                                <div class="relative w-14 h-14 rounded-full flex-shrink-0 flex items-center justify-center shadow-inner chart-donut-spin">
+                                    <div class="w-9 h-9 bg-white rounded-full flex items-center justify-center shadow-xs">
+                                        <span class="text-[13px] font-extrabold text-orange-800 leading-none font-mono">54%</span>
+                                    </div>
+                                </div>
+                                <div class="min-w-0 flex-1">
+                                    <h4 class="font-bold text-orange-950 text-sm">🌀 旋轉類</h4>
+                                    <p class="text-[11px] text-orange-700/90 mt-0.5">旋轉盤與體感遊具</p>
+                                </div>
+                            </div>
+                            <!-- 3 張照片搭配對應顏色邊框，下方統一四字與橘色百分比 -->
+                            <div class="grid grid-cols-3 gap-2 pt-2 border-t border-orange-100/80">
+                                <div class="text-center">
+                                    <div class="rounded-xl overflow-hidden border-2 border-[#ea580c] shadow-xs">
+                                        <img src="https://6t.vcom.tw/archive/image/5aSa5Lq65peL6L2J55ukLjU5ODc0OTI2Nw==.jpg" class="w-full h-14 object-cover" alt="多人轉盤">
+                                    </div>
+                                    <span class="text-[11px] font-semibold text-orange-950 block mt-1">多人轉盤</span>
+                                    <span class="text-[11px] font-extrabold text-orange-600 block font-mono">24%</span>
+                                </div>
+                                <div class="text-center">
+                                    <div class="rounded-xl overflow-hidden border-2 border-[#f97316] shadow-xs">
+                                        <img src="https://6t.vcom.tw/archive/image/5peL6L2J6aOb5qSFLjU5ODg0OTQyNg==.jpg" class="w-full h-14 object-cover" alt="旋轉飛椅">
+                                    </div>
+                                    <span class="text-[11px] font-semibold text-orange-950 block mt-1">旋轉飛椅</span>
+                                    <span class="text-[11px] font-extrabold text-orange-600 block font-mono">18%</span>
+                                </div>
+                                <div class="text-center">
+                                    <div class="rounded-xl overflow-hidden border-2 border-[#fdba74] shadow-xs">
+                                        <img src="https://6t.vcom.tw/archive/image/5peL6L2J6aOb6LyqLjU5ODg0Njg3MQ==.jpg" class="w-full h-14 object-cover" alt="旋轉飛輪">
+                                    </div>
+                                    <span class="text-[11px] font-semibold text-orange-950 block mt-1">旋轉飛輪</span>
+                                    <span class="text-[11px] font-extrabold text-orange-600 block font-mono">12%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 統計圖 2：前 3 大最重視特質 -->
+                <div class="pt-3 border-t border-orange-100/80 space-y-2">
+                    <span class="text-xs font-semibold text-orange-900 block">民眾最重視的公園特質 Top 3</span>
+                    <div class="grid grid-cols-3 gap-2 text-center">
+                        <div class="bg-orange-50 p-2.5 rounded-xl border border-orange-200/60">
+                            <span class="text-xs font-bold text-orange-950 block">No.1 安全</span>
+                            <span class="text-sm text-brand-teal font-extrabold font-mono mt-0.5 block">84%</span>
+                        </div>
+                        <div class="bg-orange-50 p-2.5 rounded-xl border border-orange-200/60">
+                            <span class="text-xs font-bold text-orange-950 block">No.2 遮蔭</span>
+                            <span class="text-sm text-brand-teal font-extrabold font-mono mt-0.5 block">71%</span>
+                        </div>
+                        <div class="bg-orange-50 p-2.5 rounded-xl border border-orange-200/60">
+                            <span class="text-xs font-bold text-orange-950 block">No.3 挑戰</span>
+                            <span class="text-sm text-brand-teal font-extrabold font-mono mt-0.5 block">59%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 操作引導按鈕 -->
+            <div class="pt-2 flex flex-wrap items-center justify-center gap-3">
+                <a href="https://www.luzhou.ntpc.gov.tw/" target="_blank" rel="noopener noreferrer" class="px-5 py-2.5 text-xs font-semibold text-white bg-brand-teal hover:bg-orange-800 rounded-xl transition-all shadow-xs flex items-center gap-1.5">
+                    <i class="bi bi-box-arrow-up-right"></i> 新北市蘆洲區公所公告專區
+                </a>
+                <a href="/" class="px-5 py-2.5 text-xs font-semibold text-orange-800 bg-orange-100 hover:bg-orange-200 rounded-xl transition-all flex items-center gap-1.5">
+                    <i class="bi bi-house-door-fill"></i> 返回首頁
+                </a>
+            </div>
+            
+            <p class="text-[11px] text-center text-orange-700/70">本調查成果由蘆洲區公所規劃彙整，成果將納入柳堤公園兒童遊戲場後續規劃設計參考。</p>
+        </div>
+        <!-- #endregion -->
+
+    </div>
+
+    <!-- Script Logic -->
+    <script>
+        // MARK: [INDEX_JS_WIZARD] 5. 問卷步驟與表單送出邏輯 (JS)
+        // #region [INDEX_JS_WIZARD] 5. 問卷步驟與表單送出邏輯 (JS)
+        let currentStep = 1;
+        const totalSteps = 4;
+        const selectedQ12 = new Set();
+        const selectedQ13 = new Set();
+
+        // Toggle image option for Q13
+        function toggleImgOpt(qName, value, el) {
+            if (selectedQ13.has(value)) {
+                selectedQ13.delete(value);
+                el.classList.remove('selected');
+            } else {
+                selectedQ13.add(value);
+                el.classList.add('selected');
+            }
+        }
+
+        function updateStepProgress() {
+            // Update labels
+            const stepLabels = {
+                1: "步驟 1 / 4：基本背景",
+                2: "步驟 2 / 4：訪園習慣",
+                3: "步驟 3 / 4：特色公園與注意事項",
+                4: "步驟 4 / 4：抽獎聯絡資料"
+            };
+            document.getElementById('step-label').innerText = stepLabels[currentStep];
+            
+            // Progress bar
+            const pct = (currentStep / totalSteps) * 100;
+            document.getElementById('step-percent').innerText = pct + '%';
+            document.getElementById('progress-bar').style.width = pct + '%';
+
+            // Show/Hide steps
+            for(let i = 1; i <= totalSteps; i++) {
+                const el = document.getElementById(`step-${i}`);
+                if (i === currentStep) {
+                    el.classList.remove('hidden');
+                } else {
+                    el.classList.add('hidden');
+                }
+            }
+
+            // Buttons controls
+            const btnPrev = document.getElementById('btn-prev');
+            const btnNext = document.getElementById('btn-next');
+            const btnSubmit = document.getElementById('btn-submit');
+
+            if (currentStep === 1) {
+                btnPrev.classList.add('hidden');
+            } else {
+                btnPrev.classList.remove('hidden');
+            }
+
+            if (currentStep === totalSteps) {
+                btnNext.classList.add('hidden');
+                btnSubmit.classList.remove('hidden');
+            } else {
+                btnNext.classList.remove('hidden');
+                btnSubmit.classList.add('hidden');
+            }
+        }
+
+        function nextStep() {
+            if (validateStep(currentStep)) {
+                currentStep++;
+                updateStepProgress();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+
+        function prevStep() {
+            if (currentStep > 1) {
+                currentStep--;
+                updateStepProgress();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+
+        // Custom Radio Selection handler
+        function selectRadio(inputName, value, element) {
+            // Sibling/Element selection handler (standard touch button)
+            if (element.tagName === 'INPUT') {
+                element.checked = true;
+                return;
+            }
+
+            document.getElementById(inputName).value = value;
+            const parent = element.parentNode;
+            parent.querySelectorAll('.custom-option').forEach(child => {
+                child.classList.remove('custom-option-checked');
+            });
+            element.classList.add('custom-option-checked');
+        }
+
+        // Show other text field if selected "其他"
+        function showOther(qId) {
+            document.getElementById(`${qId}_other`).classList.remove('hidden');
+            document.getElementById(`${qId}_other`).required = true;
+        }
+
+        function hideOther(qId) {
+            document.getElementById(`${qId}_other`).classList.add('hidden');
+            document.getElementById(`${qId}_other`).required = false;
+            document.getElementById(`${qId}_other`).value = "";
+        }
+
+        // Toggle Grid Table checkbox check by clicking cell (Fix: prevent checkbox double trigger)
+        function toggleGridCheck(event, type, idx) {
+            if (event.target.tagName === 'INPUT') return;
+            const cb = document.getElementById(`q6-${type}-${idx}`);
+            cb.checked = !cb.checked;
+        }
+
+        // Multi Select option toggle with Limit of 3 options
+        function toggleMultiSelect(inputName, opt, element) {
+            if (selectedQ12.has(opt)) {
+                selectedQ12.delete(opt);
+                element.classList.remove('custom-option-checked');
+                if (opt === '其他') hideOther('q12');
+            } else {
+                if (selectedQ12.size >= 3) {
+                    alert("最需要注意的項目最多只能選擇三個！");
+                    return;
+                }
+                selectedQ12.add(opt);
+                element.classList.add('custom-option-checked');
+                if (opt === '其他') showOther('q12');
+            }
+            document.getElementById('q12-count').innerText = selectedQ12.size;
+        }
+
+        // Toggle Lottery Fields and switch required attributes
+        function toggleLotteryFields(join) {
+            const container = document.getElementById('lottery-fields-container');
+            const nameInput = document.getElementById('lottery-name');
+            const phoneInput = document.getElementById('lottery-phone');
+            const emailInput = document.getElementById('lottery-email');
+            const consentInput = document.getElementById('lottery-consent');
+            const submitBtnText = document.getElementById('btn-submit').querySelector('span');
+
+            document.getElementById('join_lottery').value = join ? "yes" : "no";
+
+            const optJoin = document.getElementById('opt-join-lottery');
+            const optSkip = document.getElementById('opt-skip-lottery');
+            
+            if (join) {
+                optJoin.classList.add('custom-option-checked');
+                optSkip.classList.remove('custom-option-checked');
+                container.classList.remove('hidden');
+                nameInput.required = true;
+                phoneInput.required = true;
+                emailInput.required = true;
+                consentInput.required = true;
+                submitBtnText.innerText = "送出問卷並參加抽獎";
+            } else {
+                optSkip.classList.add('custom-option-checked');
+                optJoin.classList.remove('custom-option-checked');
+                container.classList.add('hidden');
+                nameInput.required = false;
+                phoneInput.required = false;
+                emailInput.required = false;
+                consentInput.required = false;
+                submitBtnText.innerText = "直接送出問卷";
+            }
+        }
+
+        // Validation for each progressive wizard step
+        function validateStep(step) {
+            if (step === 1) {
+                if (!document.getElementById('q1').value) { alert("請選擇您的性別！"); return false; }
+                if (!document.getElementById('q2').value) { alert("請選擇您的年齡層！"); return false; }
+                if (!document.getElementById('q3').value) { alert("請選擇來訪柳堤公園頻率！"); return false; }
+                if (!document.getElementById('q4').value) { alert("請選擇使用的交通工具！"); return false; }
+                if (document.getElementById('q4').value === '其他' && !document.getElementById('q4_other').value.trim()) { alert("請填寫其他交通工具！"); return false; }
+                if (!document.getElementById('q5').value) { alert("請選擇來此公園花費的時間！"); return false; }
+                if (document.getElementById('q5').value === '其他' && !document.getElementById('q5_other').value.trim()) { alert("請填寫其他時間！"); return false; }
+            } else if (step === 2) {
+                if (!document.getElementById('q7').value) { alert("請選擇平均停留時間！"); return false; }
+                if (document.getElementById('q7').value === '其他' && !document.getElementById('q7_other').value.trim()) { alert("請填寫其他停留時間！"); return false; }
+                if (!document.getElementById('q8').value) { alert("請選擇同行同伴！"); return false; }
+                if (document.getElementById('q8').value === '其他' && !document.getElementById('q8_other').value.trim()) { alert("請填寫其他同伴！"); return false; }
+            } else if (step === 3) {
+                if (!document.getElementById('q9').value) { alert("請回答是否聽過特色公園！"); return false; }
+                if (!document.getElementById('q10').value) { alert("請回答是否去過其他特色公園！"); return false; }
+                if (!document.getElementById('q11').value) { alert("請選擇陪同孩童的年齡層！"); return false; }
+                if (selectedQ12.size === 0) { alert("請至少選擇一個最需要注意的項目！(最多三個)"); return false; }
+                if (selectedQ12.has('其他') && !document.getElementById('q12_other').value.trim()) { alert("請填寫其他注意事項！"); return false; }
+
+                // Q13 圖片點選驗證（至少選一項）
+                if (selectedQ13.size === 0) { alert("第13題請至少選擇一項喜歡的遊具！"); return false; }
+
+            }
+            return true;
+        }
+
+        // Form Submit Handler
+        async function handleFormSubmit(e) {
+            e.preventDefault();
+            
+            // Final validation (Check if user wants to join lottery)
+            const isJoining = document.getElementById('join_lottery').value === 'yes';
+            let lotteryId = "未參加";
+            let nameVal = "";
+            let phoneVal = "";
+            let emailVal = "";
+
+            if (isJoining) {
+                if (!document.getElementById('lottery-name').value.trim()) { alert("請輸入聯絡姓名！"); return; }
+                if (!document.getElementById('lottery-phone').checkValidity()) { alert("請輸入正確的手機號碼格式 (例如 0912345678)！"); return; }
+                if (!document.getElementById('lottery-email').value.trim()) { alert("請輸入電子郵件！"); return; }
+                if (!document.getElementById('lottery-consent').checked) { alert("請同意個人資料處理條款！"); return; }
+
+                // Generate lottery ID
+                const randomCode = Math.floor(10000 + Math.random() * 90000);
+                lotteryId = "LZ-" + randomCode;
+                nameVal = document.getElementById('lottery-name').value.trim();
+                phoneVal = document.getElementById('lottery-phone').value.trim();
+                emailVal = document.getElementById('lottery-email').value.trim();
+            }
+
+            // Gather Q6 Grid values
+            const q6Values = { weekday: [], weekend: [] };
+            for(let i=0; i<timeslots.length; i++) {
+                if (document.getElementById(`q6-weekday-${i}`).checked) q6Values.weekday.push(timeslots[i]);
+                if (document.getElementById(`q6-weekend-${i}`).checked) q6Values.weekend.push(timeslots[i]);
+            }
+
+            // Gather Q13 image selection
+            const q13Values = Array.from(selectedQ13);
+
+            // Gather values
+            const payload = {
+                action: 'SUBMIT_PLAYGROUND_SURVEY',
+                lotteryId: lotteryId,
+                name: nameVal,
+                phone: phoneVal,
+                email: emailVal,
+                q1: document.getElementById('q1').value,
+                q2: document.getElementById('q2').value,
+                q3: document.getElementById('q3').value,
+                q4: document.getElementById('q4').value,
+                q4_other: document.getElementById('q4_other').value.trim(),
+                q5: document.getElementById('q5').value,
+                q5_other: document.getElementById('q5_other').value.trim(),
+                q6: q6Values,
+                q7: document.getElementById('q7').value,
+                q7_other: document.getElementById('q7_other').value.trim(),
+                q8: document.getElementById('q8').value,
+                q8_other: document.getElementById('q8_other').value.trim(),
+                q9: document.getElementById('q9').value,
+                q10: document.getElementById('q10').value,
+                q11: document.getElementById('q11').value,
+                q12: Array.from(selectedQ12),
+                q12_other: document.getElementById('q12_other').value.trim(),
+                q13: q13Values,
+                q15: document.getElementById('q15').value.trim(),
+                q16: document.getElementById('q16').value.trim()
+            };
+
+            // Show Loading Screen
+            document.getElementById('card-loading').classList.remove('hidden');
+
+            try {
+                if (CONFIG.gasUrl) {
+                    // Send to actual Google Sheet
+                    const response = await fetch(CONFIG.gasUrl, {
+                        method: 'POST',
+                        mode: 'no-cors',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(payload)
+                    });
+                } else {
+                    // Simulate sheet saving locally
+                    const localData = JSON.parse(localStorage.getItem('survey_demo_data') || '[]');
+                    localData.push({ timestamp: new Date(), ...payload });
+                    localStorage.setItem('survey_demo_data', JSON.stringify(localData));
+                    await new Promise(resolve => setTimeout(resolve, 800));
+                }
+
+                // Hide loading, hide form, hide progress, show success block
+                document.getElementById('card-loading').classList.add('hidden');
+                document.getElementById('survey-form').classList.add('hidden');
+                document.getElementById('progress-container').classList.add('hidden');
+                
+                // 動態渲染「您的填答摘要」
+                document.getElementById('sum-age-gender').innerText = `${payload.q2 || "未填"} / ${payload.q1 || "未填"}`;
+                document.getElementById('sum-freq-transport').innerText = `${payload.q3 || "未填"} / ${payload.q4 || "未填"}`;
+
+                const q12Container = document.getElementById('sum-q12-tags');
+                q12Container.innerHTML = '';
+                if (payload.q12 && payload.q12.length > 0) {
+                    payload.q12.forEach(tag => {
+                        const span = document.createElement('span');
+                        span.className = 'bg-orange-100 text-orange-900 px-2 py-0.5 rounded-md font-medium text-[11px]';
+                        span.innerText = tag;
+                        q12Container.appendChild(span);
+                    });
+                } else {
+                    q12Container.innerHTML = '<span class="text-gray-400 text-[11px]">無特別指定</span>';
+                }
+
+                const q13Container = document.getElementById('sum-q13-tags');
+                q13Container.innerHTML = '';
+                if (payload.q13 && payload.q13.length > 0) {
+                    payload.q13.forEach(item => {
+                        const span = document.createElement('span');
+                        span.className = 'bg-amber-100 text-amber-950 border border-amber-200/60 px-2 py-0.5 rounded-md font-medium text-[11px]';
+                        span.innerText = item;
+                        q13Container.appendChild(span);
+                    });
+                } else {
+                    q13Container.innerHTML = '<span class="text-gray-400 text-[11px]">無特別指定</span>';
+                }
+
+                // Show lottery ID only if joined
+                const successBox = document.getElementById('success-lottery-box');
+                if (isJoining) {
+                    document.getElementById('success-lottery-id').innerText = lotteryId;
+                    successBox.classList.remove('hidden');
+                } else {
+                    successBox.classList.add('hidden');
+                }
+                document.getElementById('success-block').classList.remove('hidden');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            } catch (err) {
+                document.getElementById('card-loading').classList.add('hidden');
+                alert("送出失敗，請確認網路連線是否正常：" + err.message);
+            }
+        }
+
+        // #endregion
+
+        // MARK: [INDEX_JS_COUNTDOWN_WINNER] 6. 倒數計時與得獎名單自動切換核對系統 (JS)
+        // #region [INDEX_JS_COUNTDOWN_WINNER] 6. 倒數計時與得獎名單自動切換核對系統 (JS)
+        // =====================================================================
+        // 倒數計時器與中獎名單自動切換邏輯 (115/10/30 16:00 即 2026/10/30 16:00)
+        // 僅包含承辦提供之個資遮蔽後欄位，絕不含任何原始明文個資
+        // =====================================================================
+        const TARGET_DATE = new Date(2026, 9, 30, 16, 0, 0); // 月份為 0-indexed (9 代表 10 月)
+        const WINNER_LIST = [{"seq":1,"code":"K594","name":"蔡○宏","phone":"*******602","email":"r10***@gmail.com"},{"seq":2,"code":"K814","name":"鍾○妍","phone":"*******190","email":"yuy***@gmail.com"},{"seq":3,"code":"K667","name":"李○慧","phone":"*******107","email":"son***@gmail.com"},{"seq":4,"code":"K474","name":"蔡○秀","phone":"*******261","email":"lin***@gmail.com"},{"seq":5,"code":"K596","name":"謝○蓮","phone":"*******238","email":"vio***@gmail.com"},{"seq":6,"code":"K67","name":"沈○家","phone":"*******985","email":"acd***@gmail.com"},{"seq":7,"code":"K165","name":"賴○竹","phone":"*******564","email":"boy***@gmail.com"},{"seq":8,"code":"K777","name":"小○范","phone":"*******580","email":"xia***@yahoo.com.tw"},{"seq":9,"code":"K102","name":"陳○源","phone":"*******835","email":"ang***@gmail.com"},{"seq":10,"code":"K826","name":"黃○剛","phone":"*******895","email":"zhh***@yahoo.com.tw"},{"seq":11,"code":"K326","name":"呂○青","phone":"*******648","email":"her***@gmail.com"},{"seq":12,"code":"K553","name":"楊○萍","phone":"*******779","email":"ooi***@gmail.com"},{"seq":13,"code":"K754","name":"洪○惟","phone":"*******607","email":"wei***@gmail.com"},{"seq":14,"code":"K538","name":"彭○涵","phone":"*******559","email":"nek***@gmail.com"},{"seq":15,"code":"K42","name":"蔡○茹","phone":"*******107","email":"a25***@yahoo.com.tw"},{"seq":16,"code":"K675","name":"勤○軒","phone":"*******250","email":"sta***@gmail.com"},{"seq":17,"code":"K431","name":"陳○昌","phone":"*******752","email":"kf9***@gmail.com"},{"seq":18,"code":"K639","name":"孫○翔","phone":"*******190","email":"sea***@gmail.com"},{"seq":19,"code":"K692","name":"蕭○聖","phone":"*******699","email":"tac***@gmail.com"},{"seq":20,"code":"K187","name":"張○瑜","phone":"*******757","email":"cha***@gmail.com"},{"seq":21,"code":"K545","name":"郭○楨","phone":"*******604","email":"nqh***@gmail.com"},{"seq":22,"code":"K823","name":"劉○偉","phone":"*******191","email":"zhe***@gmail.com"},{"seq":23,"code":"K340","name":"黃○儀","phone":"*******264","email":"hua***@gmail.com"},{"seq":24,"code":"K661","name":"徐○璋","phone":"*******699","email":"sma***@yahoo.com.tw"},{"seq":25,"code":"K214","name":"周○儀","phone":"*******616","email":"cin***@gmail.com"},{"seq":26,"code":"K798","name":"林○英","phone":"*******126","email":"yin***@gmail.com"},{"seq":27,"code":"K231","name":"黃○婷","phone":"*******369","email":"d30***@yahoo.com.tw"},{"seq":28,"code":"K144","name":"楊○靚","phone":"*******916","email":"bel***@gmail.com"},{"seq":29,"code":"K66","name":"楊○華","phone":"*******000","email":"abc***@gmail.com"},{"seq":30,"code":"K439","name":"潘○彤","phone":"*******033","email":"kit***@yahoo.com.tw"},{"seq":31,"code":"K404","name":"劉○萍","phone":"*******183","email":"jus***@gmail.com"},{"seq":32,"code":"K723","name":"曹○兩","phone":"*******300","email":"tsa***@gmail.com"},{"seq":33,"code":"K815","name":"蘇○綾","phone":"*******776","email":"yy9***@gmail.com"},{"seq":34,"code":"K499","name":"王○萱","phone":"*******066","email":"luc***@gmail.com"},{"seq":35,"code":"K240","name":"丁○翔","phone":"*******698","email":"din***@gmail.com"},{"seq":36,"code":"K666","name":"吳○瑩","phone":"*******166","email":"smi***@yahoo.com.tw"},{"seq":37,"code":"K632","name":"蔡○伃","phone":"*******508","email":"sas***@hotmail.com"},{"seq":38,"code":"K770","name":"李○恩","phone":"*******276","email":"wu2***@gmail.com"},{"seq":39,"code":"K824","name":"李○才","phone":"*******335","email":"zhe***@gmail.com"},{"seq":40,"code":"K151","name":"林○廷","phone":"*******383","email":"bin***@gmail.com"},{"seq":41,"code":"K136","name":"廖○偉","phone":"*******232","email":"bab***@gmail.com"},{"seq":42,"code":"K590","name":"林○慶","phone":"*******753","email":"qaz***@gmail.com"},{"seq":43,"code":"K229","name":"張○筑","phone":"*******814","email":"d09***@gmail.com"},{"seq":44,"code":"K479","name":"陳○娟","phone":"*******207","email":"lis***@gmail.com"},{"seq":45,"code":"K314","name":"陳○棻","phone":"*******767","email":"h22***@yahoo.com.tw"},{"seq":46,"code":"K518","name":"劉○蓁","phone":"*******030","email":"mia***@apps.ntpc.edu.tw"},{"seq":47,"code":"K571","name":"彭○儒","phone":"*******625","email":"pen***@gmail.com"},{"seq":48,"code":"K508","name":"白○寧","phone":"*******112","email":"mas***@yahoo.com.tw"},{"seq":49,"code":"K800","name":"李○修","phone":"*******481","email":"yin***@gmail.com"},{"seq":50,"code":"K328","name":"連○雯","phone":"*******345","email":"hil***@gmail.com"},{"seq":51,"code":"K365","name":"王○娟","phone":"*******950","email":"jan***@yahoo.com.tw"},{"seq":52,"code":"K322","name":"蔡○潔","phone":"*******347","email":"hap***@gmail.com"},{"seq":53,"code":"K3","name":"邱○鎮","phone":"*******252","email":"120***@gmail.com"},{"seq":54,"code":"K493","name":"王○丞","phone":"*******246","email":"lov***@gmail.com"},{"seq":55,"code":"K289","name":"陳○成","phone":"*******850","email":"gar***@gmail.com"},{"seq":56,"code":"K831","name":"沈○泉","phone":"*******196","email":"zxx***@gmail.com"},{"seq":57,"code":"K159","name":"何○雯","phone":"*******133","email":"bjq***@outlook.com"},{"seq":58,"code":"K548","name":"楊○賢","phone":"*******065","email":"nxl***@outlook.com"},{"seq":59,"code":"K676","name":"孟○婷","phone":"*******942","email":"sto***@yahoo.com.tw"},{"seq":60,"code":"K458","name":"梁○玲","phone":"*******365","email":"lia***@gmail.com"},{"seq":61,"code":"K532","name":"何○玲","phone":"*******001","email":"mom***@gmail.com"},{"seq":62,"code":"K140","name":"簡○蕙","phone":"*******825","email":"bea***@hotmail.com"},{"seq":63,"code":"K825","name":"林○臻","phone":"*******707","email":"zhe***@gmail.com"},{"seq":64,"code":"K791","name":"洪○順","phone":"*******768","email":"yeo***@yahoo.com.tw"},{"seq":65,"code":"K271","name":"徐○揚","phone":"*******831","email":"feb***@yahoo.com.tw"},{"seq":66,"code":"K17","name":"蔡○聰","phone":"*******876","email":"a09***@gmail.com"},{"seq":67,"code":"K746","name":"陳○仟","phone":"*******708","email":"vn0***@hotmail.com"},{"seq":68,"code":"K109","name":"吳○靜","phone":"*******984","email":"app***@gmail.com"},{"seq":69,"code":"K293","name":"張○竣","phone":"*******907","email":"geo***@gmail.com"},{"seq":70,"code":"K138","name":"吳○倍","phone":"*******167","email":"bar***@tmu.edu.tw"},{"seq":71,"code":"K68","name":"陳○明","phone":"*******271","email":"ach***@gmail.com"},{"seq":72,"code":"K142","name":"陳○嘉","phone":"*******660","email":"bea***@hotmail.com"},{"seq":73,"code":"K718","name":"鍾○廷","phone":"*******547","email":"tpd***@gmail.com"},{"seq":74,"code":"K502","name":"蔡○韻","phone":"*******762","email":"m91***@gmail.com"},{"seq":75,"code":"K720","name":"蔡○芸","phone":"*******341","email":"tsa***@gmail.com"},{"seq":76,"code":"K654","name":"劉○怡","phone":"*******554","email":"sin***@gmail.com"},{"seq":77,"code":"K285","name":"陳○青","phone":"*******821","email":"g52***@yahoo.com.tw"},{"seq":78,"code":"K287","name":"林○震","phone":"*******030","email":"ga3***@gmail.com"},{"seq":79,"code":"K43","name":"沈○璇","phone":"*******132","email":"a26***@msa.hinet.net"},{"seq":80,"code":"K637","name":"李○君","phone":"*******803","email":"sch***@gmail.com"},{"seq":81,"code":"K23","name":"黃○雅","phone":"*******273","email":"a09***@gmail.com"},{"seq":82,"code":"K206","name":"林○瓊","phone":"*******228","email":"chi***@gmail.com"},{"seq":83,"code":"K157","name":"袁○","phone":"*******593","email":"bin***@gmail.com"},{"seq":84,"code":"K363","name":"何○婷","phone":"*******822","email":"j76***@gmail.com"},{"seq":85,"code":"K125","name":"戴○霜","phone":"*******337","email":"awi***@gmail.com"},{"seq":86,"code":"K183","name":"陳○靈","phone":"*******672","email":"cat***@yahoo.com.tw"},{"seq":87,"code":"K62","name":"周○宏","phone":"*******706","email":"aas***@hotmail.com"},{"seq":88,"code":"K496","name":"張○婷","phone":"*******028","email":"lov***@gmail.com"},{"seq":89,"code":"K263","name":"顏○君","phone":"*******014","email":"exe***@gmail.com"},{"seq":90,"code":"K554","name":"黃○香","phone":"*******308","email":"ora***@yahoo.com.tw"},{"seq":91,"code":"K181","name":"邱○○梅","phone":"*******676","email":"car***@gmail.com"},{"seq":92,"code":"K77","name":"黃○慈","phone":"*******750","email":"ali***@gmail.com"},{"seq":93,"code":"K465","name":"廖○茜","phone":"*******848","email":"lik***@gmail.con"},{"seq":94,"code":"K275","name":"王○蓮","phone":"*******518","email":"fio***@yahoo.com.tw"},{"seq":95,"code":"K568","name":"賴○君","phone":"*******190","email":"peg***@yahoo.com.tw"},{"seq":96,"code":"K105","name":"鍾○慧","phone":"*******669","email":"ann***@gmail.com"},{"seq":97,"code":"K303","name":"李○忠","phone":"*******832","email":"gn0***@gmail.com"},{"seq":98,"code":"K450","name":"郭○琦","phone":"*******578","email":"kuo***@yahoo.com.tw"},{"seq":99,"code":"K456","name":"張○忠","phone":"*******888","email":"lev***@gmail.com"},{"seq":100,"code":"K613","name":"羅○敏","phone":"*******832","email":"s72***@gmail.com"},{"seq":101,"code":"K461","name":"呂○","phone":"*******078","email":"lie***@gmail.com"},{"seq":102,"code":"K115","name":"鍾○雍","phone":"*******833","email":"ari***@gmail.com"},{"seq":103,"code":"K387","name":"郭○綾","phone":"*******187","email":"jjj***@yahoo.com"},{"seq":104,"code":"K25","name":"葉○露","phone":"*******203","email":"a09***@gmail.com"},{"seq":105,"code":"K88","name":"曾○益","phone":"*******320","email":"amt***@outlook.com"},{"seq":106,"code":"K265","name":"陳○羚","phone":"*******778","email":"f09***@gmail.com"},{"seq":107,"code":"K506","name":"王○茹","phone":"*******562","email":"man***@gmail.com"},{"seq":108,"code":"K760","name":"周○君","phone":"*******108","email":"WiF***@gmail.com"},{"seq":109,"code":"K330","name":"許○華","phone":"*******715","email":"hl3***@yahoo.com.tw"},{"seq":110,"code":"K818","name":"林○瑋","phone":"*******676","email":"z09***@gmail.com"},{"seq":111,"code":"K301","name":"藍○志","phone":"*******179","email":"gk2***@gmail.com"},{"seq":112,"code":"K678","name":"謝○琴","phone":"*******798","email":"stu***@gmail.com"},{"seq":113,"code":"K44","name":"廖○喬","phone":"*******092","email":"a28***@gmail.com"},{"seq":114,"code":"K519","name":"陳○伶","phone":"*******508","email":"mia***@gmail.com"},{"seq":115,"code":"K297","name":"吳○葳","phone":"*******689","email":"gin***@gmail.com"},{"seq":116,"code":"K745","name":"邱○瑄","phone":"*******557","email":"viv***@gmail.com"},{"seq":117,"code":"K313","name":"林○婷","phone":"*******048","email":"gun***@gmail.com"},{"seq":118,"code":"K198","name":"郭○志","phone":"*******359","email":"che***@gmail.com"},{"seq":119,"code":"K74","name":"葉○銘","phone":"*******977","email":"ala***@gmail.com"},{"seq":120,"code":"K509","name":"鍾○芸","phone":"*******409","email":"mas***@yahoo.com.tw"},{"seq":121,"code":"K750","name":"吳○○雀","phone":"*******330","email":"wan***@gmail.com"},{"seq":122,"code":"K793","name":"康○琦","phone":"*******400","email":"yic***@gmail.com"},{"seq":123,"code":"K126","name":"鄭○如","phone":"*******872","email":"ayu***@yahoo.com.tw"},{"seq":124,"code":"K258","name":"施○斌","phone":"*******719","email":"esc***@mail2000.com.tw"},{"seq":125,"code":"K411","name":"許○庭","phone":"*******169","email":"kai***@gmail.com"},{"seq":126,"code":"K35","name":"張○豪","phone":"*******429","email":"a09***@gmail.com"},{"seq":127,"code":"K715","name":"陳○廷","phone":"*******939","email":"ton***@yahoo.com.tw"},{"seq":128,"code":"K469","name":"林○珊","phone":"*******372","email":"lin***@gmail.com"},{"seq":129,"code":"K210","name":"王○珠","phone":"*******007","email":"chu***@gmail.com"},{"seq":130,"code":"K237","name":"李○倢","phone":"*******515","email":"dfn***@msn.com"},{"seq":131,"code":"K141","name":"紀○妤","phone":"*******091","email":"bea***@gmail.com"},{"seq":132,"code":"K253","name":"邱○華","phone":"*******870","email":"ell***@gmail.com"},{"seq":133,"code":"K63","name":"謝○書","phone":"*******775","email":"aas***@yahoo.com.tw"},{"seq":134,"code":"K476","name":"楊○錦","phone":"*******494","email":"lio***@yahoo.com.tw"},{"seq":135,"code":"K117","name":"林○蒼","phone":"*******789","email":"asc***@gmail.com"},{"seq":136,"code":"K47","name":"郭○君","phone":"*******381","email":"a36***@yahoo.com.tw"},{"seq":137,"code":"K106","name":"連○涵","phone":"*******598","email":"ann***@gmail.com"},{"seq":138,"code":"K27","name":"廖○惠","phone":"*******023","email":"a09***@gmail.com"},{"seq":139,"code":"K703","name":"江○芬","phone":"*******812","email":"thu***@gmail.com"},{"seq":140,"code":"K665","name":"李○國","phone":"*******892","email":"sma***@gmail.com"},{"seq":141,"code":"K321","name":"張○姍","phone":"*******170","email":"hap***@gmail.com"},{"seq":142,"code":"K780","name":"高○君","phone":"*******391","email":"y09***@gmail.com"},{"seq":143,"code":"K50","name":"何○郿","phone":"*******044","email":"a74***@gmail.com"},{"seq":144,"code":"K579","name":"蔡○霖","phone":"*******229","email":"pob***@yahoo.com.tw"},{"seq":145,"code":"K383","name":"林○嫻","phone":"*******911","email":"jil***@gmail.com"},{"seq":146,"code":"K436","name":"黃○萍","phone":"*******022","email":"kim***@gmail.com"},{"seq":147,"code":"K709","name":"黃○蕎","phone":"*******939","email":"tin***@gmail.com"},{"seq":148,"code":"K348","name":"陳○真","phone":"*******199","email":"ido***@gmail.com"},{"seq":149,"code":"K516","name":"林○薇","phone":"*******024","email":"mer***@yahoo.com.tw"},{"seq":150,"code":"K137","name":"陳○如","phone":"*******357","email":"bal***@gmail.com"},{"seq":151,"code":"K563","name":"徐○珠","phone":"*******908","email":"pc1***@gmail.com"},{"seq":152,"code":"K5","name":"廖○蓁","phone":"*******207","email":"2bn***@gmail.com"},{"seq":153,"code":"K462","name":"鄭○芳","phone":"*******686","email":"lij***@gmail.com"},{"seq":154,"code":"K103","name":"白○寧","phone":"*******065","email":"ani***@hotmail.com"},{"seq":155,"code":"K191","name":"陳○璇","phone":"*******668","email":"che***@gmail.com"},{"seq":156,"code":"K53","name":"藍○美","phone":"*******553","email":"a82***@yahoo.com.tw"},{"seq":157,"code":"K189","name":"郭○颯","phone":"*******240","email":"cha***@gmail.com"},{"seq":158,"code":"K789","name":"李○儀","phone":"*******554","email":"yay***@gmail.com"},{"seq":159,"code":"K273","name":"紀○宜","phone":"*******976","email":"ffx***@gmail.com"},{"seq":160,"code":"K315","name":"李○雯","phone":"*******007","email":"h30***@gmail.com"},{"seq":161,"code":"K671","name":"余○慈","phone":"*******331","email":"spj***@yahoo.com.tw"},{"seq":162,"code":"K245","name":"黃○玲","phone":"*******039","email":"dor***@gmail.com"},{"seq":163,"code":"K480","name":"陳○如","phone":"*******102","email":"lit***@yahoo.com.tw"},{"seq":164,"code":"K185","name":"蔡○展","phone":"*******885","email":"cfz***@gmail.com"},{"seq":165,"code":"K807","name":"曾○娥","phone":"*******752","email":"yue***@gmail.com"},{"seq":166,"code":"K405","name":"戴○芳","phone":"*******368","email":"jxu***@gmail.com"},{"seq":167,"code":"K603","name":"高○閔","phone":"*******059","email":"rub***@yahoo.com.tw"},{"seq":168,"code":"K752","name":"h○","phone":"*******077","email":"web***@gmail.com"},{"seq":169,"code":"K528","name":"呂○懌","phone":"*******836","email":"min***@gmail.com"},{"seq":170,"code":"K89","name":"鄭○停","phone":"*******808","email":"amy***@gmail.com"},{"seq":171,"code":"K378","name":"李○佳","phone":"*******959","email":"jia***@gmail.com"},{"seq":172,"code":"K555","name":"o○o","phone":"*******057","email":"oxo***@duck.com"},{"seq":173,"code":"K619","name":"黃○甄","phone":"*******239","email":"s90***@yahoo.com.tw"},{"seq":174,"code":"K56","name":"周○雅","phone":"*******147","email":"a89***@gmail.com"},{"seq":175,"code":"K686","name":"張○育","phone":"*******303","email":"sun***@gmail.com"},{"seq":176,"code":"K552","name":"余○婷","phone":"*******744","email":"oli***@gbding.com"},{"seq":177,"code":"K445","name":"陳○慈","phone":"*******568","email":"kok***@yahoo.com.tw"},{"seq":178,"code":"K684","name":"翁○蓉","phone":"*******950","email":"sun***@gmail.com"},{"seq":179,"code":"K635","name":"余○婕","phone":"*******076","email":"sas***@hotmail.com"},{"seq":180,"code":"K758","name":"許○萱","phone":"*******185","email":"whi***@hotmail.com"},{"seq":181,"code":"K693","name":"蕭○尚","phone":"*******858","email":"tai***@icloud.com"},{"seq":182,"code":"K398","name":"曾○青","phone":"*******277","email":"jud***@hotmail.com"},{"seq":183,"code":"K264","name":"陳○孝","phone":"*******935","email":"ezi***@gmail.com"},{"seq":184,"code":"K768","name":"盧○瑜","phone":"*******165","email":"wre***@hotmail.com"},{"seq":185,"code":"K227","name":"吳○宇","phone":"*******567","email":"cwt***@gmail.com"},{"seq":186,"code":"K674","name":"王○勳","phone":"*******710","email":"sta***@gmail.com"},{"seq":187,"code":"K510","name":"黃○珺","phone":"*******709","email":"may***@yahoo.com.tw"},{"seq":188,"code":"K309","name":"吳○樺","phone":"*******745","email":"gpx***@gmail.com"},{"seq":189,"code":"K259","name":"游○盛","phone":"*******401","email":"yuv***@gmail.com"},{"seq":190,"code":"K672","name":"闕○芳","phone":"*******371","email":"st8***@gmail.com"},{"seq":191,"code":"K774","name":"金○晴","phone":"*******988","email":"x12***@hotmail.com"},{"seq":192,"code":"K395","name":"洪○滄","phone":"*******299","email":"jts***@gmail.com"},{"seq":193,"code":"K756","name":"黃○涵","phone":"*******152","email":"wen***@gmail.com"},{"seq":194,"code":"K268","name":"高○帆","phone":"*******380","email":"fan***@yahoo.com.tw"},{"seq":195,"code":"K319","name":"張○庭","phone":"*******513","email":"hao***@yahoo.com.tw"},{"seq":196,"code":"K634","name":"陳○璇","phone":"*******666","email":"sas***@gmail.com"},{"seq":197,"code":"K459","name":"廖○民","phone":"*******790","email":"lia***@gmail.com"},{"seq":198,"code":"K644","name":"曉○○劉","phone":"*******918","email":"she***@yahoo.com.tw"},{"seq":199,"code":"K764","name":"黃○綾","phone":"*******539","email":"win***@gmail.com"},{"seq":200,"code":"K618","name":"趙○妤","phone":"*******965","email":"s90***@yahoo.com.tw"},{"seq":201,"code":"K743","name":"邱○瑩","phone":"*******998","email":"viv***@gmail.com"},{"seq":202,"code":"K78","name":"邱○諒","phone":"*******590","email":"ali***@yahoo.com.tw"},{"seq":203,"code":"K564","name":"陳○均","phone":"*******308","email":"pea***@yahoo.com.tw"},{"seq":204,"code":"K464","name":"李○淳","phone":"*******627","email":"lik***@yahoo.com.tw"},{"seq":205,"code":"K316","name":"蔡○誠","phone":"*******483","email":"h94***@gmail.com"},{"seq":206,"code":"K384","name":"李○如","phone":"*******772","email":"jil***@gmail.com"},{"seq":207,"code":"K213","name":"尤○伶","phone":"*******856","email":"cin***@gmail.com"},{"seq":208,"code":"K375","name":"陳○伶","phone":"*******408","email":"jes***@yahoo.com.tw"},{"seq":209,"code":"K128","name":"劉○汶","phone":"*******626","email":"ayu***@gmail.com"},{"seq":210,"code":"K763","name":"許○雅","phone":"*******220","email":"win***@yahoo.com.tw"},{"seq":211,"code":"K408","name":"胡○栗","phone":"*******758","email":"k8i***@gmail.com"},{"seq":212,"code":"K648","name":"林○蓓","phone":"*******651","email":"shi***@gmail.com"},{"seq":213,"code":"K721","name":"蔡○菁","phone":"*******181","email":"tsa***@gmail.com"},{"seq":214,"code":"K94","name":"陳○龍","phone":"*******348","email":"amy***@yahoo.com.tw"},{"seq":215,"code":"K323","name":"林○世","phone":"*******985","email":"har***@yahoo.com.tw"},{"seq":216,"code":"K29","name":"蔡○軒","phone":"*******798","email":"a09***@gmail.com"},{"seq":217,"code":"K821","name":"吳○怜","phone":"*******600","email":"za7***@gmail.com"},{"seq":218,"code":"K512","name":"詹○玫","phone":"*******680","email":"may***@gmail.com"},{"seq":219,"code":"K453","name":"陳○進","phone":"*******542","email":"lee***@gmail.com"},{"seq":220,"code":"K812","name":"吳○芸","phone":"*******906","email":"yun***@gmail.com"},{"seq":221,"code":"K236","name":"黃○萍","phone":"*******507","email":"deb***@gmail.com"},{"seq":222,"code":"K410","name":"廖○宏","phone":"*******105","email":"kae***@gmail.com"},{"seq":223,"code":"K207","name":"胡○傑","phone":"*******172","email":"cho***@yahoo.com.tw"},{"seq":224,"code":"K302","name":"林○姐","phone":"*******993","email":"gla***@gmail.com"},{"seq":225,"code":"K681","name":"朱○薰","phone":"*******832","email":"sum***@yahoo.com.tw"},{"seq":226,"code":"K400","name":"王○珠","phone":"*******189","email":"jul***@gmail.com"},{"seq":227,"code":"K641","name":"李○祥","phone":"*******047","email":"set***@hotmail.com"},{"seq":228,"code":"K380","name":"林○捷","phone":"*******157","email":"jia***@gmail.com"},{"seq":229,"code":"K286","name":"黃○瑜","phone":"*******296","email":"g99***@gmail.com"},{"seq":230,"code":"K133","name":"豬○","phone":"*******614","email":"b93***@ntu.edu.tw"},{"seq":231,"code":"K551","name":"陳○","phone":"*******299","email":"oli***@gmail.com"},{"seq":232,"code":"K527","name":"施○宏","phone":"*******242","email":"min***@gmail.com"},{"seq":233,"code":"K256","name":"李○恒","phone":"*******986","email":"ene***@yahoo.com.tw"},{"seq":234,"code":"K792","name":"李○怡","phone":"*******710","email":"Yi0***@gmail.com"},{"seq":235,"code":"K120","name":"黃○揚","phone":"*******031","email":"asi***@gmail.com"},{"seq":236,"code":"K329","name":"洪○芳","phone":"*******723","email":"hjf***@hotmail.com"},{"seq":237,"code":"K59","name":"吳○佑","phone":"*******733","email":"a97***@gmail.com"},{"seq":238,"code":"K443","name":"許○榕","phone":"*******519","email":"kll***@yahoo.com.tw"},{"seq":239,"code":"K369","name":"吳○傑","phone":"*******015","email":"jas***@yahoo.com.tw"},{"seq":240,"code":"K119","name":"張○淨","phone":"*******332","email":"ash***@gmail.com"},{"seq":241,"code":"K435","name":"張○琪","phone":"*******421","email":"kik***@gmail.com"},{"seq":242,"code":"K244","name":"吳○廷","phone":"*******035","email":"dor***@gmail.com"},{"seq":243,"code":"K604","name":"鄭○云","phone":"*******718","email":"rub***@yahoo.com.tw"},{"seq":244,"code":"K446","name":"胡○淇","phone":"*******120","email":"kos***@gmail.com"},{"seq":245,"code":"K507","name":"張○萍","phone":"*******669","email":"man***@gmail.com"},{"seq":246,"code":"K673","name":"陳○玉","phone":"*******353","email":"st8***@gmail.com"},{"seq":247,"code":"K203","name":"李○萱","phone":"*******369","email":"chi***@gmail.com"},{"seq":248,"code":"K700","name":"陳○聖","phone":"*******571","email":"tea***@gmail.com"},{"seq":249,"code":"K737","name":"劉○月","phone":"*******491","email":"van***@gmail.com"},{"seq":250,"code":"K515","name":"張○軒","phone":"*******599","email":"mem***@gmail.com"},{"seq":251,"code":"K419","name":"陳○孝","phone":"*******125","email":"ken***@gmail.com"},{"seq":252,"code":"K195","name":"陳○婷","phone":"*******469","email":"che***@cts.com.tw"},{"seq":253,"code":"K219","name":"李○霖","phone":"*******311","email":"cll***@gmail.com"},{"seq":254,"code":"K179","name":"林○叶","phone":"*******718","email":"can***@gmail.com"},{"seq":255,"code":"K730","name":"林○永","phone":"*******593","email":"u75***@gmail.com"},{"seq":256,"code":"K281","name":"吳○億","phone":"*******353","email":"g_b***@yahoo.com.tw"},{"seq":257,"code":"K628","name":"闕○珊","phone":"*******198","email":"san***@gmail.com"},{"seq":258,"code":"K704","name":"陳○婷","phone":"*******900","email":"tia***@gmail.com"},{"seq":259,"code":"K738","name":"張○平","phone":"*******131","email":"ver***@hotmail.com"},{"seq":260,"code":"K606","name":"許○萍","phone":"*******518","email":"rub***@hotmail.com"},{"seq":261,"code":"K312","name":"林○樑","phone":"*******860","email":"gre***@gmail.com"},{"seq":262,"code":"K647","name":"邱○欣","phone":"*******106","email":"shi***@gmail.com"},{"seq":263,"code":"K642","name":"陳○惠","phone":"*******587","email":"sf7***@gmail.com"},{"seq":264,"code":"K358","name":"陳○蓉","phone":"*******023","email":"ivy***@hotmail.com"},{"seq":265,"code":"K333","name":"李○嬅","phone":"*******707","email":"hon***@gmail.com"},{"seq":266,"code":"K523","name":"賴○樺","phone":"*******269","email":"mil***@yahoo.com.tw"},{"seq":267,"code":"K747","name":"林○燕","phone":"*******009","email":"w22***@yahoo.com.tw"},{"seq":268,"code":"K820","name":"陳○宇","phone":"*******398","email":"z23***@yahoo.com.tw"},{"seq":269,"code":"K547","name":"李○蓁","phone":"*******102","email":"Nun***@gmail.com"},{"seq":270,"code":"K706","name":"王○涵","phone":"*******850","email":"tim***@gmail.com"},{"seq":271,"code":"K670","name":"徐○蘭","phone":"*******252","email":"sow***@gmail.com"},{"seq":272,"code":"K278","name":"胡○文","phone":"*******612","email":"flo***@yahoo.com.tw"},{"seq":273,"code":"K561","name":"葉○妤","phone":"*******315","email":"pay***@exdonuts.com"},{"seq":274,"code":"K769","name":"吳○穎","phone":"*******852","email":"wu.***@gmail.com"},{"seq":275,"code":"K795","name":"黃○嬅","phone":"*******801","email":"yih***@gmail.com"},{"seq":276,"code":"K121","name":"林○誼","phone":"*******464","email":"aso***@livemail.tw"},{"seq":277,"code":"K108","name":"呂○芬","phone":"*******884","email":"any***@gmail.com"},{"seq":278,"code":"K403","name":"張○貞","phone":"*******331","email":"jun***@hotmail.com"},{"seq":279,"code":"K749","name":"陳○雄","phone":"*******168","email":"wan***@yahoo.com.tw"},{"seq":280,"code":"K726","name":"李○如","phone":"*******577","email":"tzj***@gmail.com"},{"seq":281,"code":"K168","name":"潘○茹","phone":"*******707","email":"c09***@gmail.com"},{"seq":282,"code":"K615","name":"葉○霞","phone":"*******523","email":"s87***@yahoo.com.tw"},{"seq":283,"code":"K677","name":"廖○均","phone":"*******258","email":"stu***@gmail.com"},{"seq":284,"code":"K448","name":"方○鈞","phone":"*******947","email":"kue***@gmail.com"},{"seq":285,"code":"K304","name":"梁○容","phone":"*******681","email":"gnn***@gmail.com"},{"seq":286,"code":"K162","name":"劉○玉","phone":"*******660","email":"blu***@gmail.com"},{"seq":287,"code":"K679","name":"廖○伶","phone":"*******366","email":"stu***@yahoo.com.tw"},{"seq":288,"code":"K177","name":"廖○郎","phone":"*******834","email":"cal***@gmail.com"},{"seq":289,"code":"K371","name":"鄭○宥","phone":"*******309","email":"jee***@gmail.com"},{"seq":290,"code":"K651","name":"郭○玲","phone":"*******013","email":"Shu***@gmail.com"},{"seq":291,"code":"K101","name":"張○琪","phone":"*******990","email":"ang***@gmail.com"},{"seq":292,"code":"K376","name":"李○芬","phone":"*******019","email":"jes***@gmail.com"},{"seq":293,"code":"K467","name":"吳○柔","phone":"*******219","email":"lil***@hotmail.com"},{"seq":294,"code":"K1","name":"陳○承","phone":"*******168","email":"032***@gmail.com"},{"seq":295,"code":"K423","name":"黃○軍","phone":"*******986","email":"kf9***@gmail.com"},{"seq":296,"code":"K15","name":"林○容","phone":"*******305","email":"a09***@gmail.com"},{"seq":297,"code":"K58","name":"賴○汶","phone":"*******898","email":"a97***@gmail.com"},{"seq":298,"code":"K809","name":"劉○里","phone":"*******036","email":"yul***@hotmail.com"},{"seq":299,"code":"K39","name":"饒○茹","phone":"*******606","email":"a19***@gmail.com"},{"seq":300,"code":"K32","name":"楊○梅","phone":"*******029","email":"a09***@gmail.com"}];
+        let isWinnerListRendered = false;
+        let countdownTimerId = null;
+
+        function renderWinnerRows(list) {
+            const tbody = document.getElementById('winner-table-body');
+            const badge = document.getElementById('winner-count-badge');
+            if (!tbody) return;
+
+            if (badge) {
+                badge.innerText = `顯示 ${list.length} / ${WINNER_LIST.length} 筆`;
+            }
+
+            if (list.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="5" class="py-6 text-center text-orange-700 font-sans">
+                            查無符合條件的得獎資料，請確認輸入的電話末 3 碼、信箱前 3 碼、姓名或代號是否正確。
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            const rowsHtml = list.map(item => `
+                <tr class="hover:bg-orange-50/70 transition-colors">
+                    <td class="py-2 px-2.5 text-center font-bold text-orange-700">${item.seq}</td>
+                    <td class="py-2 px-2 text-center font-semibold text-brand-teal">${item.code}</td>
+                    <td class="py-2 px-2 text-center font-sans font-bold text-orange-950">${item.name}</td>
+                    <td class="py-2 px-2 text-center text-orange-900">${item.phone}</td>
+                    <td class="py-2 px-2.5 text-orange-900 break-all">${item.email}</td>
+                </tr>
+            `).join('');
+            tbody.innerHTML = rowsHtml;
+        }
+
+        function filterWinnerList() {
+            const input = document.getElementById('winner-search-input');
+            if (!input) return;
+            const q = input.value.trim().toLowerCase();
+            if (!q) {
+                renderWinnerRows(WINNER_LIST);
+                return;
+            }
+            const filtered = WINNER_LIST.filter(item => {
+                return String(item.seq) === q ||
+                       item.code.toLowerCase().includes(q) ||
+                       item.name.toLowerCase().includes(q) ||
+                       item.phone.toLowerCase().includes(q) ||
+                       item.email.toLowerCase().includes(q);
+            });
+            renderWinnerRows(filtered);
+        }
+
+        function clearWinnerSearch() {
+            const input = document.getElementById('winner-search-input');
+            if (input) {
+                input.value = '';
+                renderWinnerRows(WINNER_LIST);
+            }
+        }
+
+        function revealWinnerList() {
+            const wrapper = document.getElementById('countdown-wrapper');
+            const winnerSection = document.getElementById('winner-list-section');
+            if (wrapper) {
+                wrapper.classList.add('hidden');
+            }
+            if (winnerSection) {
+                winnerSection.classList.remove('hidden');
+            }
+            if (!isWinnerListRendered) {
+                renderWinnerRows(WINNER_LIST);
+                isWinnerListRendered = true;
+            }
+            if (countdownTimerId) {
+                clearInterval(countdownTimerId);
+                countdownTimerId = null;
+            }
+        }
+
+        function updateCountdown() {
+            const now = new Date();
+            const diff = TARGET_DATE - now;
+
+            if (diff <= 0) {
+                revealWinnerList();
+                return;
+            }
+
+            const daysEl = document.getElementById('cd-days');
+            const hoursEl = document.getElementById('cd-hours');
+            const minutesEl = document.getElementById('cd-minutes');
+            const secondsEl = document.getElementById('cd-seconds');
+
+            if (!daysEl) return;
+
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+            daysEl.innerText = String(days).padStart(2, '0');
+            hoursEl.innerText = String(hours).padStart(2, '0');
+            minutesEl.innerText = String(minutes).padStart(2, '0');
+            secondsEl.innerText = String(seconds).padStart(2, '0');
+        }
+
+        // 啟動倒數計時與自動切換監聽
+        updateCountdown();
+        if (new Date() < TARGET_DATE) {
+            countdownTimerId = setInterval(updateCountdown, 1000);
+        }
+        // #endregion
+    </script>
+</body>
+</html>
