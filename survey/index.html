@@ -161,20 +161,38 @@
                         </p>
                     </div>
 
-                    <!-- 可捲動得獎名單表格 -->
-                    <div class="bg-white/95 rounded-xl border border-orange-200 shadow-xs overflow-hidden">
-                        <div class="max-h-96 overflow-y-auto overflow-x-auto">
-                            <table class="w-full text-xs text-left border-collapse">
-                                <thead class="bg-orange-100/90 text-orange-950 font-bold sticky top-0 z-10 border-b border-orange-200">
-                                    <tr>
-                                        <th class="py-2.5 px-2.5 text-center w-12">順序</th>
-                                        <th class="py-2.5 px-2.5 text-center w-28">抽獎序號</th>
-                                        <th class="py-2.5 px-2 text-center w-20">姓名</th>
-                                        <th class="py-2.5 px-2 text-center w-28">電話</th>
-                                        <th class="py-2.5 px-2.5">電子郵件信箱</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="winner-table-body" class="divide-y divide-orange-100/70 text-orange-950 font-mono">
+                    <!-- 可捲動得獎名單表格（首欄固定不捲動，捲動區獨立於首欄下方） -->
+                    <div class="bg-white rounded-xl border border-orange-200 shadow-xs overflow-hidden">
+                        <!-- 固定表頭（完全不透明，不隨內容捲動） -->
+                        <table class="w-full text-xs text-left border-collapse table-fixed bg-orange-100 border-b border-orange-200">
+                            <colgroup>
+                                <col class="w-14">
+                                <col class="w-28">
+                                <col class="w-20">
+                                <col class="w-28">
+                                <col>
+                            </colgroup>
+                            <thead class="bg-orange-100 text-orange-950 font-bold">
+                                <tr>
+                                    <th class="py-2.5 px-2 text-center bg-orange-100">順序</th>
+                                    <th class="py-2.5 px-2 text-center bg-orange-100">抽獎序號</th>
+                                    <th class="py-2.5 px-2 text-center bg-orange-100">姓名</th>
+                                    <th class="py-2.5 px-2 text-center bg-orange-100">電話</th>
+                                    <th class="py-2.5 px-2.5 bg-orange-100">電子郵件信箱</th>
+                                </tr>
+                            </thead>
+                        </table>
+                        <!-- 獨立捲動內容區（縮於首欄正下方） -->
+                        <div class="max-h-96 overflow-y-auto bg-white">
+                            <table class="w-full text-xs text-left border-collapse table-fixed">
+                                <colgroup>
+                                    <col class="w-14">
+                                    <col class="w-28">
+                                    <col class="w-20">
+                                    <col class="w-28">
+                                    <col>
+                                </colgroup>
+                                <tbody id="winner-table-body" class="divide-y divide-orange-100 text-orange-950 font-mono bg-white">
                                 </tbody>
                             </table>
                         </div>
